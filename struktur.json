@@ -1,0 +1,30 @@
+{
+    "ID": {
+        "hostname": "",
+        "vendor": "",
+        "os": "",
+        "ip": "",
+        "mac": "",
+        "ports": [
+            {
+                "port": "",
+                "protocol": ""
+            }
+        ],
+        "devicetype": "",
+        "risks": [
+            {
+                "description": "",
+                "consequences": [
+                    ""
+                ],
+                "countermeasures": [
+                    ""
+                ]
+            }
+        ],
+        "categories": [
+            ""
+        ]
+    }
+}

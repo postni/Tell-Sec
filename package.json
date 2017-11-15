@@ -1,0 +1,18 @@
+{
+  "name": "electron",
+  "version": "0.0.1",
+  "description": "none",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ich",
+  "license": "ISC",
+  "dependencies": {
+    "ip-subnet-calculator": "^1.1.8",
+    "jquery": "^3.2.1",
+    "jquery-ui": "^1.12.1",
+    "nedb": "^1.8.0",
+    "node-nmap": "^4.0.0"
+  }
+}
