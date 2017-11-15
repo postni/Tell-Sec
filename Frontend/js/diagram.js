@@ -36,7 +36,7 @@ var options = {
             else {
                 callback(data);
             }
-            
+
         }
     }
 }
@@ -45,72 +45,72 @@ var network = new vis.Network(container, data, options);
 var ids = 100;
 
 /*funktionen*/
-function loader(){
+function loader() {
     toggleLoad()
-    this.getData = window.setInterval(checkForUpdate,1000)
-    }
-function checkForUpdate(){
+    this.getData = window.setInterval(checkForUpdate, 1000)
+}
+function checkForUpdate() {
     let updater = JSON.parse(sessionStorage.getItem("update"))
-    console.log("updater var: "+updater)
-    if(updater){
+    console.log("updater var: " + updater)
+    if (updater) {
         console.log(sessionStorage.getItem("update"))
-        sessionStorage.setItem("update",false)
+        //sessionStorage.setItem("update", false)
         update()
     }
 }
-function update(){
-    try{
+function update() {
+    try {
         console.log("update")
         window.clearInterval(this.getData);
     }
-    catch(err){
+    catch (err) {
         console.log(err)
     }
     let ids = nodes.getIds();
-    console.log("IDs: "+ids);
+    console.log("IDs: " + ids);
     nodes.remove(ids)
 
     let devices = datastore.getDevices()
     console.log(devices)
-    for(let i in devices){
-        console.log(typeof(i)+" - "+i)
+    for (let i in devices) {
+        console.log(typeof (i) + " - " + i)
         let d = devices[i]
-        let img = d.devicetype==="Client"? "person": "symbole/"+d.devicetype.toLowerCase()
-        appendNode(d.hostname,img,i);
+        let label = d.hostname ? d.hostname : d.devicetype
+        let img = d.devicetype === "Client" ? "person" : "symbole/" + d.devicetype.toLowerCase()
+        appendNode(label, img, i);
     }
-    for(let j in devices){
-        console.log(typeof(j)+" - "+j)
+    for (let j in devices) {
+        console.log(typeof (j) + " - " + j)
         let d = devices[j]
-        let img = d.devicetype==="Client"? "person": "symbole/"+d.devicetype.toLowerCase()
-        if(!!d.connectedTo){
-            d.connectedTo.forEach((edge)=>{
-                appendEdge(j,edge);
+        if (!!d.connectedTo) {
+            d.connectedTo.forEach((edge) => {
+                appendEdge(j, edge);
             })
         }
     }
     toggleLoad()
 }
 
-function appendEdge(from,to){
-    try{   
+function appendEdge(from, to) {
+    try {
         edges.add({
-            "from":from,
-            "to":to,
+            "from": from,
+            "to": to,
         })
 
-    }catch(err) {
+    } catch (err) {
         alert(err);
     }
 }
 
 function addNode(label, img) {
     let myId = datastore.newID()
-    let data = {id:myId,"devicetype":label}
+    let data = { id: myId, "devicetype": label }
     datastore.addDevice(data);
-    appendNode(label, img,myId);
+    appendNode(label, img, myId);
 }
 
-function appendNode(label, img, id){
+function appendNode(label, img, id) {
     try {
         nodes.add({
             id: id,
@@ -149,9 +149,9 @@ function removeElement() {
 
 }
 /*Ausgabe label des angeklickten Elements */
-network.on("click", (params)=>{
+network.on("click", (params) => {
     let label = (nodes._data[(params.nodes[0])].label);
-    console.log("label: "+label);
+    console.log("label: " + label);
     document.getElementById("label").innerText = label
     modal.style.display = "block";
 })
@@ -172,18 +172,18 @@ var span = document.getElementsByClassName("close")[0];
 
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+span.onclick = function () {
     modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
 
-function toggleLoad () {
+function toggleLoad() {
     var i = document.getElementById('loadsc');
     i.classList.toggle("hidden");
 }
