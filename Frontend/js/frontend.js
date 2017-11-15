@@ -24,16 +24,18 @@ class Datastore {
                 "vendor": "TimoTec",
                 "connectedTo": ["3"],
                 "os": "Timo94",
-                "ip": "1234567",
-                "mac": "123456789",
+                "ip": "10.23.4.61",
+                "mac": "F2:34:A5:67:B2:81",
                 "ports": [
                     {
                         "port": "123",
-                        "protocol": "test"
+                        "protocol": "test",
+                        "service": "SSH"
                     },
                     {
                         "port": "2345",
-                        "protocol": "test2"
+                        "protocol": "test",
+                        "service": "FTP"
                     }
                 ],
                 "devicetype": "Client",
@@ -44,16 +46,18 @@ class Datastore {
                 "hostname": "Niklas",
                 "vendor": "NiklasTec",
                 "os": "Niklas94",
-                "ip": "1234568",
-                "mac": "123456790",
+                "ip": "10.23.4.62",
+                "mac": "F2:34:A5:67:B2:92",
                 "ports": [
                     {
                         "port": "123",
-                        "protocol": "test"
+                        "protocol": "test",
+                        "service": "SSH"
                     },
                     {
                         "port": "2345",
-                        "protocol": "test2"
+                        "protocol": "test",
+                        "service": "FTP"
                     }
                 ],
                 "devicetype": "Router",
@@ -65,16 +69,18 @@ class Datastore {
                 "vendor": "BeneTec",
                 "connectedTo": ["2"],
                 "os": "Bene94",
-                "ip": "1234569",
-                "mac": "123456789",
+                "ip": "10.23.4.63",
+                "mac": "F2:34:A5:67:B2:83",
                 "ports": [
                     {
                         "port": "123",
-                        "protocol": "test"
+                        "protocol": "test",
+                        "service": "SSH"
                     },
                     {
                         "port": "2345",
-                        "protocol": "test2"
+                        "protocol": "test",
+                        "service": "FTP"
                     }
                 ],
                 "devicetype": "Switch",
@@ -86,16 +92,18 @@ class Datastore {
                 "vendor": "KübraTec",
                 "connectedTo": ["3"],
                 "os": "Kübra94",
-                "ip": "1234577",
-                "mac": "123456799",
+                "ip": "10.23.4.74",
+                "mac": "F2:34:A5:67:B2:94",
                 "ports": [
                     {
                         "port": "123",
-                        "protocol": "test"
+                        "protocol": "test",
+                        "service": "SSH"
                     },
                     {
                         "port": "2345",
-                        "protocol": "test2"
+                        "protocol": "test",
+                        "service": "FTP"
                     }
                 ],
                 "devicetype": "Client",
@@ -107,16 +115,18 @@ class Datastore {
                 "vendor": "GülceTec",
                 "connectedTo": ["3"],
                 "os": "Gülce94",
-                "ip": "1234567",
-                "mac": "123456789",
+                "ip": "10.23.4.65",
+                "mac": "F2:34:A5:67:B2:85",
                 "ports": [
                     {
                         "port": "123",
-                        "protocol": "test"
+                        "protocol": "test",
+                        "service": "SSH"
                     },
                     {
                         "port": "2345",
-                        "protocol": "test2"
+                        "protocol": "test",
+                        "service": "FTP"
                     }
                 ],
                 "devicetype": "Client",
@@ -128,16 +138,18 @@ class Datastore {
                 "vendor": "HakanTec",
                 "connectedTo": ["3"],
                 "os": "Hakan94",
-                "ip": "1234567",
-                "mac": "123456789",
+                "ip": "10.23.4.66",
+                "mac": "F2:34:A5:67:B2:86",
                 "ports": [
                     {
                         "port": "123",
-                        "protocol": "test"
+                        "protocol": "test",
+                        "service": "SSH"
                     },
                     {
                         "port": "2345",
-                        "protocol": "test2"
+                        "protocol": "test",
+                        "service": "FTP"
                     }
                 ],
                 "devicetype": "Client",

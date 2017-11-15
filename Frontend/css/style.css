@@ -42,7 +42,7 @@
     -webkit-animation-name: fadeIn;
     -webkit-animation-duration: 0.4s;
     animation-name: fadeIn;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
 }
 
 .close {
@@ -50,6 +50,7 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
+    margin-left: 5px;
 }
 
 .close:hover,
@@ -61,7 +62,17 @@
 .modal-header {
 	padding: 2px 16px;
     height: 20px;
+    justify-content: unset !important;
+}
 
+.modal-text{
+    padding-right: 5px;
+}
+.modal-text-line{
+    justify-content: flex-start;
+}
+.modal-body label{
+    width: 150px;
 }
 
 .modal-body {padding: 2px 16px;}
@@ -109,7 +120,7 @@
   }
   .sk-background {
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
     left: 0;
     top: 0;
     z-index: 1000000;

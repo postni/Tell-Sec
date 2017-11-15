@@ -12,11 +12,11 @@ function checkForUpdate() {
         window.clearInterval(this.getData);
         console.log(sessionStorage.getItem("update"))
         //sessionStorage.setItem("update", false)
-        update()
+        updateMyData()
     }
 }
 
-function update() {
+function updateMyData() {
     try {
         console.log("update")
         window.clearInterval(this.getData);

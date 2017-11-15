@@ -55,10 +55,10 @@ function checkForUpdate() {
     if (updater) {
         console.log(sessionStorage.getItem("update"))
         //sessionStorage.setItem("update", false)
-        update()
+        updateMyData()
     }
 }
-function update() {
+function updateMyData() {
     try {
         console.log("update")
         window.clearInterval(this.getData);
@@ -150,10 +150,31 @@ function removeElement() {
 }
 /*Ausgabe label des angeklickten Elements */
 network.on("click", (params) => {
-    let label = (nodes._data[(params.nodes[0])].label);
-    console.log("label: " + label);
-    document.getElementById("label").innerText = label
-    modal.style.display = "block";
+    if (params.nodes[0]) {
+        let myId = params.nodes[0];
+        let devices = datastore.getDevices();
+        document.getElementById("modal-id").innerText = myId
+        document.getElementById("modal-label").innerText = devices[myId].hostname ? devices[myId].hostname : "unbekannt"
+        document.getElementById("modal-devicetype").innerText = (devices[myId].devicetype ? "(" + devices[myId].devicetype + ")" : "(" + "unbekannt" + ")")
+        document.getElementById("modal-hostname").innerText = devices[myId].hostname ? devices[myId].hostname : "unbekannt"
+        document.getElementById("modal-ip").innerText = devices[myId].ip ? devices[myId].ip : "unbekannt"
+        document.getElementById("modal-mac").innerText = devices[myId].mac ? devices[myId].mac : "unbekannt"
+        document.getElementById("modal-vendor").innerText = devices[myId].vendor ? devices[myId].vendor : "unbekannt"
+        document.getElementById("modal-os").innerText = devices[myId].os ? devices[myId].os : "unbekannt"
+
+
+        let ports = document.getElementById("modal-ports");
+        ports.innerHTML = "";
+        devices[myId].ports.forEach((p) => {
+            let li = document.createElement("li")
+            li.appendChild(document.createTextNode(p.port + ":   " + p.protocol+"  -  "+p.service));
+            ports.appendChild(li);
+        })
+        //.innerText = devices[myId].ports?devices[myId].ports:"unbekannt"
+        //console.log("label: " + label);
+        //document.getElementById("label").innerText = label
+        modal.style.display = "block";
+    }
 })
 
 
