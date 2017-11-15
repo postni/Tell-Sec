@@ -90,9 +90,9 @@ electron.ipcMain.on('analyse-devices', ()=>{
 /////////////////////
 
 electron.ipcMain.on('scan-network', (event) => {
+  console.log("scan network")  
   let scanner = new NetworkScanner();
   scanner.getActiveIPs(scanner.getMyNetworks(),scanComplete, event);
-  console.log("scan network")
 })
 
 electron.ipcMain.on('scan-localhost', (event) => {

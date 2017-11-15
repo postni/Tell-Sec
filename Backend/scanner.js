@@ -13,7 +13,6 @@ var NmapScanner = class NmapScanner {
     //gibt eine Liste(Array) aller Netzwerke zurück (jeweils kleinste und größte IP im Netzwerk)
     getMyNetworks(){
         console.log("MyNetworks");
-
         var subnets = [];
 
         //berechnet für jeden Netzwerkadapter die niedrigste und höchste IP-Adresse

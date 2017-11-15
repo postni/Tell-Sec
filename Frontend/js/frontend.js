@@ -178,12 +178,17 @@ class Datastore{
     }
 
     setDevices(newDevices){
-        //TODO
+        console.log("8==========================================o")
+        console.log("newDevices")        
         console.log(newDevices)
         let devices = JSON.parse(sessionStorage.getItem("devices"))
+        console.log("devices - before")        
+        console.log(devices)
+        let newItems = Object.keys(newDevices).length
+        let items = Object.keys(devices).length               
         let nextID  = this.newID();   
-        for(n in newDevices){
-            for(o in devices){
+        for(let n in newDevices){
+            for(let o in devices){
                 if(newDevices[n].ip === devices[o].ip || newDevices[n].mac === devices[o].mac){
                     devices[o].hostname = newDevices[n].hostname ? devices[o].hostname:newDevices[n].hostname;
                     devices[o].ip = devices[o].ip ? devices[o].ip:newDevices[n].ip;
@@ -201,10 +206,21 @@ class Datastore{
 
                     nextID++;
                 }
+                items--
             }
+        newItems--
+        if(items===0 && newItems===0){
+            console.log("devices - after")
+            console.log(devices)        
+            
+            
+            sessionStorage.setItem("devices",JSON.stringify(devices))
+            sessionStorage.setItem("update", true)
+            console.log("8==========================================o")                    
         }
-        sessionStorage.setItem("devices",devices)
-        sessionStorage.setItem("update", true)        
+        }
+        
+        
     }
 
     analyseStarten(_callback){
