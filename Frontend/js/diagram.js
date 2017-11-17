@@ -1,6 +1,6 @@
 var vis = require('./vis/dist/vis'); //require("vis/dist/vis.min.js")
 var datastore = require('./js/frontend').datastore
-
+$(document).ready(()=>{$('.mdb-select').material_select()})
 /* Bilder */
 var DIR = '../img';
 
@@ -153,23 +153,27 @@ network.on("click", (params) => {
     if (params.nodes[0]) {
         let myId = params.nodes[0];
         let devices = datastore.getDevices();
-        document.getElementById("modal-id").innerText = myId
-        document.getElementById("modal-label").innerText = devices[myId].hostname ? devices[myId].hostname : "unbekannt"
-        document.getElementById("modal-devicetype").innerText = (devices[myId].devicetype ? "(" + devices[myId].devicetype + ")" : "(" + "unbekannt" + ")")
-        document.getElementById("modal-hostname").innerText = devices[myId].hostname ? devices[myId].hostname : "unbekannt"
-        document.getElementById("modal-ip").innerText = devices[myId].ip ? devices[myId].ip : "unbekannt"
-        document.getElementById("modal-mac").innerText = devices[myId].mac ? devices[myId].mac : "unbekannt"
-        document.getElementById("modal-vendor").innerText = devices[myId].vendor ? devices[myId].vendor : "unbekannt"
-        document.getElementById("modal-os").innerText = devices[myId].os ? devices[myId].os : "unbekannt"
+      /*  document.getElementById("modal-id").innerText = myId 
+        document.getElementById("modal-label").innerText = devices[myId].hostname ? devices[myId].hostname : "unbekannt" 
+        document.getElementById("modal-devicetype").innerText = (devices[myId].devicetype ? "(" + devices[myId].devicetype + ")" : "(" + "unbekannt" + ")")*/
+        document.getElementById("modal-hostname").value = devices[myId].hostname ? devices[myId].hostname : "unbekannt"
+        document.getElementById("modal-ip").value = devices[myId].ip ? devices[myId].ip : "unbekannt"
+        document.getElementById("modal-mac").value = devices[myId].mac ? devices[myId].mac : "unbekannt"
+        document.getElementById("modal-vendor").value = devices[myId].vendor ? devices[myId].vendor : "unbekannt"
+        document.getElementById("modal-os").value = devices[myId].os ? devices[myId].os : "unbekannt"
 
 
         let ports = document.getElementById("modal-ports");
         ports.innerHTML = "";
+        if(devices[myId].ports){
         devices[myId].ports.forEach((p) => {
             let li = document.createElement("li")
             li.appendChild(document.createTextNode(p.port + ":   " + p.protocol+"  -  "+p.service));
             ports.appendChild(li);
-        })
+        })}else{
+            ports.parentElement.innerHTML="<p> unbekannt </p>"
+        }
+        
         //.innerText = devices[myId].ports?devices[myId].ports:"unbekannt"
         //console.log("label: " + label);
         //document.getElementById("label").innerText = label
@@ -193,9 +197,9 @@ var span = document.getElementsByClassName("close")[0];
 
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-    modal.style.display = "none";
-}
+//span.onclick = function () {
+ //     modal.style.display = "none";
+//}
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {

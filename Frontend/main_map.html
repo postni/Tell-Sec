@@ -32,22 +32,22 @@
 </head>
 
 <body onload="loader()">
-        <div class="sk-background hidden" id="loadsc" onclick="toggleLoad()">
-                <div class="sk-circle">
-                    <div class="sk-circle1 sk-child"></div>
-                    <div class="sk-circle2 sk-child"></div>
-                    <div class="sk-circle3 sk-child"></div>
-                    <div class="sk-circle4 sk-child"></div>
-                    <div class="sk-circle5 sk-child"></div>
-                    <div class="sk-circle6 sk-child"></div>
-                    <div class="sk-circle7 sk-child"></div>
-                    <div class="sk-circle8 sk-child"></div>
-                    <div class="sk-circle9 sk-child"></div>
-                    <div class="sk-circle10 sk-child"></div>
-                    <div class="sk-circle11 sk-child"></div>
-                    <div class="sk-circle12 sk-child"></div>
-                  </div>
-                  </div>
+    <div class="sk-background hidden" id="loadsc" onclick="toggleLoad()">
+        <div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
+    </div>
 
     <header>
         <!--Navbar-->
@@ -161,7 +161,7 @@
 
                         <span style="font-size:30px;cursor:pointer">
                             <img class="menu_pic" name="person" src="img/person.png" width="75" alt="User" onclick="addNode('Person', 'person')" />
-                        </span> 
+                        </span>
                         <p></p>
                         <span style="font-size:30px;cursor:pointer" onclick="openNav_machine()">
                             <img src="img/machine.png" width="75px" alt="Maschine" />
@@ -179,40 +179,67 @@
                     <div id="mynetwork"></div>
 
                     <!--PopUp-->
-                    <div id="myModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <div class="modal-header">
+                    <div id="myModal" class="modal form-elegant">
+                        <div class="container">
+                            <div class="row"> 
+                                <div class="modal-content card card-body mx-4">
+                                    <div class="modal-body">
+                                        <div class="col-md-6">
 
-                                <span class="modal-text" id="modal-id">X</span></p><span class="modal-text"> - </span><span class="modal-text" id="modal-label">X</span></p><span id="modal-devicetype">X</span></p>
+
+                                            <p class="modal-text-line md-form">
+
+                                                <select class="mdb-select">
+                                                    <option value="switch" selected>Switch</option>
+                                                    <option value="router">Router</option>
+                                                </select>
+                                                <label>Geräteart</label>
+                                                </span>
+                                            </p>
+
+                                            <p class="modal-text-line md-form">
+                                                <label for="modal-hostname">Gerätename</label>
+                                                <input type="text" class="modal-text form-control" id="modal-hostname" name="modal-hostname" value="X">
+                                            </p>
+
+                                            <!--   <p class="modal-text-line"><label for="modal-hostname">Gerätename: </label> <span class="modal-text" id="modal-hostname">X</span></p> -->
+                                            <p class="modal-text-line md-form">
+                                                <label for="modal-ip">IP </label>
+                                                <input type="text" class="modal-text form-control" id="modal-ip" value="X">
+                                            </p>
+                                            <p class="modal-text-line md-form">
+                                                    <label for="modal-mac">MAC </label>
+                                                    <input type="text" class="modal-text form-control" id="modal-mac" value="X">
+                                                </p>
+
+
+
+                                            <p class="modal-text-line md-form">
+                                                <label for="modal-vendor">Hersteller </label>
+                                                <input type="text" class="modal-text form-control" id="modal-vendor" value="X">
+                                            </p>
+                                            <p class="modal-text-line md-form">
+                                                <label for="modal-os">Betriebssystem </label>
+                                                <input type="text" class="modal-text form-control" id="modal-os" value="X">
+                                            </p>
+                                            <label for="modal-ports">Offene Ports: </label>
+                                            <ul id="modal-ports">X</ul>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <p class="modal-text-line"><label for="modal-hostname">Gerätename: </label> <span class="modal-text" id="modal-hostname">X</span></p>
-                                <p class="modal-text-line"><label for="modal-ip">IP: </label> <span class="modal-text" id="modal-ip">X</span></p>
-                                <p class="modal-text-line"><label for="modal-mac">MAC: </label> <span class="modal-text" id="modal-mac">X</span></p>
-                                <p class="modal-text-line"><label for="modal-vendor">Hersteller: </label> <span class="modal-text" id="modal-vendor">X</span></p>
-                                <p class="modal-text-line"><label for="modal-os">Betriebssystem: </label> <span class="modal-text" id="modal-os">X</span></p>
-                                <label for="modal-ports">Offene Ports: </label>
-                                <ul id="modal-ports">X</ul>                              
-                            </div>
-                            <div class="modal-footer">
-                                <span class="modal-text">TODO</span>
-                              </div>
                         </div>
-
                     </div>
-
-
-
-
-
                 </div>
             </div>
         </div>
         </div>
         </div>
 
-     
+
     </main>
     <!-- SCRIPTS -->
     <!-- JQuery -->
@@ -232,7 +259,7 @@
     <!--script src="js/vis_config.js"></script-->
     <script src="js/diagram.js"></script>
     <script language="javascript" type="text/javascript" src="js/menu_side.js"></script>
-    
+
 </body>
 
 </html>
