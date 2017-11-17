@@ -48,7 +48,9 @@ function updateMyData() {
         let col4 = document.createElement("td");
         col4.appendChild(document.createTextNode(d["os"]));
         let col5 = document.createElement("td");
-        col5.appendChild(document.createTextNode("test"));
+        col5.appendChild(document.createTextNode(
+            (d["ip"] === undefined) ? "unbekannt" : d["ip"]
+        ));
         let col6 = document.createElement("td");
         col6.appendChild(document.createTextNode(
             (d["mac"] === null) ? "unbekannt" : d["mac"]

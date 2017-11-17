@@ -1,0 +1,101 @@
+/* Bilder */
+var DIR = '../img';
+
+// create an array with nodes
+var nodes = new vis.DataSet([
+    { id: 1, shape: 'image', image: 'img/person.png', label: 'DU' },
+]);
+
+// create an array with edges
+var edges = new vis.DataSet([
+    { from: 1, to: 3 },
+    { from: 1, to: 2 },
+    { from: 2, to: 4 },
+    { from: 2, to: 5 }
+]);
+
+// create a network
+var container = document.getElementById('mynetwork');
+
+// provide the data in the vis format
+var data = {
+    nodes: nodes,
+    edges: edges
+};
+
+
+// initialize your network!
+
+
+var options = {
+    locale: 'de',
+    manipulation: {
+        addNode: false,
+        addEdge: function (data, callback) {
+            if (data.from == data.to) {
+
+            }
+            else {
+                callback(data);
+            }
+            
+        }
+    }
+}
+
+
+var network = new vis.Network(container, data, options);
+
+var ids = 100;
+
+
+
+
+
+/*funktionen*/
+function addNode(typ, img) {
+    try {
+        nodes.add({
+            id: ids.value,
+            label: typ,
+            shape: 'image',
+            image: 'img/' + img + '.png'
+        });
+        ids++;
+        console.log(JSON.stringify(nodes))
+    }
+    catch (err) {
+        alert(err);
+    }
+}
+
+function removeElement() {
+    let selectedNodes = network.getSelectedNodes();
+    let selectedEdges = network.getSelectedEdges();
+    selectedNodes.forEach(function (element) {
+        try {
+            nodes.remove({ id: element });
+        }
+        catch (err) {
+            alert(err);
+        }
+
+    }, this);
+    selectedEdges.forEach(function (element) {
+        try {
+            edges.remove({ id: element });
+        }
+        catch (err) {
+            alert(err);
+        }
+
+    }, this);
+
+}
+function destroy() { /*noch nicht implementiert */
+    if (network !== null) {
+        network.destroy();
+        network = null;
+    }
+}
+
