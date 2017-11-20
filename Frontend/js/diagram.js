@@ -102,7 +102,13 @@ function appendEdge(from, to) {
         alert(err);
     }
 }
+function updateContent(key, element){
+    console.log(document.getElementById('modal-id'));
+    var i = document.getElementById('modal-id').innerText;
+    datastore.changeValue(i, key, null, element.value)
 
+
+}
 function addNode(label, img) {
     let myId = datastore.newID()
     let data = { id: myId, "devicetype": label }
@@ -153,8 +159,8 @@ network.on("click", (params) => {
     if (params.nodes[0]) {
         let myId = params.nodes[0];
         let devices = datastore.getDevices();
-      /*  document.getElementById("modal-id").innerText = myId 
-        document.getElementById("modal-label").innerText = devices[myId].hostname ? devices[myId].hostname : "unbekannt" 
+        document.getElementById("modal-id").innerText = myId 
+      /*  document.getElementById("modal-label").innerText = devices[myId].hostname ? devices[myId].hostname : "unbekannt" 
         document.getElementById("modal-devicetype").innerText = (devices[myId].devicetype ? "(" + devices[myId].devicetype + ")" : "(" + "unbekannt" + ")")*/
         document.getElementById("modal-hostname").value = devices[myId].hostname ? devices[myId].hostname : "unbekannt"
         document.getElementById("modal-ip").value = devices[myId].ip ? devices[myId].ip : "unbekannt"
@@ -171,7 +177,7 @@ network.on("click", (params) => {
             li.appendChild(document.createTextNode(p.port + ":   " + p.protocol+"  -  "+p.service));
             ports.appendChild(li);
         })}else{
-            ports.parentElement.innerHTML="<p> unbekannt </p>"
+            ports.parentElement.innerHTML="<p> unbekannt </p><ul id='modal-ports'></ul>"
         }
         
         //.innerText = devices[myId].ports?devices[myId].ports:"unbekannt"

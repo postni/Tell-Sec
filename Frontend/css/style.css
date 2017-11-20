@@ -19,10 +19,13 @@
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+  /*  z-index: 1; /* Sit on top */
     padding-top: 79px; /* Location of the box */
- /*   padding-left: 250px;*/
-    margin-left: 50px;
+   /* padding-left: 200px;*/
+  
+   margin-left: auto;
+   margin-right: auto;
+
 
     left: 0;
     top: 0;
