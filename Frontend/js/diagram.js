@@ -79,7 +79,8 @@ function updateMyData() {
         console.log(typeof (i) + " - " + i)
         let d = devices[i]
         let label = d.hostname ? d.hostname : d.devicetype
-        let img = d.devicetype === "Client" ? "person" : "symbole/" + d.devicetype.toLowerCase()
+        let help = d.devicetype?d.devicetype.toLowerCase():"person"
+        let img = d.devicetype === "Client" ? "person" : "symbole/" + help
         appendNode(label, img, i);
     }
     for (let j in devices) {
