@@ -71,7 +71,7 @@ function updateMyData() {
     let ids = nodes.getIds();
     console.log("IDs: " + ids);
     nodes.remove(ids)
-    edges=new vis.DataSet([]);
+    edges._data={}
 
     let devices = datastore.getDevices()
     console.log(devices)
@@ -91,7 +91,11 @@ function updateMyData() {
             })
         }
     }
-    toggleLoad()
+    let showLoader = JSON.parse(sessionStorage.getItem("showloader"));
+    if(showLoader === true){
+        console.log("showloader: "+showLoader)
+        toggleLoad()        
+    }
 }
 
 function appendEdge(from, to) {
@@ -223,6 +227,18 @@ window.onclick = function (event) {
 function toggleLoad() {
     var i = document.getElementById('loadsc');
     i.classList.toggle("hidden");
+    let hidden = false
+    console.log("loader hidden?")
+    i.classList.forEach((d)=>{
+        console.log(d)
+        hidden = d==="hidden"? true:hidden;
+    })
+    console.log(hidden)
+    console.log("##############################")
+    console.log("show loader?")    
+    let showloader = hidden? false: true;
+    console.log(showloader)    
+    sessionStorage.setItem("showloader", showloader)
 }
 
 
