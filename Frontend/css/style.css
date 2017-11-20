@@ -20,8 +20,10 @@
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 77px; /* Location of the box */
+    padding-top: 79px; /* Location of the box */
  /*   padding-left: 250px;*/
+    margin-left: 50px;
+
     left: 0;
     top: 0;
     width: 80%; /* Full width */

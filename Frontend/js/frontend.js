@@ -224,7 +224,7 @@ class Datastore {
     }
 
     addDevice(device) {
-        let devices = getDevices();
+        let devices = this.getDevices();
 
         let devicetype = device.devicetype === "Person" ? "Client" : device.devicetype;
         devices[device.id] = { "devicetype": devicetype };
