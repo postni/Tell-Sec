@@ -69,6 +69,7 @@ function updateMyData() {
     let ids = nodes.getIds();
     console.log("IDs: " + ids);
     nodes.remove(ids)
+    edges=new vis.DataSet([]);
 
     let devices = datastore.getDevices()
     console.log(devices)
@@ -107,7 +108,12 @@ function updateContent(key, element){
     console.log(document.getElementById('modal-id'))
     var i = document.getElementById('modal-id').innerText;
     datastore.changeValue(i, key, null, element.value)
+    if(key==='hostname'){
+        
+        updateMyData()
 
+
+    }
 
 }
 function addNode(label, img) {
