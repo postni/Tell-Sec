@@ -163,8 +163,7 @@ function analysisComplete( event, risks ){
   console.log("#################################################")
   console.log("/////////////////////DONE////////////////////////")
   console.log("#################################################")
-  event.sender.send("analysis-complete", risks)
-  
+  event.returnValue = risks  
 
 }
 

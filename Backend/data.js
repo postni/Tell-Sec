@@ -16,7 +16,7 @@ class Data {
         this.db.gehoert_zu = new Datastore({ filename: "db/gehoert_zu.db", autoload: true })
     }
 
-    getRisks(event, device, _callback) {      
+    getRisks(event, device) {      
         
         var laengeEnthaelt = 999;
         var laengeRisiko = 999
@@ -59,14 +59,12 @@ class Data {
                                                 laengeMassnahmen--
                                                 if (laengeFolge === 0 && laengeEnthaelt === 0 && laengeFuehrt_zu === 0 && laengeRisiko === 0 && laengeGehoert_zu === 0 && laengeMassnahmen === 0) {
                                                     //TODO
-
-                                                    this.riskdata[device] = ergebnis
                                                     this.counter--
                                                     if(this.counter ===0){
                                                         //ANTWORT
-                                                        console.log("done")                                                     
-                                                        _callback(event,this.riskdata)
-                                                        this.riskdata= {}
+                                                        console.log("done")
+                                                        return [device,ergebnis];                                                    
+                                                        //_callback(event,this.riskdata)
                                                     }
 
                                                 }
@@ -96,8 +94,7 @@ class Data {
                                                     if(this.counter ===0){
                                                         //ANTWORT                                             
                                                         console.log("done")
-                                                        _callback(event,this.riskdata)
-                                                        this.riskdata= {}
+                                                        return [device,ergebnis];                                                     
                                                     }
 
                                                 }
@@ -117,6 +114,8 @@ class Data {
 
                 })
         })
+        
+        return ["error"];
     }
 
     analyse(event, devices, _callback){   
@@ -135,12 +134,16 @@ class Data {
             }
 
         }
-        this.counter = types.length        
+        this.counter = types.length  
+        let risks = {}     
         types.forEach((typ)=>{
-            this.getRisks(event, typ,_callback)
+            console.log(typ)
+            let helper = this.getRisks(event, typ)
+            risks[helper[0]]=helper[1];
         })
-
-
+        console.log("donedone")
+        console.log(risks)
+        _callback(event,risks)
     }
 
     completeRiskAnalysis(event, device){

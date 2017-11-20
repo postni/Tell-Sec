@@ -218,7 +218,13 @@ class Datastore {
     addTo(id, key, subkey, value) {  
         let devices = this.getDevices();
         console.log(devices)
+        if(!devices[key]){
+            devices[key]=[]
+        }
         if(subkey){
+            if(!devices[key][subkey]){
+                devices[key][subkey]=[]
+            }
             devices[key][subkey].push(value)
         }else{
             devices[key].push(value)
@@ -234,26 +240,20 @@ class Datastore {
         devices[device.id] = { "devicetype": devicetype };
 
         sessionStorage.setItem("devices", JSON.stringify(devices))
-        //communicator.sendToBackend(devices);
     }
 
     setDevices(newDevices) {
         if (!newDevices) {
             sessionStorage.setItem("update", true)
         } else {
-            console.log("==========================================")
-            console.log("newDevices")
-            console.log(newDevices)
             let devices = this.getDevices()
-            console.log("devices - before")
-            console.log(devices)
+
             let newItems = Object.keys(newDevices).length
             let items = Object.keys(devices).length
             let nextID = this.newID();
             for (let n in newDevices) {
                 let exists = false;
-                //let itemsInner = items;
-                //console.log(itemsInner+" <- i | n -> "+newItems)            
+
                 for (let o in devices) {
                     if (newDevices[n].ip === devices[o].ip || (newDevices[n].mac === devices[o].mac && newDevices[n].mac)) {
                         devices[o].hostname = newDevices[n].hostname ? devices[o].hostname : newDevices[n].hostname;
@@ -283,12 +283,14 @@ class Datastore {
             console.log("devices - after")
             console.log(devices)
 
-
             sessionStorage.setItem("devices", JSON.stringify(devices))
-            communicator.analyseSecurity()
             //sessionStorage.setItem("update", true)
             console.log("==========================================")
         }
+    }
+
+    checkForRisks(){
+        communicator.analyseSecurity();
     }
 }
 
@@ -297,11 +299,11 @@ class Communicator {
     }
 
     analyseSecurity() {
-        ipcRenderer.send('analyse-devices', datastore.getDevices());
+        //let test = ipcRenderer.sendSync('analyse-devices', datastore.getDevices());
+        //console.log(test)
     }
 
-    scanNetwork(_callback) {
-        this.loader = _callback;
+    scanNetwork() {
         ipcRenderer.send('scan-network');
     }
 
