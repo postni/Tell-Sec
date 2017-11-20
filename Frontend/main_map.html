@@ -210,26 +210,26 @@
 
                                            
                             
-                                        <!--rechts-->
+                                        <!--2.reihe-->
                                         <div class="col-sm-3">
                                                 <p class="modal-text-line md-form">
                                                         <label for="modal-hostname">Gerätename</label>
-                                                        <input type="text" class="modal-text form-control" id="modal-hostname" name="modal-hostname" value="X">
+                                                        <input type="text" class="modal-text form-control" onchange="updateContent('hostname', this)" id="modal-hostname" name="modal-hostname" value="X">
                                                     </p>
                                                     <p class="modal-text-line md-form">
                                                         <label for="modal-mac">MAC </label>
-                                                        <input type="text" class="modal-text form-control" id="modal-mac" value="X">
+                                                        <input type="text" class="modal-text form-control" onchange="updateContent('mac', this)" id="modal-mac" value="X">
                                                     </p>
                                                    
                                         </div>
                                         <div class="col-sm-3">
                                             <p class="modal-text-line md-form">
                                                 <label for="modal-vendor">Hersteller </label>
-                                                <input type="text" class="modal-text form-control" id="modal-vendor" value="X">
+                                                <input type="text" class="modal-text form-control" onchange="updateContent('vendor', this)" id="modal-vendor" value="X">
                                             </p>
                                             <p class="modal-text-line md-form">
                                                 <label for="modal-os">Betriebssystem </label>
-                                                <input type="text" class="modal-text form-control" id="modal-os" value="X">
+                                                <input type="text" class="modal-text form-control" onchange="updateContent('os', this)" id="modal-os" value="X">
                                             </p>
                                         </div>
                                         <div class="col-sm-3">
@@ -238,7 +238,7 @@
                                             <ul id="modal-ports">X</ul>
 
                                         </div>
-                                        <p id="modal-id"></p>
+                                        <p id="modal-id" style="display:none"></p>
                                         </div>
 
                                     </div>

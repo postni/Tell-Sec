@@ -104,6 +104,7 @@ function appendEdge(from, to) {
 }
 function updateContent(key, element){
     console.log(document.getElementById('modal-id'));
+    console.log(document.getElementById('modal-id'))
     var i = document.getElementById('modal-id').innerText;
     datastore.changeValue(i, key, null, element.value)
 
@@ -159,7 +160,7 @@ network.on("click", (params) => {
     if (params.nodes[0]) {
         let myId = params.nodes[0];
         let devices = datastore.getDevices();
-        document.getElementById("modal-id").innerText = null; 
+        document.getElementById("modal-id").innerText = myId; 
       /*  document.getElementById("modal-label").innerText = devices[myId].hostname ? devices[myId].hostname : "unbekannt" 
         document.getElementById("modal-devicetype").innerText = (devices[myId].devicetype ? "(" + devices[myId].devicetype + ")" : "(" + "unbekannt" + ")")*/
         document.getElementById("modal-hostname").value = devices[myId].hostname ? devices[myId].hostname : "unbekannt"
