@@ -11,9 +11,22 @@ class Datastore {
         }
     }
 
+    newID() {
+        let devices = this.getDevices()
+        let ids = []
+        for (let i in devices) {
+            ids.push(parseInt(i))
+        }
 
-    getDevices() {
-        return JSON.parse(sessionStorage.getItem("devices"));
+        let largest = Math.max.apply(Math, ids);
+
+        if (largest < 0) {
+            largest = 0;
+        } else {
+            largest++;
+        }
+
+        return ("" + largest)
     }
 
     getTestdata() {
@@ -23,6 +36,7 @@ class Datastore {
                 "hostname": "Timo",
                 "vendor": "TimoTec",
                 "connectedTo": ["3"],
+                "connectionsToMe":[""],
                 "os": "Timo94",
                 "ip": "10.23.4.61",
                 "mac": "F2:34:A5:67:B2:81",
@@ -48,6 +62,7 @@ class Datastore {
                 "os": "Niklas94",
                 "ip": "10.23.4.62",
                 "mac": "F2:34:A5:67:B2:92",
+                "connectionsToMe": ["2"],
                 "ports": [
                     {
                         "port": "123",
@@ -68,6 +83,7 @@ class Datastore {
                 "hostname": "Benedikt",
                 "vendor": "BeneTec",
                 "connectedTo": ["2"],
+                "connectionsToMe": ["1","4","5","6"],
                 "os": "Bene94",
                 "ip": "10.23.4.63",
                 "mac": "F2:34:A5:67:B2:83",
@@ -159,28 +175,56 @@ class Datastore {
         }
         sessionStorage.setItem("devices", JSON.stringify(testdata));
         sessionStorage.setItem("update", true)
+        this.analyseStarten();
     }
 
-    newID() {
-        let devices = this.getDevices()
-        let ids = []
-        for (let i in devices) {
-            ids.push(parseInt(i))
+    analyseStarten() {
+        communicator.analyseSecurity();
+    }
+
+    getRisks(){
+        return sessionStorage.getItem("risks")
+    }
+
+    addRisk(riskId, risk){
+        let risks = getRisks()
+        let devices = getDevices()
+
+        let id = riskId.split("_")[0]
+
+        risks[riskId] = risk;
+        risks[riskId]["damage"] = 0;
+        //risks[riskId]["influenced"] = devices[]["connectionsToMe"]?devices[]["connectionsToMe"]: [];
+
+
+    }
+
+    getDevices() {
+        return JSON.parse(sessionStorage.getItem("devices"));
+    }
+
+    changeValue(id, key,subkey, value) {
+        let devices = getDevices();
+        console.log(devices)
+        devices[id][key] = value;
+        console.log(devices)
+        sessionStorage.setItem("devices", JSON.stringify(devices));
+    }
+
+    addTo(id, key, subkey, value) {  
+        let devices = getDevices();
+        console.log(devices)
+        if(subkey){
+            devices[key][subkey].push(value)
+        }else{
+            devices[key].push(value)
         }
-
-        let largest = Math.max.apply(Math, ids);
-
-        if (largest < 0) {
-            largest = 0;
-        } else {
-            largest++;
-        }
-
-        return ("" + largest)
+        console.log(devices)
+        sessionStorage.setItem("devices", JSON.stringify(devices));
     }
 
     addDevice(device) {
-        let devices = JSON.parse(sessionStorage.getItem("devices"));
+        let devices = getDevices();
 
         let devicetype = device.devicetype === "Person" ? "Client" : device.devicetype;
         devices[device.id] = { "devicetype": devicetype };
@@ -196,7 +240,7 @@ class Datastore {
             console.log("8==========================================o")
             console.log("newDevices")
             console.log(newDevices)
-            let devices = JSON.parse(sessionStorage.getItem("devices"))
+            let devices = getDevices()
             console.log("devices - before")
             console.log(devices)
             let newItems = Object.keys(newDevices).length
@@ -231,19 +275,6 @@ class Datastore {
                     nextID++;
                 }
 
-
-
-                //console.log(itemsInner+" <- i | n -> "+newItems)
-                //newItems--
-                /*if(itemsInner ===0 && newItems===0){
-                    console.log("devices - after")
-                    console.log(devices)        
-                    
-                    
-                    sessionStorage.setItem("devices",JSON.stringify(devices))
-                    sessionStorage.setItem("update", true)
-                    console.log("8==========================================o")                    
-                }*/
             }
             console.log("devices - after")
             console.log(devices)
@@ -254,17 +285,13 @@ class Datastore {
             console.log("8==========================================o")
         }
     }
-
-    analyseStarten(_callback) {
-        communicator.analyseSecurity(_callback);
-    }
 }
 
 class Communicator {
     constructor() {
     }
-    analyseSecurity(_callback) {
-        ipcRenderer.send('analyse', _callback);
+    analyseSecurity() {
+        ipcRenderer.send('analyse-devices', datastore.getDevices());
     }
     scanNetwork(_callback) {
         this.loader = _callback;
@@ -279,14 +306,16 @@ class Communicator {
     }
 }
 
-ipcRenderer.on('reply', (string) => {
-    console.log(string)
-})
-
 ipcRenderer.on('scan-complete', (event, data) => {
     console.log("scan complete")
     datastore.setDevices(data);
 });
+
+ipcRenderer.on('analysis-complete', (event, risiks)=>{
+    for(let risk in risks){   
+        console.log(risks[risk])
+    }
+})
 
 datastore = new Datastore()
 communicator = new Communicator()

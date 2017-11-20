@@ -154,15 +154,15 @@ function handleSquirrelEvent(application) {
 /////////////////
 
 
-electron.ipcMain.on('devices-changed', (event, devices) => {
-  console.log("devices changed");
-  datastore.refreshDatastore(devices);
+electron.ipcMain.on('analyse-devices', ( event, devices )=>{
+  console.log("analyse devices");
+  datastore.analyse(event ,devices, analysisComplete);
 })
 
-electron.ipcMain.on('analyse-devices', ()=>{
-  console.log("analyse devices");
-  datastore.analyse();
-})
+function analysisComplete( event, risks ){
+  event.sender.send("analysis-complete", risks)
+
+}
 
 
   /////////////////////
@@ -182,13 +182,10 @@ electron.ipcMain.on('scan-localhost', (event) => {
 })
 
 function scanComplete(event, data){
-  let devices = data;
   console.log("#################################################")
-  console.log("/////////////////////////////////////////////////")
+  console.log("/////////////////////DONE////////////////////////")
   console.log("#################################################")
-  console.log(devices)
-  //datastore.refreshDatastore(devices);
-  event.sender.send('scan-complete', devices);  
+  event.sender.send('scan-complete', data);  
 }
 
   /////////////////
