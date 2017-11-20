@@ -175,7 +175,6 @@ class Datastore {
         }
         sessionStorage.setItem("devices", JSON.stringify(testdata));
         sessionStorage.setItem("update", true)
-        this.analyseStarten();
     }
 
     analyseStarten() {
@@ -187,8 +186,8 @@ class Datastore {
     }
 
     addRisk(riskId, risk){
-        let risks = getRisks()
-        let devices = getDevices()
+        let risks = this.getRisks()
+        let devices = this.getDevices()
 
         let id = riskId.split("_")[0]
 
@@ -204,15 +203,20 @@ class Datastore {
     }
 
     changeValue(id, key,subkey, value) {
-        let devices = getDevices();
+        let devices = this.getDevices();
         console.log(devices)
-        devices[id][key] = value;
+        if(subkey){
+            devices[id][key][subkey] = value;
+        }else{
+            devices[id][key] = value;
+        }
+        
         console.log(devices)
         sessionStorage.setItem("devices", JSON.stringify(devices));
     }
 
     addTo(id, key, subkey, value) {  
-        let devices = getDevices();
+        let devices = this.getDevices();
         console.log(devices)
         if(subkey){
             devices[key][subkey].push(value)
@@ -224,7 +228,7 @@ class Datastore {
     }
 
     addDevice(device) {
-        let devices = this.getDevices();
+        let devices = getDevices();
 
         let devicetype = device.devicetype === "Person" ? "Client" : device.devicetype;
         devices[device.id] = { "devicetype": devicetype };
@@ -237,7 +241,7 @@ class Datastore {
         if (!newDevices) {
             sessionStorage.setItem("update", true)
         } else {
-            console.log("8==========================================o")
+            console.log("==========================================")
             console.log("newDevices")
             console.log(newDevices)
             let devices = getDevices()
@@ -281,8 +285,9 @@ class Datastore {
 
 
             sessionStorage.setItem("devices", JSON.stringify(devices))
-            sessionStorage.setItem("update", true)
-            console.log("8==========================================o")
+            communicator.analyseSecurity()
+            //sessionStorage.setItem("update", true)
+            console.log("==========================================")
         }
     }
 }
@@ -290,17 +295,21 @@ class Datastore {
 class Communicator {
     constructor() {
     }
+
     analyseSecurity() {
         ipcRenderer.send('analyse-devices', datastore.getDevices());
     }
+
     scanNetwork(_callback) {
         this.loader = _callback;
         ipcRenderer.send('scan-network');
     }
+
     scanLocalhost(_callback) {
         this.loader = _callback;
         ipcRenderer.send('scan-localhost');
     }
+
     maximize() {
         ipcRenderer.send('maximize');
     }
@@ -312,9 +321,12 @@ ipcRenderer.on('scan-complete', (event, data) => {
 });
 
 ipcRenderer.on('analysis-complete', (event, risiks)=>{
-    for(let risk in risks){   
-        console.log(risks[risk])
-    }
+    console.log("###################################")
+    console.log("-------Analyse abgeschlossen-------")
+    console.log("###################################")
+    sessionStorage.setItem("risks", risks)
+    console.log("##################################")  
+    //sessionStorage.setItem("update", true)  
 })
 
 datastore = new Datastore()

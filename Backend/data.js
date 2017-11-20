@@ -64,6 +64,7 @@ class Data {
                                                     this.counter--
                                                     if(this.counter ===0){
                                                         //ANTWORT
+                                                        console.log("done")                                                     
                                                         _callback(event,this.riskdata)
                                                         this.riskdata= {}
                                                     }
@@ -93,7 +94,8 @@ class Data {
                                                     this.riskdata[device] = ergebnis
                                                     this.counter--
                                                     if(this.counter ===0){
-                                                        //ANTWORT
+                                                        //ANTWORT                                             
+                                                        console.log("done")
                                                         _callback(event,this.riskdata)
                                                         this.riskdata= {}
                                                     }
