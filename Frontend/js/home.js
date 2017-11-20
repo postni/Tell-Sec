@@ -43,9 +43,12 @@ function startWithNwScan(){
 
 function startNoNwScan(){
     console.log("Netzwerk wird nicht gescannt");
+    
+    /*
     if(clicked ==="expert"){
         communicator.scanLocalhost();
     }
+    */
     
     communicator.maximize();
     window.location.href = 'main_map.html';

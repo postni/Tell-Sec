@@ -228,7 +228,7 @@ class Datastore {
     }
 
     addDevice(device) {
-        let devices = getDevices();
+        let devices = this.getDevices();
 
         let devicetype = device.devicetype === "Person" ? "Client" : device.devicetype;
         devices[device.id] = { "devicetype": devicetype };
@@ -244,7 +244,7 @@ class Datastore {
             console.log("==========================================")
             console.log("newDevices")
             console.log(newDevices)
-            let devices = getDevices()
+            let devices = this.getDevices()
             console.log("devices - before")
             console.log(devices)
             let newItems = Object.keys(newDevices).length
@@ -305,10 +305,10 @@ class Communicator {
         ipcRenderer.send('scan-network');
     }
 
-    scanLocalhost(_callback) {
+    /*scanLocalhost(_callback) {
         this.loader = _callback;
         ipcRenderer.send('scan-localhost');
-    }
+    }*/
 
     maximize() {
         ipcRenderer.send('maximize');
