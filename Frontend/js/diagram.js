@@ -35,6 +35,8 @@ var options = {
             }
             else {
                 callback(data);
+                datastore.addTo(data.from, 'connectedTo', null, data.to)
+                datastore.addTo(data.to, 'connectionsToMe', null, data.from)
             }
 
         }
@@ -108,11 +110,8 @@ function updateContent(key, element){
     console.log(document.getElementById('modal-id'))
     var i = document.getElementById('modal-id').innerText;
     datastore.changeValue(i, key, null, element.value)
-    if(key==='hostname'){
-        
+    if(key==='hostname' || key==='devicetype'){
         updateMyData()
-
-
     }
 
 }

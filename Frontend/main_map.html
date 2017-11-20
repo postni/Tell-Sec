@@ -180,7 +180,7 @@
 
                     <!--PopUp-->
                     <div id="myModal" class="modal form-elegant">
-                        <div class="container">
+                        <div class="container" style="position:absolute;bottom:0;margin:0;width:100%;">
                             <div class="row"> 
                                 <div class="modal-content card card-body mx-4">
                                     <div class="modal-body row">
@@ -189,9 +189,18 @@
 
                                             <p class="modal-text-line md-form">
 
-                                                <select class="mdb-select">
-                                                    <option value="switch" selected>Switch</option>
-                                                    <option value="router">Router</option>
+                                                <select class="mdb-select" onchange="updateContent('devicetype', this)">
+                                                    <option value="Repeater">Repeater</option>
+                                                    <option value="Hub">Hub</option>
+                                                    <option value="Bridge">Bridge</option>
+                                                    <option value="Switch">Switch</option>
+                                                    <option value="Router">Router</option>
+                                                    <option value="Gateway">Gateway</option>
+                                                    <option value="Access Point">Access Point</option>
+                                                    <option value="Firewall">Firewall</option>
+                                                    <option value="NAS">NAS</option>
+                                                    <option value="Server">Server</option>
+
                                                 </select>
                                                 <label>Geräteart</label>
                                                 </span>

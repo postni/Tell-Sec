@@ -1,3 +1,5 @@
+html, body {height: 100%}
+
 .menu_elements {
     margin-top: 200px;
 
@@ -13,22 +15,25 @@
     border-radius: 5px;
     margin-top: 10px;
     background-color: #f7f7f7;
+    position: relative;
 }
 /*PopUp*/
 
 .modal {
     display: none; /* Hidden by default */
+
     position: fixed; /* Stay in place */
+    bottom: 0;
   /*  z-index: 1; /* Sit on top */
-    padding-top: 79px; /* Location of the box */
+   /* padding-top: 79px; /* Location of the box */
    /* padding-left: 200px;*/
   
    margin-left: auto;
-   margin-right: auto;
+   margin-right: 0px;
 
 
     left: 0;
-    top: 0;
+   /* top: 0;*/
     width: 80%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
