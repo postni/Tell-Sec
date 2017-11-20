@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Tell! - Entwurfseditor</title>
+    <!-- Stylesheets und Skripte-->
+    <link href="css/menu_side.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet">
+
+
+    <!--Bootstrap Stylesheets-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- MDB -->
+    <link href="css/mdb.min.css" rel="stylesheet">
+    <!--Main Navigation-->
+</head>
+
+<body onload="loader()">
+
+    <div class="sk-background hidden" id="loadsc" onclick="toggleLoad()">
+        <div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
+    </div>
+
+
+    <!--script type="text/javascript" src="js/wz_dragdrop.js"></script-->
+
+    <header>
+        <!--Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark stylish-color">
+            <!-- Links -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Neu">
+                    <a class="nav-link" href="#">
+                        <img src="img/new.png" width="30px" alt="Neu" />
+                    </a>
+                </li>
+                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Speichern">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="img/save.png" width="30px" alt="Speichern" />
+                    </a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Speichern</a>
+                        <a class="dropdown-item" href="#">Speichern unter</a>
+                        <a class="dropdown-item" href="#">PDF Export</a>
+                    </div>
+
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Öffnen">
+                    <a class="nav-link" href="#">
+                        <img src="img/open.png" width="35px" alt="Öffnen" />
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Zurück">
+                    <a class="nav-link" href="#">
+                        <img src="img/undo.png" width="20px" alt="Undo" />
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Vorwärts">
+                    <a class="nav-link" href="#">
+                        <img src="img/redo.png" width="20px" alt="Redo" />
+                    </a>
+                </li>
+            </ul>
+
+            <!--logo mitte-->
+            <ul class="navbar-nav mx-auto">
+                <li>
+                    <a>
+                        <img src="img/Logo (1).png" width="100px" alt="Tell!" />
+                    </a>
+                </li>
+            </ul>
+            <!--elemente rechts-->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Analyse starten">
+                    <a class="nav-link" href="#">
+                        <img src="img/start.png" width="30px" alt="Redo" />
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Netzwerkscan starten">
+                    <a class="nav-link" href="#" onclick="startScan()">
+                        <img src="img/scan.png" width="30px" alt="Scan" />
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
+                    <a class="nav-link" href="#">
+                        <img src="img/settings.png" width="30px" alt="Einstellungen" />
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Map-Ansicht">
+                    <a class="nav-link" href="main_map.html">
+                        <img src="img/map.png" width="35px" alt="Map" />
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+
+
+    </header>
+
+
+    <!--Layout-->
+    <main>
+TEST
+
+       
+
+
+    </main>
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script>
+        window.jQuery = window.$ = require('jquery'); require("jquery-ui");
+    </script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <!-- Custom -->
+    <script src="js/table.js"></script>
+    <script language="javascript" type="text/javascript" src="js/menu_side.js"></script>
+</body>
+
+</html>
