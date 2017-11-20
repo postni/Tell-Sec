@@ -6,6 +6,7 @@ function loader() {
 }
 
 function checkForUpdate() {
+    datastore.checkForRisks();
     let updater = JSON.parse(sessionStorage.getItem("update"))
     console.log("updater var: " + updater)
     if (updater) {
