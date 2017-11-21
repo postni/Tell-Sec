@@ -218,16 +218,16 @@ class Datastore {
     addTo(id, key, subkey, value) {  
         let devices = this.getDevices();
         console.log(devices)
-        if(!devices[key]){
-            devices[key]=[]
+        if(!devices[id][key]){
+            devices[id][key]=[]
         }
         if(subkey){
-            if(!devices[key][subkey]){
-                devices[key][subkey]=[]
+            if(!devices[id][key][subkey]){
+                devices[id][key][subkey]=[]
             }
-            devices[key][subkey].push(value)
+            devices[id][key][subkey].push(value)
         }else{
-            devices[key].push(value)
+            devices[id][key].push(value)
         }
         console.log(devices)
         sessionStorage.setItem("devices", JSON.stringify(devices));
