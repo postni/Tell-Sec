@@ -5,7 +5,12 @@ html, body {height: 100%}
 
 }
 
+.evaluation {
+    text-align:center;
+    width: 100%;
 
+    
+}
 
 #mynetwork {
     width: 100%;
