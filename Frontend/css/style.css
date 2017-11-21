@@ -110,6 +110,12 @@ html, body {height: 100%}
     font-weight: bold;
     margin-left: 5px;
 }
+label.active{
+    font-size: 0.8rem;
+}
+.no-margin{
+    margin: 0px !important;
+}
 
 .close:hover,
 .close:focus {

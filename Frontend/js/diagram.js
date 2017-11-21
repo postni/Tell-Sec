@@ -259,17 +259,36 @@ network.on("click", (params) => {
             let allPorts = document.querySelectorAll("[id^=port-]")
             let portID = 0
     
-            for(let port in allPorts){
-                //let help = parseInt(port)
-                //portID = portID<help? help:portID
-                console.log(port)
+            let pLength = allPorts.length
+            for(let i =0; i<pLength;i++){
+                let id = (allPorts[i].id)
+                id=id.split("-")[1]
+                portID=id>portID?id:portID
             }
-            let protocolID = 0;
-            let serviceID = 0;
+
+            let allProtocols = document.querySelectorAll("[id^=protocol-]")
+            let protocolID = 0
+    
+            let prLength = allProtocols.length
+            for(let i =0; i<prLength;i++){
+                let id = (allProtocols[i].id)
+                id=id.split("-")[1]
+                protocolID=id>protocolID?id:protocolID
+            }
+
+            let allServices = document.querySelectorAll("[id^=service-]")
+            let serviceID = 0
+    
+            let sLength = allServices.length
+            for(let i =0; i<sLength;i++){
+                let id = (allServices[i].id)
+                id=id.split("-")[1]
+                serviceID=id>serviceID?id:serviceID
+            }
 
 
             let div = document.createElement("div")
-            div.classList.add("row", "justify-content")
+            div.classList.add("row", "no-margin", "justify-content")
             let d1 = document.createElement("div")
             d1.classList.add("col-sm-3", "pl-0")
             let p1 = document.createElement("p")
@@ -279,10 +298,7 @@ network.on("click", (params) => {
             port.classList.add("modal-text", "form-control")
             port.id = "port-" + portID
             portID++
-            console.log("Port: " + p.port)
-            port.value = "port--"
             let portLabel = document.createElement("label")
-            portLabel.classList.add("active")
             portLabel.htmlFor = port.id
             portLabel.innerText = "Port"
             p1.appendChild(portLabel)
@@ -297,9 +313,7 @@ network.on("click", (params) => {
             protocol.type = "text"
             protocol.classList.add("modal-text", "form-control")
             protocol.id = "protocol-" + protocolID
-            protocol.value = "protocol--"
             let protocolLabel = document.createElement("label")
-            protocolLabel.classList.add("active")
             protocolLabel.htmlFor = protocol.id
             protocolLabel.innerText = "Protocol"
             p2.appendChild(protocolLabel)
@@ -314,9 +328,7 @@ network.on("click", (params) => {
             service.type = "text"
             service.classList.add("modal-text", "form-control")
             service.id = "service-" + serviceID
-            service.value = "service---"
             let serviceLabel = document.createElement("label")
-            serviceLabel.classList.add("active")
             serviceLabel.htmlFor = service.id
             serviceLabel.innerText = "Service"
             p3.appendChild(serviceLabel)
