@@ -176,17 +176,27 @@
                             <thead>
                               <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Risiko</th>
-                                <th scope="col">Wahrscheinlichkeit</th>
-                                <th scope="col">Schadenshöhe</th>
+                                <th scope="col" class="col-md-5">Risiko</th>
+                                <th scope="col" class="col-md-3">Wahrscheinlichkeit</th>
+                                <th scope="col" class="col-md-3">Schadenshöhe</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
                                 <th scope="row">1</th>
-                                <td>Wasser</td>
-                                <td>w</td>
-                                <td>s</td>
+                                <td>Wasserschaden</td>
+                                <td>
+                                        <div id="slidecontainer">
+                                                <input type="range" min="1" max="100" value="50" class="slider" id="probability">
+                                                <p><span id="demo"></span>%</p>
+                                              </div>
+                                </td>
+                                <td>
+                                        <div id="slidecontainer">
+                                                <input type="range" min="1" max="5" value="50" class="slider" id="damage">
+                                                <span id="demod"></span>
+                                              </div>
+                                </td>
                               </tr>
                               <tr>
                                 <th scope="row">2</th>
@@ -197,6 +207,9 @@
  
                             </tbody>
                           </table>
+                          
+
+                    
                     
             </div>
         </div>
