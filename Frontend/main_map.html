@@ -135,14 +135,13 @@
                     <div class="border">
                         <div id="user" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_user()">&times;</a>
-
+                            <a onclick="addNode('stationär', 'symbole/desktop')">stationär</a>
+                            <a onclick="addNode('mobil', 'symbole/mobile')">mobil</a>
 
                         </div>
                         <div id="machine" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_machine()">&times;</a>
-                            <a href="#">Typ 1</a>
-                            <a href="#">Typ 2</a>
-                            <a href="#">Typ 3</a>
+ 
                         </div>
                         <div id="network" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_network()">&times;</a>
@@ -159,12 +158,12 @@
                         </div>
 
 
-                        <span style="font-size:30px;cursor:pointer">
-                            <img class="menu_pic" name="person" src="img/person.png" width="75" alt="User" onclick="addNode('Person', 'person')" />
+                        <span style="font-size:30px;cursor:pointer" onclick="openNav_user()">
+                            <img class="menu_pic" name="person" src="img/person.png" width="75" alt="User"  />
                         </span>
                         <p></p>
-                        <span style="font-size:30px;cursor:pointer" onclick="openNav_machine()">
-                            <img src="img/machine.png" width="75px" alt="Maschine" />
+                        <span style="font-size:30px;cursor:pointer">
+                            <img name="machine" src="img/machine1.png" width="75px" alt="Maschine" onclick="addNode('Maschine', 'machine')" />
                         </span>
                         <p></p>
                         <span style="font-size:30px;cursor:pointer" onclick="openNav_network()">
