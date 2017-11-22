@@ -1,6 +1,5 @@
 var vis = require('./vis/dist/vis'); //require("vis/dist/vis.min.js")
 var datastore = require('./js/frontend').datastore
-var datastore = require('./js/frontend').communicator
 var filehandler = require('./js/filehandler')
 $(document).ready(() => { $('.mdb-select').material_select() })
 /* Bilder */
