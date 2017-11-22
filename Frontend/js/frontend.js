@@ -1,5 +1,6 @@
 var ipcRenderer = require('electron').ipcRenderer;
 
+
 class Datastore {
 
     constructor() {
@@ -315,6 +316,7 @@ class Communicator {
     maximize() {
         ipcRenderer.send('maximize');
     }
+
 }
 
 ipcRenderer.on('scan-complete', (event, data) => {
