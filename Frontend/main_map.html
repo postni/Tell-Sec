@@ -135,14 +135,13 @@
                     <div class="border">
                         <div id="user" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_user()">&times;</a>
-
+                            <a onclick="addNode('stationär', 'symbole/desktop')">stationär</a>
+                            <a onclick="addNode('mobil', 'symbole/mobile')">mobil</a>
 
                         </div>
                         <div id="machine" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_machine()">&times;</a>
-                            <a href="#">Typ 1</a>
-                            <a href="#">Typ 2</a>
-                            <a href="#">Typ 3</a>
+ 
                         </div>
                         <div id="network" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_network()">&times;</a>
@@ -159,12 +158,12 @@
                         </div>
 
 
-                        <span style="font-size:30px;cursor:pointer">
-                            <img class="menu_pic" name="person" src="img/person.png" width="75" alt="User" onclick="addNode('Person', 'person')" />
+                        <span style="font-size:30px;cursor:pointer" onclick="openNav_user()">
+                            <img class="menu_pic" name="person" src="img/person.png" width="75" alt="User"  />
                         </span>
                         <p></p>
-                        <span style="font-size:30px;cursor:pointer" onclick="openNav_machine()">
-                            <img src="img/machine.png" width="75px" alt="Maschine" />
+                        <span style="font-size:30px;cursor:pointer">
+                            <img name="machine" src="img/machine1.png" width="75px" alt="Maschine" onclick="addNode('Maschine', 'machine')" />
                         </span>
                         <p></p>
                         <span style="font-size:30px;cursor:pointer" onclick="openNav_network()">
@@ -183,74 +182,84 @@
                         <div class="container" style="position:absolute;bottom:0;margin:0;width:100%;">
                             <div class="row"> 
                                 <div class="modal-content card card-body mx-4">
-                                    <div class="modal-body row">
-                                        <div class="col-sm-3">
+                                    <div class="modal-body ">
+                                            <div class="row">
+                                                    <div class="col-sm-4">
+            
+            
+                                                        <p class="modal-text-line md-form form-sm">
+            
+                                                            <select class="mdb-select" onchange="updateContent('devicetype', this)">
+                                                                <option value="Repeater">Repeater</option>
+                                                                <option value="Hub">Hub</option>
+                                                                <option value="Bridge">Bridge</option>
+                                                                <option value="Switch">Switch</option>
+                                                                <option value="Router">Router</option>
+                                                                <option value="Gateway">Gateway</option>
+                                                                <option value="Access Point">Access Point</option>
+                                                                <option value="Firewall">Firewall</option>
+                                                                <option value="NAS">NAS</option>
+                                                                <option value="Server">Server</option>
+            
+                                                            </select>
+                                                            <label>Geräteart</label>
+                                                            </span>
+                                                        </p>
+            
+                                                        
+            
+                                                        <!--p class="modal-text-line"><label for="modal-hostname">Gerätename: </label> <span class="modal-text" id="modal-hostname">X</span></p-->
+                                                        <p class="modal-text-line md-form form-sm">
+                                                            <label for="modal-ip">IP </label>
+                                                            <input type="text" class="modal-text form-control" onchange="updateContent('ip', this)" id="modal-ip" value="X">
+                                                        </p>
+                                                        
+                                                    </div>
+            
+            
+                                                       
+                                        
+                                                    <!--2.reihe-->
+                                                    <div class="col-sm-4">
+                                                            <p class="modal-text-line md-form form-sm">
+                                                                    <label for="modal-hostname">Gerätename</label>
+                                                                    <input type="text" class="modal-text form-control" onchange="updateContent('hostname', this)" id="modal-hostname" name="modal-hostname" value="X">
+                                                                </p>
+                                                                <p class="modal-text-line md-form form-sm">
+                                                                    <label for="modal-mac">MAC </label>
+                                                                    <input type="text" class="modal-text form-control" onchange="updateContent('mac', this)" id="modal-mac" value="X">
+                                                                </p>
+                                                               
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p class="modal-text-line md-form form-sm">
+                                                            <label for="modal-vendor">Hersteller </label>
+                                                            <input type="text" class="modal-text form-control" onchange="updateContent('vendor', this)" id="modal-vendor" value="X">
+                                                        </p>
+                                                        <p class="modal-text-line md-form form-sm">
+                                                            <label for="modal-os">Betriebssystem </label>
+                                                            <input type="text" class="modal-text form-control" onchange="updateContent('os', this)" id="modal-os" value="X">
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <p id="modal-id" style="display:none"></p>
+                                                    </div>
+            
+                                                </div>
+                                                <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
 
+                                                                    <p class="modal-text-line md-form form-sm">
+                                                                            <label for="modal-ports">Offene Ports: </label><span id="add-ports"> -hinzufügen- </span>
+                                                                            <div class="modal-text-line md-form form-sm" id="modal-ports">X</div>            
+                                                                    </p>
 
-                                            <p class="modal-text-line md-form">
-
-                                                <select class="mdb-select" onchange="updateContent('devicetype', this)">
-                                                    <option value="Repeater">Repeater</option>
-                                                    <option value="Hub">Hub</option>
-                                                    <option value="Bridge">Bridge</option>
-                                                    <option value="Switch">Switch</option>
-                                                    <option value="Router">Router</option>
-                                                    <option value="Gateway">Gateway</option>
-                                                    <option value="Access Point">Access Point</option>
-                                                    <option value="Firewall">Firewall</option>
-                                                    <option value="NAS">NAS</option>
-                                                    <option value="Server">Server</option>
-
-                                                </select>
-                                                <label>Geräteart</label>
-                                                </span>
-                                            </p>
-
-                                            
-
-                                            <!--   <p class="modal-text-line"><label for="modal-hostname">Gerätename: </label> <span class="modal-text" id="modal-hostname">X</span></p> -->
-                                            <p class="modal-text-line md-form">
-                                                <label for="modal-ip">IP </label>
-                                                <input type="text" class="modal-text form-control" onchange="updateContent('ip', this)" id="modal-ip" value="X">
-                                            </p>
-                                            
-                                        </div>
-
-
-                                           
-                            
-                                        <!--2.reihe-->
-                                        <div class="col-sm-3">
-                                                <p class="modal-text-line md-form">
-                                                        <label for="modal-hostname">Gerätename</label>
-                                                        <input type="text" class="modal-text form-control" onchange="updateContent('hostname', this)" id="modal-hostname" name="modal-hostname" value="X">
-                                                    </p>
-                                                    <p class="modal-text-line md-form">
-                                                        <label for="modal-mac">MAC </label>
-                                                        <input type="text" class="modal-text form-control" onchange="updateContent('mac', this)" id="modal-mac" value="X">
-                                                    </p>
-                                                   
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <p class="modal-text-line md-form">
-                                                <label for="modal-vendor">Hersteller </label>
-                                                <input type="text" class="modal-text form-control" onchange="updateContent('vendor', this)" id="modal-vendor" value="X">
-                                            </p>
-                                            <p class="modal-text-line md-form">
-                                                <label for="modal-os">Betriebssystem </label>
-                                                <input type="text" class="modal-text form-control" onchange="updateContent('os', this)" id="modal-os" value="X">
-                                            </p>
-                                        </div>
-                                        <div class="col-sm-3">
-                                                           
-                                            <label for="modal-ports">Offene Ports: </label>
-                                            <ul id="modal-ports">X</ul>
-
-                                        </div>
-                                        <p id="modal-id" style="display:none"></p>
-                                        </div>
-
+                                                            </div>
+                                                        </div>
+                                                </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>

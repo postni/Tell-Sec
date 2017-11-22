@@ -43,7 +43,7 @@
 
     <header>
         <!--Navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark stylish-color">
+        <nav class="navbar navbar-expand-lg navbar-dark stylish-color" style="z-index:100">
             <!-- Links -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Neu">
@@ -89,26 +89,23 @@
             </ul>
             <!--elemente rechts-->
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Analyse starten">
-                    <a class="nav-link" href="#">
-                        <img src="img/start.png" width="30px" alt="Redo" />
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Netzwerkscan starten">
-                    <a class="nav-link" href="#" onclick="startScan()">
-                        <img src="img/scan.png" width="30px" alt="Scan" />
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
-                    <a class="nav-link" href="#">
-                        <img src="img/settings.png" width="30px" alt="Einstellungen" />
-                    </a>
-                </li>
+                
+                
                 <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Map-Ansicht">
                     <a class="nav-link" href="main_map.html">
                         <img src="img/map.png" width="35px" alt="Map" />
                     </a>
                 </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Listenansicht">
+                        <a class="nav-link" href="main.html">
+                            <img src="img/list.png" width="35px" alt="Liste" />
+                        </a>
+                    </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
+                            <a class="nav-link" href="#">
+                                <img src="img/settings.png" width="30px" alt="Einstellungen" />
+                            </a>
+                        </li>
             </ul>
             </div>
         </nav>
@@ -116,13 +113,103 @@
 
     </header>
 
-
-    <!--Layout-->
     <main>
-TEST
+        <div class="container">
+            <br> 
+            <div class="row" id="good" style="display:none">
+                <div class="col-md-12 evaluation grey lighten-4 card card-body">
+                    <div >
+                        
+                        <div class="intro-text">
+                            <h1>Gute Aussichten!</h1>
+                            <img class="img-fluid" src="img/good.png" width="100px" alt="Sehr Gut" />
+                            <p class="skills">Ihr System ist in einem guten Zustand.</p><br>
+                            <p>Um eine noch genauere Risikobewertung durchzuführen, können die verschiedenen Risiken von Ihnen bzgl. der Eintrittswahrscheinlichkeit und der jeweiligen Schadenshöhe bewertet werden.</p>
+                        </div>
+                    </div>
+                </div>
 
-       
 
+            </div>
+            
+            <div class="row" id="ok" style="display:none">
+                   
+                <div class="col-md-12 evaluation grey lighten-4 card card-body">
+                    <div >
+                        
+                        <div class="intro-text">
+                            <h1>Vorsicht!</h1>
+                            <img class="img-fluid" src="img/warn.png" width="100px" alt="Achtung" />
+                            <p class="skills">Ihr System weist möglicherweise einige Sicherheitsrisiken auf.</p><br>
+                            <p>Um eine genauere Risikobewertung durchführen zu können, müssen die verschiedenen Risiken von Ihnen bzgl. der Eintrittswahrscheinlichkeit und der jeweiligen Schadenshöhe bewertet werden.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            
+            <div class="row" id="stop" style="display:none">
+                   
+                <div class="col-md-12 evaluation grey lighten-4 card card-body">
+                    <div >
+                        
+                        <div class="intro-text">
+                            <h1>Risiko!</h1>
+                            <img class="img-fluid" src="img/stop.png" width="100px" alt="Sehr Gut" />
+                            <p class="skills">Ihr System weist große Sicherheitsrisiken auf.</p><br>
+                            <p>Um eine genauere Risikobewertung durchführen zu können, müssen die verschiedenen Risiken von Ihnen bzgl. der Eintrittswahrscheinlichkeit und der jeweiligen Schadenshöhe bewertet werden.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <br>
+            <!-- inhalt-->
+            <div class="row">
+                
+                    <table class="table table-sm">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col" class="col-md-5">Risiko</th>
+                                <th scope="col" class="col-md-3">Wahrscheinlichkeit</th>
+                                <th scope="col" class="col-md-3">Schadenshöhe</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">1</th>
+                                <td>Wasserschaden</td>
+                                <td>
+                                        <div id="slidecontainer">
+                                                <input type="range" min="1" max="100" value="50" class="slider" id="probability">
+                                                <p><span id="demo"></span>%</p>
+                                              </div>
+                                </td>
+                                <td>
+                                        <div id="slidecontainer">
+                                                <input type="range" min="1" max="5"  class="slider" id="damage">
+                                                <span id="demod"></span>
+                                              </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">2</th>
+                                <td>Feuer</td>
+                                <td>w</td>
+                                <td>s</td>
+                              </tr>
+ 
+                            </tbody>
+                          </table>
+                          
+
+                    
+                    
+            </div>
+        </div>
 
     </main>
     <!-- SCRIPTS -->
