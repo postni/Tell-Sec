@@ -27,6 +27,10 @@ var data = {
 
 // initialize your network!
 var options = {
+    interaction: {
+        navigationButtons: true,
+        keyboard: true
+      },
     layout: {
         randomSeed: undefined,
         improvedLayout:true,
