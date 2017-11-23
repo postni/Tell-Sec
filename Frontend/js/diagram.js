@@ -28,6 +28,13 @@ var data = {
 // initialize your network!
 var options = {
     locale: 'de',
+    edges:{
+        arrows: {
+          to:     {enabled: true, scaleFactor:1, type:'arrow'},
+          middle: {enabled: false, scaleFactor:1, type:'arrow'},
+          from:   {enabled: false, scaleFactor:1, type:'arrow'}
+        }},
+    
     manipulation: {
         addNode: false,
         addEdge: function (data, callback) {
