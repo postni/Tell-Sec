@@ -3,9 +3,6 @@ var Datastore = require('nedb')
 
 class Data {
     constructor() {
-        this.counter = 0;
-        this.riskdata = {};
-
         this.db = {}
         this.db.enthaelt = new Datastore({ filename: "db/enthaelt.db", autoload: true })
         this.db.folge = new Datastore({ filename: "db/folge.db", autoload: true })
@@ -16,56 +13,50 @@ class Data {
         this.db.gehoert_zu = new Datastore({ filename: "db/gehoert_zu.db", autoload: true })
     }
 
-    getRisks(event, device) {      
-        
-        var laengeEnthaelt = 999;
-        var laengeRisiko = 999
-        var laengeGehoert_zu = 999
-        var laengeMassnahmen = 999
-        var laengeFuehrt_zu = 999
-        var laengeFolge = 999
+    getRisks(device) {
+        return new Promise(resolve => {
+            var laengeEnthaelt = 999;
+            var laengeRisiko = 999
+            var laengeGehoert_zu = 999
+            var laengeMassnahmen = 999
+            var laengeFuehrt_zu = 999
+            var laengeFolge = 999
 
-        var ergebnis = {
-            Bezeichnung: "",
-            Kategorien: [],
-            Risiken: []
-        }
+            var ergebnis = {
+                Bezeichnung: "",
+                Kategorien: [],
+                Risiken: []
+            }
 
-        this.db.risikoquelle.findOne({ Bezeichnung: device }, (err, res) => {
-            ergebnis.Bezeichnung = res.Bezeichnung
-            ergebnis.Kategorien.push(res.Kategorie)
 
-            if (err) console.log("err: " + err);
+            this.db.risikoquelle.findOne({ Bezeichnung: device }, (err, res) => {
+                ergebnis.Bezeichnung = res.Bezeichnung
+                ergebnis.Kategorien.push(res.Kategorie)
+
+                if (err) console.log("err: " + err);
 
                 this.db.enthaelt.find({ IDRQ: res.IDRQ }, (err, res) => {
-                    laengeEnthaelt = res.length    
+                    laengeEnthaelt = res.length
                     res.forEach((element) => {
                         this.db.risiko.find({ IDR: element.IDR }, (err, res) => {
-                            laengeRisiko = res.length         
-                            res.forEach((element) => {         
+                            laengeRisiko = res.length
+                            res.forEach((element) => {
                                 var risiko = {
                                     Bezeichnung: element.Bezeichnung,
                                     Massnahmen: [],
                                     Folgen: []
                                 }
-                                this.db.gehoert_zu.find({ IDR: element.IDR }, (err, res) => {           
-                                    laengeGehoert_zu = res.length            
+                                this.db.gehoert_zu.find({ IDR: element.IDR }, (err, res) => {
+                                    laengeGehoert_zu = res.length
                                     res.forEach((element) => {
-     
-                                        this.db.massnahme.find({ IDM: element.IDM }, (err, res) => {                 
+
+                                        this.db.massnahme.find({ IDM: element.IDM }, (err, res) => {
                                             laengeMassnahmen = res.length
                                             res.forEach((element) => {
                                                 risiko.Massnahmen.push(element.Bezeichnung)
                                                 laengeMassnahmen--
                                                 if (laengeFolge === 0 && laengeEnthaelt === 0 && laengeFuehrt_zu === 0 && laengeRisiko === 0 && laengeGehoert_zu === 0 && laengeMassnahmen === 0) {
-                                                    //TODO
-                                                    this.counter--
-                                                    if(this.counter ===0){
-                                                        //ANTWORT
-                                                        console.log("done")
-                                                        return [device,ergebnis];                                                    
-                                                        //_callback(event,this.riskdata)
-                                                    }
+                                                    resolve(ergebnis)
 
                                                 }
                                             })
@@ -87,15 +78,8 @@ class Data {
                                                 laengeFolge--
 
                                                 if (laengeFolge === 0 && laengeEnthaelt === 0 && laengeFuehrt_zu === 0 && laengeRisiko === 0 && laengeGehoert_zu === 0 && laengeMassnahmen === 0) {
-                                                    //TODO      
-                                                    
-                                                    this.riskdata[device] = ergebnis
-                                                    this.counter--
-                                                    if(this.counter ===0){
-                                                        //ANTWORT                                             
-                                                        console.log("done")
-                                                        return [device,ergebnis];                                                     
-                                                    }
+                                                    console.log(ergebnis)
+                                                    resolve(ergebnis)
 
                                                 }
                                             })
@@ -111,44 +95,33 @@ class Data {
                         laengeEnthaelt--
                     })
 
-
                 })
+            })
+
         })
-        
-        return ["error"];
     }
 
-    analyse(event, devices, _callback){   
+
+    analyse(event, devices, _callback) {
         var types = []
-        for(let id in devices){
+        for (let id in devices) {
             let devicetype = devices[id]["devicetype"];
             let exists = false
-            types.forEach((typ)=>{
-                if(typ === devicetype){
-                    exists=true
+            types.forEach((typ) => {
+                if (typ === devicetype) {
+                    exists = true
                 }
             })
 
-            if(!exists){
+            if (!exists) {
                 types.push(devicetype)
             }
 
         }
-        this.counter = types.length  
-        let risks = {}     
-        types.forEach((typ)=>{
-            console.log(typ)
-            let helper = this.getRisks(event, typ)
-            risks[helper[0]]=helper[1];
+        Promise.all(types.map((type) => { return this.getRisks(type).then(r => { return r }) })).then((res) => {
+            console.log(res)
+            _callback(event, res)
         })
-        console.log("donedone")
-        console.log(risks)
-        _callback(event,risks)
-    }
-
-    completeRiskAnalysis(event, device){
-        this.devicesLength--
-        //TODO
     }
 
 }

@@ -12,6 +12,7 @@ class Datastore {
     }
 
     newID() {
+        console.log("<newID()>")
         let devices = this.getDevices()
         let ids = []
         for (let i in devices) {
@@ -26,11 +27,12 @@ class Datastore {
             largest++;
         }
 
+        console.log("<newID()>")        
         return ("" + largest)
     }
 
     getTestdata() {
-        console.log("test")
+        console.log("<getTestdata()>")
         let testdata = {
             "1": {
                 "hostname": "Timo",
@@ -175,10 +177,7 @@ class Datastore {
         }
         sessionStorage.setItem("devices", JSON.stringify(testdata));
         sessionStorage.setItem("update", true)
-    }
-
-    analyseStarten() {
-        communicator.analyseSecurity();
+        console.log("</getTestdata()>")
     }
 
     getRisks(){
@@ -199,7 +198,9 @@ class Datastore {
     }
 
     getDevices() {
-        return JSON.parse(sessionStorage.getItem("devices"));
+        console.log("<getDevices()>")
+        console.log("</getDevices()>")
+        return JSON.parse(sessionStorage.getItem("devices"));        
     }
 
     changeValue(id, key,subkey, value) {
@@ -290,6 +291,7 @@ class Datastore {
     }
 
     checkForRisks(){
+        console.log("checkForRisks()")
         communicator.analyseSecurity();
     }
 }
@@ -299,8 +301,8 @@ class Communicator {
     }
 
     analyseSecurity() {
-        //let test = ipcRenderer.sendSync('analyse-devices', datastore.getDevices());
-        //console.log(test)
+        let test = ipcRenderer.sendSync('analyse-devices', datastore.getDevices());
+        console.log(test)
     }
 
     scanNetwork() {
