@@ -250,17 +250,34 @@ class Datastore {
     removeDevice(deviceId){
         console.log('PETER')
         let devices = this.getDevices();
-        var con = devices.deviceId.connectedTo;
-        var con2me = devices.deviceId.connectedToMe;
-        delete devices.deviceId;
-        con.forEach((connection)=> {
-            devices.connection.connectionsToMe=devices.connection.connectionsToMe.filter((id)=>{
+        console.log(devices[deviceId])
+        console.log(deviceId)
+        var con = devices[deviceId].connectedTo?devices[deviceId].connectedTo:null;
+        var con2me = devices[deviceId].connectedToMe?devices[deviceId].connectedToMe:null;
+        
+        delete devices[deviceId];
+        console.log(devices)
+        console.log(con)
+        if(con) {
+            con.forEach((connection)=> {
+            devices[connection].connectionsToMe=devices[connection].connectionsToMe.filter((id)=>{
                 return !(id===deviceId);
             })
             
-        })
-        sessionStorage.setItem('devices', devices);
+        })}
+        if(con2me) {
+            con2me.forEach((connection)=> {
+            devices[connection].connectedTo=devices[connection].connectedTo.filter((id)=>{
+                return !(id===deviceId);
+            })
+            
+        })}
+
+
         console.log(devices)
+        var d = JSON.stringify(devices)
+        sessionStorage.setItem('devices', d);
+        
     }
 
     setDevices(newDevices) {
