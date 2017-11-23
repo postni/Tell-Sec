@@ -159,7 +159,7 @@ function removeElement() {
         try {
             nodes.remove({ id: element });
             console.log(element)
-           // removeDevice(element);
+            datastore.removeDevice(element);
         }
         catch (err) {
             alert(err);
@@ -205,7 +205,7 @@ network.on("click", (params) => {
         if (devices[myId].ports) {
             devices[myId].ports.forEach((p) => {
                 let div = document.createElement("div")
-                div.classList.add("row", "justify-content")
+                div.classList.add("row", "no-margin", "justify-content")
                 let d1 = document.createElement("div")
                 d1.classList.add("col-sm-3", "pl-0")
                 let p1 = document.createElement("p")
@@ -265,7 +265,7 @@ network.on("click", (params) => {
                 ports.appendChild(div);
             })
         } else {
-            ports.innerHTML = "<p> unbekannt </p>"
+            ports.innerHTML = ""
         }
 
         add.onclick = () => {
