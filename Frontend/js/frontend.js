@@ -4,11 +4,15 @@ var ipcRenderer = require('electron').ipcRenderer;
 class Datastore {
 
     constructor() {
-        if (!!!sessionStorage.getItem("devices")) {
+        console.log('test////////*****//////')
+        if (!sessionStorage.getItem("devices")) {
+            console.log(sessionStorage.getItem("devices"))
             sessionStorage.setItem("devices", JSON.stringify({}))
         }
-        if (!!!sessionStorage.getItem("update")) {
-            sessionStorage.setItem("update", false)
+        if (!sessionStorage.getItem("update")) {
+            console.log('/////////////////////////////////////////////))))))=???????????????????????????????')
+            sessionStorage.setItem("update", true)
+            
         }
     }
 
@@ -212,7 +216,8 @@ class Datastore {
             devices[id][key] = value;
         }
         
-        console.log(devices)
+
+        
         sessionStorage.setItem("devices", JSON.stringify(devices));
     }
 
@@ -256,7 +261,7 @@ class Datastore {
                 let exists = false;
 
                 for (let o in devices) {
-                    if (newDevices[n].ip === devices[o].ip || (newDevices[n].mac === devices[o].mac && newDevices[n].mac)) {
+                    if ((newDevices[n].ip === devices[o].ip && newDevices[n].ip) || (newDevices[n].mac === devices[o].mac && newDevices[n].mac)) {
                         devices[o].hostname = newDevices[n].hostname ? devices[o].hostname : newDevices[n].hostname;
                         devices[o].ip = devices[o].ip ? devices[o].ip : newDevices[n].ip;
                         devices[o].mac = devices[o].mac ? devices[o].mac : newDevices[n].mac;
@@ -276,7 +281,9 @@ class Datastore {
                     devices[nextID]["ports"] = newDevices[n].openPorts ? newDevices[n].openPorts : null
                     devices[nextID]["os"] = newDevices[n].osNmap ? newDevices[n].osNmap : null
                     devices[nextID]["vendor"] = newDevices[n].vendor ? newDevices[n].vendor : null
-                    devices[nextID]["devicetype"] = "Client"
+                    devices[nextID]["devicetype"] = newDevices[n].devicetype? newDevices[n].devicetype : "Client"
+                    devices[nextID]["connetedTo"] = newDevices[n].connetedTo? newDevices[n].connetedTo : []
+                    devices[nextID]["connectionsToMe"] = newDevices[n].connectionsToMe? newDevices[n].connectionsToMe : []
                     nextID++;
                 }
 
@@ -285,7 +292,7 @@ class Datastore {
             console.log(devices)
 
             sessionStorage.setItem("devices", JSON.stringify(devices))
-            //sessionStorage.setItem("update", true)
+            sessionStorage.setItem("update", true)
             console.log("==========================================")
         }
     }
@@ -305,6 +312,7 @@ class Communicator {
     }
 
     scanNetwork() {
+        sessionStorage.setItem("update", false)
         ipcRenderer.send('scan-network');
     }
 

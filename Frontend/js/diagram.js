@@ -57,7 +57,7 @@ function checkForUpdate() {
     console.log("updater var: " + updater)
     if (updater) {
         console.log(sessionStorage.getItem("update"))
-        //sessionStorage.setItem("update", false)
+       // sessionStorage.setItem("update", false)
         updateMyData()
     }
 }
@@ -357,6 +357,8 @@ function opensave () {
 }
 function openopen () {
     filehandler.openDialog()
+    sessionStorage.setItem("update", false)
+    this.getData = window.setInterval(checkForUpdate, 1000)    
 }
 
 
