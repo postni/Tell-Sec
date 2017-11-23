@@ -69,6 +69,7 @@ function updateMyData() {
     catch (err) {
         console.log(err)
     }
+    datastore.checkForRisks()
     let ids = nodes.getIds();
     console.log("IDs: " + ids);
     nodes.remove(ids)

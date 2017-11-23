@@ -157,7 +157,7 @@ electron.ipcMain.on('analyse-devices', ( event, devices )=>{
 
 function analysisComplete( event, risks ){
   console.log("#################################################")
-  console.log("/////////////////////DONE////////////////////////")
+  console.log(risks)
   console.log("#################################################")
   event.returnValue = risks  
 
