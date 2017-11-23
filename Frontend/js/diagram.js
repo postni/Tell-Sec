@@ -1,5 +1,6 @@
 var vis = require('./vis/dist/vis'); //require("vis/dist/vis.min.js")
 var datastore = require('./js/frontend').datastore
+var filehandler = require('./js/filehandler')
 $(document).ready(() => { $('.mdb-select').material_select() })
 /* Bilder */
 var DIR = '../img';
@@ -352,7 +353,12 @@ network.on("click", (params) => {
     }
 })
 
-
+function opensave () {
+    filehandler.saveDialog()
+}
+function openopen () {
+    filehandler.openDialog()
+}
 
 
 /*.................... */

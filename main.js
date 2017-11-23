@@ -2,7 +2,6 @@ const electron = require('electron')
 const NetworkScanner = require('./backend/scanner');
 const datastore = require('./backend/data').datastore
 
-
 // Module to control application life.
 const app = electron.app
 
