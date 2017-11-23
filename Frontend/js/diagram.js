@@ -27,6 +27,22 @@ var data = {
 
 // initialize your network!
 var options = {
+    layout: {
+        randomSeed: undefined,
+        improvedLayout:true,
+        hierarchical: {
+          enabled:true,
+          levelSeparation: 150,
+          nodeSpacing: 100,
+          treeSpacing: 200,
+          blockShifting: true,
+          edgeMinimization: true,
+          parentCentralization: true,
+          direction: 'LR',        // UD, DU, LR, RL
+          sortMethod: 'hubsize'   // hubsize, directed
+        }
+    },
+    
     locale: 'de',
     edges:{
         arrows: {
