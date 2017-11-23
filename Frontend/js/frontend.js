@@ -6,11 +6,9 @@ class Datastore {
     constructor() {
         console.log('test////////*****//////')
         if (!sessionStorage.getItem("devices")) {
-            console.log(sessionStorage.getItem("devices"))
             sessionStorage.setItem("devices", JSON.stringify({}))
         }
         if (!sessionStorage.getItem("update")) {
-            console.log('/////////////////////////////////////////////))))))=???????????????????????????????')
             sessionStorage.setItem("update", true)
             
         }
@@ -247,6 +245,22 @@ class Datastore {
         devices[device.id] = { "devicetype": devicetype };
 
         sessionStorage.setItem("devices", JSON.stringify(devices))
+    }
+
+    removeDevice(deviceId){
+        console.log('PETER')
+        let devices = this.getDevices();
+        var con = devices.deviceId.connectedTo;
+        var con2me = devices.deviceId.connectedToMe;
+        delete devices.deviceId;
+        con.forEach((connection)=> {
+            devices.connection.connectionsToMe=devices.connection.connectionsToMe.filter((id)=>{
+                return !(id===deviceId);
+            })
+            
+        })
+        sessionStorage.setItem('devices', devices);
+        console.log(devices)
     }
 
     setDevices(newDevices) {

@@ -147,9 +147,12 @@ function appendNode(label, img, id) {
 function removeElement() {
     let selectedNodes = network.getSelectedNodes();
     let selectedEdges = network.getSelectedEdges();
+    
     selectedNodes.forEach(function (element) {
         try {
             nodes.remove({ id: element });
+            console.log(element)
+           // removeDevice(element);
         }
         catch (err) {
             alert(err);
@@ -165,6 +168,7 @@ function removeElement() {
         }
 
     }, this);
+    modal.style.display = "none";
 
 }
 /*Ausgabe label des angeklickten Elements */
