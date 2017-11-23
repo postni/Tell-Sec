@@ -250,14 +250,33 @@
                                                             <div class="col-sm-12">
 
                                                                     <p class="modal-text-line md-form form-sm">
-                                                                            <label for="modal-ports">Offene Ports: </label><span id="add-ports"> -hinzufügen- </span>
-                                                                            <div class="modal-text-line md-form form-sm" id="modal-ports">X</div>            
+                                                                            <label for="modal-ports">Offene Ports:</label>
+                                                                            <div class="modal-text-line md-form form-sm" id="modal-ports" style="max-height:200px; overflow-y: scroll">X</div>            
                                                                     </p>
                                                                     <p>
-                                                                        <button onclick="removeElement()">delete</button>
+                                                                        
+                                                                        
                                                                     </p>
 
                                                             </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xs-1">
+                                                                <span class="close"><img src="img/cross.png" width="25px" alt="Schließen"></span>
+                                                            </div>
+                                                            
+                                                            <div class="col-xs-1">
+                                                                    <span id="add-ports"> 
+                                                                        <img src="img/ethernet.png" width="30px" alt="Port hinzufügen">
+                                                                    </span>
+                                                                </div>
+                                                              
+                                                            <div class="col-xs-1">
+                                                                <a onclick="removeElement()">
+                                                                    <img src="img/trash.png" width="30px" alt="Entfernen">
+                                                                    </a>
+                                                            </div>
+                                                            <div class="col-xs-9"></div>
                                                         </div>
                                                 </div>
                                     </div>

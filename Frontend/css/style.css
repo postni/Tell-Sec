@@ -140,9 +140,9 @@ label.active{
 #add-ports{
     font-size: 0.7rem;
     color: #757575;
-    position:relative;
+   /* position:relative;
     top:0.6rem;
-    left: 6rem;
+    left: 6rem;*/
     cursor: pointer;
 }
 
