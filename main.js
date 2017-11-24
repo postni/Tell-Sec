@@ -161,12 +161,13 @@ function analysisComplete( event, risks ){
   risks.forEach(element => {
     console.log("element: ")
     console.log(element)
+    riskObject[element.Bezeichnung] = element.Risiken
   });
 
   console.log("#################################################")
   console.log(".......................DONE......................")
   console.log("#################################################")
-  event.returnValue = risks  
+  event.returnValue = riskObject  
 
 }
 
