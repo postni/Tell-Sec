@@ -13,7 +13,82 @@ class Data {
         this.db.gehoert_zu = new Datastore({ filename: "db/gehoert_zu.db", autoload: true })
     }
 
-    getRisks(device) {
+    findIDRQinEnthaelt(idrq){
+        return new Promise(resolve =>{
+            this.db.enthaelt.find({ IDRQ: idrq }, (err, res) => {
+                let risiken = []
+                res.forEach((element) => {
+                    risiken.push(this.findIDRinRisiko(element.IDR))
+                })
+                Promise.all(risiken).then(resolve)
+    
+            })
+        })
+        
+    }
+
+    findIDRinGehoertZu(idr){
+        return new Promise(resolve => {
+            this.db.gehoert_zu.find({ IDR: idr }, (err, res) => {
+                let massnahmen = []                
+                res.forEach((element) => {
+                  massnahmen.push(this.findIDMinMassnahme(element.IDM))  
+                })
+                Promise.all(massnahmen).then(resolve)
+            })
+        })
+    }
+
+    findIDMinMassnahme(idm){
+        return new Promise(resolve =>{
+            this.db.massnahme.findOne({ IDM: idm }, (err, res) => {    
+                resolve(res.Bezeichnung)
+            })
+        })
+    }
+
+
+
+    findIDRinRisiko(idr){
+        return new Promise(resolve => {
+            this.db.risiko.findOne({ IDR: idr }, (err, res) => {
+                var risiko = {
+                    Bezeichnung: res.Bezeichnung,
+                    Folgen: [],
+                    Massnahmen: []
+                }
+                this.findIDRinFuehrtZu(idr).then((res)=>{
+                    risiko.Folgen = res;
+                    return this.findIDRinGehoertZu(idr)
+                }).then(res=>{
+                    risiko.Massnahmen = res;
+                    resolve(risiko)
+                })
+        })
+        })
+    }
+
+    findIDRinFuehrtZu(idr){
+        return new Promise(resolve =>{
+            this.db.fuehrt_zu.find({ IDR: idr }, (err, res) => {
+                let folgen = []
+                res.forEach((element) => {
+                    folgen.push(this.findIDFinFolge(element.IDF))
+                })
+                Promise.all(folgen).then(resolve)
+            })
+        })
+    }
+
+    findIDFinFolge(id){
+        return new Promise(resolve =>{
+            this.db.folge.findOne({ IDF: id }, (err, res) => {
+                resolve(res.Bezeichnung)
+            })
+        })
+    }
+
+    findBezeichnunginRisikoquelle(bezeichnung) {
         return new Promise(resolve => {
             var laengeEnthaelt = 999;
             var laengeRisiko = 999
@@ -24,77 +99,14 @@ class Data {
 
             var ergebnis = {
                 Bezeichnung: "",
-                Kategorien: [],
                 Risiken: []
             }
-
-
-            this.db.risikoquelle.findOne({ Bezeichnung: device }, (err, res) => {
+            this.db.risikoquelle.findOne({ Bezeichnung: bezeichnung }, (err, res) => {
+                if (err) console.log("err: " + err);                
                 ergebnis.Bezeichnung = res.Bezeichnung
-                ergebnis.Kategorien.push(res.Kategorie)
-
-                if (err) console.log("err: " + err);
-
-                this.db.enthaelt.find({ IDRQ: res.IDRQ }, (err, res) => {
-                    laengeEnthaelt = res.length
-                    res.forEach((element) => {
-                        this.db.risiko.find({ IDR: element.IDR }, (err, res) => {
-                            laengeRisiko = res.length
-                            res.forEach((element) => {
-                                var risiko = {
-                                    Bezeichnung: element.Bezeichnung,
-                                    Massnahmen: [],
-                                    Folgen: []
-                                }
-                                this.db.gehoert_zu.find({ IDR: element.IDR }, (err, res) => {
-                                    laengeGehoert_zu = res.length
-                                    res.forEach((element) => {
-
-                                        this.db.massnahme.find({ IDM: element.IDM }, (err, res) => {
-                                            laengeMassnahmen = res.length
-                                            res.forEach((element) => {
-                                                risiko.Massnahmen.push(element.Bezeichnung)
-                                                laengeMassnahmen--
-                                                if (laengeFolge === 0 && laengeEnthaelt === 0 && laengeFuehrt_zu === 0 && laengeRisiko === 0 && laengeGehoert_zu === 0 && laengeMassnahmen === 0) {
-                                                    resolve(ergebnis)
-
-                                                }
-                                            })
-
-                                        })
-                                        laengeGehoert_zu--
-                                    })
-
-                                    ergebnis.Risiken.push()
-                                })
-
-                                this.db.fuehrt_zu.find({ IDR: element.IDR }, (err, res) => {
-                                    laengeFuehrt_zu = res.length
-                                    res.forEach((element) => {
-                                        this.db.folge.find({ IDF: element.IDF }, (err, res) => {
-                                            laengeFolge = res.length
-                                            res.forEach((element) => {
-                                                risiko.Folgen.push(element.Bezeichnung)
-                                                laengeFolge--
-
-                                                if (laengeFolge === 0 && laengeEnthaelt === 0 && laengeFuehrt_zu === 0 && laengeRisiko === 0 && laengeGehoert_zu === 0 && laengeMassnahmen === 0) {
-                                                    console.log(ergebnis)
-                                                    resolve(ergebnis)
-
-                                                }
-                                            })
-                                        })
-                                        laengeFuehrt_zu--
-                                    })
-                                })
-                                ergebnis.Risiken.push(risiko)
-                                laengeRisiko--
-                            })
-
-                        })
-                        laengeEnthaelt--
-                    })
-
+                this.findIDRQinEnthaelt(res.IDRQ).then(res =>{
+                    ergebnis.Risiken = res
+                    resolve(ergebnis)
                 })
             })
 
@@ -118,9 +130,13 @@ class Data {
             }
 
         }
-        Promise.all(types.map((type) => { return this.getRisks(type).then(r => { return r }) })).then((res) => {
+        console.log(types)
+        Promise.all(types.map((bezeichnung) => { return this.findBezeichnunginRisikoquelle(bezeichnung).then(r => { return r }) })).then((res) => {
+            console.log("|||||||||||||||||||||||||||||||")
+            console.log("||||||----promise-all----||||||")
+            console.log("|||||||||||||||||||||||||||||||")            
             console.log(res)
-            _callback(event, res)
+            _callback(event,res)
         })
     }
 

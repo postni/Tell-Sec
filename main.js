@@ -156,8 +156,15 @@ electron.ipcMain.on('analyse-devices', ( event, devices )=>{
 })
 
 function analysisComplete( event, risks ){
+
+  let riskObject = {}
+  risks.forEach(element => {
+    console.log("element: ")
+    console.log(element)
+  });
+
   console.log("#################################################")
-  console.log(risks)
+  console.log(".......................DONE......................")
   console.log("#################################################")
   event.returnValue = risks  
 
