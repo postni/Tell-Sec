@@ -397,7 +397,7 @@ function openopen () {
 /*.................... */
 // Get the modal
 var modal = document.getElementById('myModal');
-
+var sidenav = document.getElementById('siden');
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
 
@@ -416,8 +416,9 @@ span.onclick = function () {
 window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
-    }
-}
+    }else if (event.target == sidenav) {
+       sidenav.style.display = "none";
+}}
 
 function toggleLoad() {
     var i = document.getElementById('loadsc');

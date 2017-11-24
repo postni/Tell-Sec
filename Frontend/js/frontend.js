@@ -250,14 +250,15 @@ class Datastore {
     removeDevice(deviceId){
         console.log('PETER')
         let devices = this.getDevices();
-        console.log(devices[deviceId])
-        console.log(deviceId)
+       // console.log(devices[deviceId])
+       //console.log(deviceId)
         var con = devices[deviceId].connectedTo?devices[deviceId].connectedTo:null;
-        var con2me = devices[deviceId].connectedToMe?devices[deviceId].connectedToMe:null;
-        
+
+        var con2me = devices[deviceId].connectionsToMe?devices[deviceId].connectionsToMe:null;
+        console.log(con2me)
         delete devices[deviceId];
-        console.log(devices)
-        console.log(con)
+        //console.log(devices)
+        //console.log(con)
         if(con) {
             con.forEach((connection)=> {
             devices[connection].connectionsToMe=devices[connection].connectionsToMe.filter((id)=>{
