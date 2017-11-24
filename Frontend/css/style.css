@@ -1,9 +1,18 @@
-html, body {height: 100%}
+html, body {
+    height: 100%;
+    font-family: Roboto,sans-serif;
+
+}
 
 .menu_elements {
     margin-top: 200px;
 
 }
+.border{
+    font-family: Roboto,sans-serif;
+}
+
+
 
 .evaluation {
     text-align:center;
@@ -82,7 +91,7 @@ html, body {height: 100%}
 
     left: 0;
    /* top: 0;*/
-    width: 80%; /* Full width */
+    width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
 
