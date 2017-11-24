@@ -103,10 +103,10 @@ class Data {
             }
             this.db.risikoquelle.findOne({ Bezeichnung: bezeichnung }, (err, res) => {
                 if (err) console.log("err: " + err);                
-                ergebnis.Bezeichnung = res.Bezeichnung
+                ergebnis.Bezeichnung = res.Bezeichnung;
                 this.findIDRQinEnthaelt(res.IDRQ).then(res =>{
-                    ergebnis.Risiken = res
-                    resolve(ergebnis)
+                    ergebnis.Risiken = res;
+                    resolve(ergebnis);
                 })
             })
 
@@ -118,25 +118,25 @@ class Data {
         var types = []
         for (let id in devices) {
             let devicetype = devices[id]["devicetype"];
-            let exists = false
+            let exists = false;
             types.forEach((typ) => {
                 if (typ === devicetype) {
-                    exists = true
+                    exists = true;
                 }
             })
 
             if (!exists) {
-                types.push(devicetype)
+                types.push(devicetype);
             }
 
         }
         console.log(types)
         Promise.all(types.map((bezeichnung) => { return this.findBezeichnunginRisikoquelle(bezeichnung).then(r => { return r }) })).then((res) => {
-            console.log("|||||||||||||||||||||||||||||||")
-            console.log("||||||----promise-all----||||||")
-            console.log("|||||||||||||||||||||||||||||||")            
-            console.log(res)
-            _callback(event,res)
+            console.log("|||||||||||||||||||||||||||||||");
+            console.log("||||||----promise-all----||||||");
+            console.log("|||||||||||||||||||||||||||||||") ;           
+            console.log(res);
+            _callback(event,res);
         })
     }
 

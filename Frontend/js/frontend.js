@@ -1,3 +1,4 @@
+var datastore = require('../../Backend/data');
 var ipcRenderer = require('electron').ipcRenderer;
 
 
@@ -10,7 +11,7 @@ class Datastore {
         }
         if (!sessionStorage.getItem("update")) {
             sessionStorage.setItem("update", true)
-            
+
         }
     }
 
@@ -30,7 +31,7 @@ class Datastore {
             largest++;
         }
 
-        console.log("<newID()>")        
+        console.log("<newID()>")
         return ("" + largest)
     }
 
@@ -41,7 +42,7 @@ class Datastore {
                 "hostname": "Timo",
                 "vendor": "TimoTec",
                 "connectedTo": ["3"],
-                "connectionsToMe":[""],
+                "connectionsToMe": [""],
                 "os": "Timo94",
                 "ip": "10.23.4.61",
                 "mac": "F2:34:A5:67:B2:81",
@@ -88,7 +89,7 @@ class Datastore {
                 "hostname": "Benedikt",
                 "vendor": "BeneTec",
                 "connectedTo": ["2"],
-                "connectionsToMe": ["1","4","5","6"],
+                "connectionsToMe": ["1", "4", "5", "6"],
                 "os": "Bene94",
                 "ip": "10.23.4.63",
                 "mac": "F2:34:A5:67:B2:83",
@@ -183,55 +184,39 @@ class Datastore {
         console.log("</getTestdata()>")
     }
 
-    getRisks(){
-        return sessionStorage.getItem("risks")
-    }
-
-    addRisk(riskId, risk){
-        let risks = this.getRisks()
-        let devices = this.getDevices()
-
-        let id = riskId.split("_")[0]
-
-        risks[riskId] = risk;
-        risks[riskId]["damage"] = 0;
-        //risks[riskId]["influenced"] = devices[]["connectionsToMe"]?devices[]["connectionsToMe"]: [];
-
-
-    }
 
     getDevices() {
         console.log("<getDevices()>")
-        console.log("</getDevices()>")
-        return JSON.parse(sessionStorage.getItem("devices"));        
+        let rueckgabe = JSON.parse(sessionStorage.getItem("devices"))?JSON.parse(sessionStorage.getItem("devices")):{};
+        return rueckgabe;
     }
 
-    changeValue(id, key,subkey, value) {
+    changeValue(id, key, subkey, value) {
         let devices = this.getDevices();
         console.log(devices)
-        if(subkey){
+        if (subkey) {
             devices[id][key][subkey] = value;
-        }else{
+        } else {
             devices[id][key] = value;
         }
-        
 
-        
+
+
         sessionStorage.setItem("devices", JSON.stringify(devices));
     }
 
-    addTo(id, key, subkey, value) {  
+    addTo(id, key, subkey, value) {
         let devices = this.getDevices();
         console.log(devices)
-        if(!devices[id][key]){
-            devices[id][key]=[]
+        if (!devices[id][key]) {
+            devices[id][key] = []
         }
-        if(subkey){
-            if(!devices[id][key][subkey]){
-                devices[id][key][subkey]=[]
+        if (subkey) {
+            if (!devices[id][key][subkey]) {
+                devices[id][key][subkey] = []
             }
             devices[id][key][subkey].push(value)
-        }else{
+        } else {
             devices[id][key].push(value)
         }
         console.log(devices)
@@ -247,38 +232,40 @@ class Datastore {
         sessionStorage.setItem("devices", JSON.stringify(devices))
     }
 
-    removeDevice(deviceId){
+    removeDevice(deviceId) {
         console.log('PETER')
         let devices = this.getDevices();
-       // console.log(devices[deviceId])
-       //console.log(deviceId)
-        var con = devices[deviceId].connectedTo?devices[deviceId].connectedTo:null;
+        // console.log(devices[deviceId])
+        //console.log(deviceId)
+        var con = devices[deviceId].connectedTo ? devices[deviceId].connectedTo : null;
 
-        var con2me = devices[deviceId].connectionsToMe?devices[deviceId].connectionsToMe:null;
+        var con2me = devices[deviceId].connectionsToMe ? devices[deviceId].connectionsToMe : null;
         console.log(con2me)
         delete devices[deviceId];
         //console.log(devices)
         //console.log(con)
-        if(con) {
-            con.forEach((connection)=> {
-            devices[connection].connectionsToMe=devices[connection].connectionsToMe.filter((id)=>{
-                return !(id===deviceId);
+        if (con) {
+            con.forEach((connection) => {
+                devices[connection].connectionsToMe = devices[connection].connectionsToMe.filter((id) => {
+                    return !(id === deviceId);
+                })
+
             })
-            
-        })}
-        if(con2me) {
-            con2me.forEach((connection)=> {
-            devices[connection].connectedTo=devices[connection].connectedTo.filter((id)=>{
-                return !(id===deviceId);
+        }
+        if (con2me) {
+            con2me.forEach((connection) => {
+                devices[connection].connectedTo = devices[connection].connectedTo.filter((id) => {
+                    return !(id === deviceId);
+                })
+
             })
-            
-        })}
+        }
 
 
         console.log(devices)
         var d = JSON.stringify(devices)
         sessionStorage.setItem('devices', d);
-        
+
     }
 
     setDevices(newDevices) {
@@ -314,9 +301,9 @@ class Datastore {
                     devices[nextID]["ports"] = newDevices[n].openPorts ? newDevices[n].openPorts : null
                     devices[nextID]["os"] = newDevices[n].osNmap ? newDevices[n].osNmap : null
                     devices[nextID]["vendor"] = newDevices[n].vendor ? newDevices[n].vendor : null
-                    devices[nextID]["devicetype"] = newDevices[n].devicetype? newDevices[n].devicetype : "Client"
-                    devices[nextID]["connetedTo"] = newDevices[n].connetedTo? newDevices[n].connetedTo : []
-                    devices[nextID]["connectionsToMe"] = newDevices[n].connectionsToMe? newDevices[n].connectionsToMe : []
+                    devices[nextID]["devicetype"] = newDevices[n].devicetype ? newDevices[n].devicetype : "Client"
+                    devices[nextID]["connetedTo"] = newDevices[n].connetedTo ? newDevices[n].connetedTo : []
+                    devices[nextID]["connectionsToMe"] = newDevices[n].connectionsToMe ? newDevices[n].connectionsToMe : []
                     nextID++;
                 }
 
@@ -330,9 +317,33 @@ class Datastore {
         }
     }
 
-    checkForRisks(){
+    checkForRisks() {
         console.log("checkForRisks()")
         communicator.analyseSecurity();
+    }
+
+    addRisks(risks) {
+        let devices = this.getDevices()
+        for (let dType in risks) {
+            for (let id in devices) {
+                if (devices[id].devicetype === dType && devices[id].risks) {
+                    devices[id].risks = {}
+                    risks[dType].forEach((risk) => {
+                        let newRisk = {}
+                        let riskId = id + "_" + risk.Bezeichnung
+                        newRisk.consequences = risk.Folgen
+                        newRisk.countermeassures = risk.Massnahmen
+                        newRisk.probability = 0
+                        newRisk.damage = 0
+                        devices[id].risks[riskId] = newRisk
+                    })
+                }
+            }
+        }
+        sessionStorage.setItem("devices", JSON.stringify(devices))
+    }
+    getRisks() {
+        console.log("risks")
     }
 }
 
@@ -341,8 +352,9 @@ class Communicator {
     }
 
     analyseSecurity() {
-        let test = ipcRenderer.sendSync('analyse-devices', datastore.getDevices());
-        console.log(test)
+        let risks = ipcRenderer.sendSync('analyse-devices', datastore.getDevices());
+        //console.log(test)
+        datastore.addRisks(risks)
     }
 
     scanNetwork() {
@@ -365,15 +377,6 @@ ipcRenderer.on('scan-complete', (event, data) => {
     console.log("scan complete")
     datastore.setDevices(data);
 });
-
-ipcRenderer.on('analysis-complete', (event, risiks)=>{
-    console.log("###################################")
-    console.log("-------Analyse abgeschlossen-------")
-    console.log("###################################")
-    sessionStorage.setItem("risks", risks)
-    console.log("##################################")  
-    //sessionStorage.setItem("update", true)  
-})
 
 datastore = new Datastore()
 communicator = new Communicator()
