@@ -54,7 +54,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark stylish-color">
             <!-- Links -->
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Neu">
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Neu" onclick="sessionStorage.setItem('devices', '{}'); updateMyData()">
                     <a class="nav-link" href="#">
                         <img src="img/new.png" width="30px" alt="Neu" />
                     </a>
@@ -69,10 +69,14 @@
                     </div>
 
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Öffnen">
-                    <a class="nav-link" onclick="openopen()">
+                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Öffnen">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="img/open.png" width="35px" alt="Öffnen" />
                     </a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item">Öffnen</a>
+                        <a class="dropdown-item" onclick="openopen()">Hinzufügen</a>
+                    </div>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Zurück">
                     <a class="nav-link" href="#">
@@ -109,11 +113,30 @@
                         <img src="img/scan.png" width="30px" alt="Scan" />
                     </a>
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
-                    <a class="nav-link" href="#">
+             
+
+
+                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Einstellungen" >
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="img/settings.png" width="30px" alt="Einstellungen" />
                     </a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" onclick="opensave()">About</a>
+                        <a class="dropdown-item" onclick="opensave()">Hilfe</a>
+                        <a class="dropdown-item" onclick="window.close();">Schließen</a>
+                    </div>
+
                 </li>
+
+
+
+
+
+
+
+
+
+
                 <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Listenansicht">
                     <a class="nav-link" href="main.html">
                         <img src="img/list.png" width="35px" alt="Liste" />

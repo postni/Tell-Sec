@@ -29,7 +29,8 @@ var data = {
 var options = {
     interaction: {
         navigationButtons: true,
-        keyboard: true
+        keyboard: true,
+       // multiselect: true
       },
     layout: {
         randomSeed: undefined,
@@ -57,6 +58,9 @@ var options = {
     
     manipulation: {
         addNode: false,
+        deleteNode: false,
+        deleteEdge: false,
+        initiallyActive: true,
         addEdge: function (data, callback) {
             if (data.from == data.to) {
 
@@ -70,6 +74,8 @@ var options = {
         }
     }
 }
+
+
 var network = new vis.Network(container, data, options);
 
 var ids = 100;
