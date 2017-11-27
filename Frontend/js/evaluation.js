@@ -1,3 +1,5 @@
+var datastore = require("./js/frontend").datastore
+
 // Slider1
 var prob = document.getElementById("probability");
 var output = document.getElementById("demo");
@@ -44,6 +46,37 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
+function getRisks(){
+    let devices = datastore.getDevices();
+    let table = document.getElementById("risk-table")
+    let tablehead = table.insertRow()
+    let headerText = ["Gerät", "Risiken"]
+    headerText.forEach((text)=>{
+        let th = document.createElement("th")
+        th.innerText = text
+        tablehead.appendChild(th)        
+    })
+
+    for(let id in devices){
+        let device = devices[id];
+        let row = table.insertRow()
+        let nameCell = row.insertCell()
+        nameCell.innerText = device.hostname
+        let riskCell = row.insertCell()
+        let riskTable = document.createElement("table")
+        riskTable.id=id+"-risks"
+        riskCell.appendChild(riskTable)
+        for(let risk in device.risks){
+            let riskRow = riskTable.insertRow()
+            let cellXY = riskRow.insertCell()
+            cellXY.innerText= risk.split("_")[1]
+        }
+    }
+
+}
+getRisks()
+
 var decision = getRandomInt(0, 100)
 console.log(decision)
 

@@ -342,9 +342,6 @@ class Datastore {
         }
         sessionStorage.setItem("devices", JSON.stringify(devices))
     }
-    getRisks() {
-        console.log("risks")
-    }
 }
 
 class Communicator {
