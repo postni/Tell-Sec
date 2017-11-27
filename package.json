@@ -13,6 +13,7 @@
     "jquery": "^3.2.1",
     "jquery-ui": "^1.12.1",
     "nedb": "^1.8.0",
-    "node-nmap": "^4.0.0"
+    "node-nmap": "^4.0.0",
+    "status-indicator": "^1.0.9"
   }
 }

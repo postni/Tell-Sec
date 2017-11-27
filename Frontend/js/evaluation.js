@@ -1,5 +1,6 @@
 var datastore = require("./js/frontend").datastore
 
+
 // Slider1
 var prob = document.getElementById("probability");
 var output = document.getElementById("demo");
@@ -62,20 +63,52 @@ function getRisks(){
         let device = devices[id];
         let row = table.insertRow()
         let nameCell = row.insertCell()
-        nameCell.innerText = device.hostname
+     
+        let statusIndicator = document.createElement("status-indicator")
+        statusIndicator.setAttribute("negative","")
+        statusIndicator.setAttribute("pulse","")
+        nameCell.appendChild(statusIndicator)
+
+        nameCell.appendChild(document.createTextNode("  "+device.hostname))
         let riskCell = row.insertCell()
+
+        riskCell.classList.add("py-0")
+
         let riskTable = document.createElement("table")
         riskTable.id=id+"-risks"
         riskCell.appendChild(riskTable)
         for(let risk in device.risks){
             let riskRow = riskTable.insertRow()
-            let cellXY = riskRow.insertCell()
-            cellXY.innerText= risk.split("_")[1]
+            let cellRiskLeft = riskRow.insertCell()
+            let cellRiskRight = riskRow.insertCell()
+            let riskNameTable = document.createElement("table")
+            cellRiskLeft.appendChild(riskNameTable)
+            
+            insertProbabilitySlider(cellRiskLeft, id)
+            
+            riskNameTable.insertRow().innerText = risk.split("_")[1]
+
+            let innerRiskTable = document.createElement("table")
+            cellRiskRight.appendChild(innerRiskTable)
+
+            device.risks[risk].consequences .forEach((consequence)=>{
+                let consequenceRow = innerRiskTable.insertRow()
+                consequenceRow.innerText = consequence
+            })
+
         }
     }
 
 }
 getRisks()
+
+function insertProbabilitySlider(table,id){
+    let container = document.createElement("div")
+    container.setAttribute("id",id+"-propability")
+
+
+    table.appendChild(container)
+}
 
 var decision = getRandomInt(0, 100)
 console.log(decision)
