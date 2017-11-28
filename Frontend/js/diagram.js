@@ -390,14 +390,7 @@ network.on("click", (params) => {
     }
 })
 
-function opensave () {
-    filehandler.saveDialog()
-}
-function openopen () {
-    filehandler.openDialog()
-    sessionStorage.setItem("update", false)
-    this.getData = window.setInterval(checkForUpdate, 1000)    
-}
+
 
 
 /*.................... */
@@ -442,6 +435,9 @@ function toggleLoad() {
     console.log(showloader)
     sessionStorage.setItem("showloader", showloader)
 }
+
+
+
 
 
 module.exports.update = update;

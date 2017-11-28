@@ -14,7 +14,9 @@ class Filehandler {
     saveDialog() {
         // You can obviously give a direct path without use the dialog (C:/Program Files/path/myfileexample.txt)
         content = JSON.stringify(datastore.getDevices());
-        dialog.showSaveDialog((fileName) => {
+        dialog.showSaveDialog({ filters: [
+            { name: 'TellSec-Dokument', extensions: ['tell'] }
+           ]},(fileName) => {
             if (fileName === undefined) {
                 console.log("Du hast die Datei nicht gespeichert");
                 return;
@@ -34,7 +36,9 @@ class Filehandler {
     openDialog() {
 
         //Muss rein
-        dialog.showOpenDialog((fileNames) => {
+        dialog.showOpenDialog({ filters: [
+               { name: 'TellSec-Dokument', extensions: ['tell'] }
+              ]},(fileNames) => {
             // fileNames is an array that contains all the selected
             if (fileNames === undefined) {
                 console.log("Keine Datei ausgewält");
@@ -54,6 +58,52 @@ class Filehandler {
             });
         });
 
+    }
+    showAlertDialog(_callback) {
+        var buttons = ['OK', 'Cancel'];
+        
+        
+        dialog.showMessageBox({ 
+            title: 'Neue Map',
+            type: 'warning', 
+            buttons: buttons, 
+            message: 'Möchten Sie Ihren bisherigen Netzwerkplan unwiderruflich verwerfen?'
+        }, (resp) => {
+            if(resp === 0) {
+                _callback(false)
+            } else {
+               _callback(true)
+            }
+        
+        });
+        
+    }
+    showAlertDialogFalse(){
+        dialog.showMessageBox({ 
+            title: 'Neue Map',
+            type: 'info', 
+            buttons: ['OK'], 
+            message: 'Ihr Netzwerkplan ist bereits leer.'
+        });
+    }
+    showCloseDialog(_callback) {
+        var buttons = ['OK', 'Cancel'];
+        
+        
+        dialog.showMessageBox({ 
+            title: 'Schließen',
+            type: 'warning', 
+            buttons: buttons, 
+            message: 'Schließen? Ungespeicherte Inhalte werden verloren gehen.'
+        }, (resp) => {
+            if(resp === 0) {
+                _callback(false)
+            } else {
+               _callback(true)
+            }
+        
+        });
+        
     }
 }
 
