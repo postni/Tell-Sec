@@ -94,7 +94,7 @@ class Filehandler {
             title: 'Schließen',
             type: 'warning', 
             buttons: buttons, 
-            message: 'Schließen? Ungespeicherte Inhalte werden verloren gehen.'
+            message: 'Programm beenden? Ungespeicherte Inhalte werden verloren gehen.'
         }, (resp) => {
             if(resp === 0) {
                 _callback(false)
