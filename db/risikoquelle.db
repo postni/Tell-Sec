@@ -1,8 +1,21 @@
 {"IDRQ":1,"Bezeichnung":"Client","Kategorie":"Endgerät","_id":"0ufiQCt6emRX1uXe"}
+{"IDRQ":17,"Bezeichnung":"Hub","Kategorie":"Aufbau","_id":"F2WDpUL0wO1afYlZ"}
+{"IDRQ":16,"Bezeichnung":"Gateway","Kategorie":"Aufbau","_id":"JBAF8EiNAoQaBRtr"}
 {"IDRQ":4,"Bezeichnung":"Firewall","Kategorie":"Netzwerk","_id":"LS8jyGjXgNJO9O5a"}
 {"IDRQ":5,"Bezeichnung":"Netzwerkspeicher","Kategorie":"Netzwerk","_id":"P0bMlDyMLo3udgJe"}
+{"IDRQ":11,"Bezeichnung":"Maschinensteuerung","Kategorie":"Maschinen","_id":"PsBRNNia2XnzpqRa"}
 {"IDRQ":8,"Bezeichnung":"Acces Point","Kategorie":"Aufbau","_id":"SEgwa0st16fn2C7k"}
+{"IDRQ":12,"Bezeichnung":"Hardware Firewall","Kategorie":"Netzwerk","_id":"UhnnR3YUbrp0NACR"}
+{"IDRQ":14,"Bezeichnung":"Mobiles Gerät","Kategorie":"Endgerät","_id":"YPBhiYSR5g55QRd3"}
+{"IDRQ":8,"Bezeichnung":"Acces Point","Kategorie":"Aufbau","_id":"ZACvDmFThvRWMuKv"}
+{"IDRQ":5,"Bezeichnung":"Netzwerkspeicher","Kategorie":"Netzwerk","_id":"ZloDFTdDI0Lpve4f"}
+{"IDRQ":9,"Bezeichnung":"Benutzer","Kategorie":"Personal","_id":"awrgJG3vzEQ3h7pp"}
+{"IDRQ":6,"Bezeichnung":"Server","Kategorie":"Netzwerk","_id":"dxYGMmHeYBKIQ7jy"}
 {"IDRQ":2,"Bezeichnung":"Switch","Kategorie":"Aufbau","_id":"gUtovVS2UXmGWyLq"}
 {"IDRQ":6,"Bezeichnung":"Server","Kategorie":"Netzwerk","_id":"jbGeW2Kq9mYR6ENY"}
+{"IDRQ":13,"Bezeichnung":"Repeater","Kategorie":"Netzwerk","_id":"jhaqKBTgpuhE0XhS"}
+{"IDRQ":1,"Bezeichnung":"Statisches Gerät","Kategorie":"Endgerät","_id":"nZ4E0kQoQ2J3WAQP"}
 {"IDRQ":9,"Bezeichnung":"Benutzer","Kategorie":"Personal","_id":"qnUA0LFHJ82rqbst"}
 {"IDRQ":3,"Bezeichnung":"Router","Kategorie":"Netzwerk","_id":"r2zPsyDVEBTV0C2B"}
+{"IDRQ":2,"Bezeichnung":"Switch","Kategorie":"Aufbau","_id":"uCpp2k8q2JU60dSA"}
+{"IDRQ":3,"Bezeichnung":"Router","Kategorie":"Netzwerk","_id":"xH7zGLC1XxnolZC7"}

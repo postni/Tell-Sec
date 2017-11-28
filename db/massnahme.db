@@ -1,17 +1,41 @@
+{"IDM":28,"Bezeichnung":"Bitte führen Sie eine Autorisierung durch.","_id":"0FU2RI8wgzZxPYHL"}
 {"IDM":16,"Bezeichnung":"Root-Login verhindern","_id":"0KxAYHdQjocRHAtD"}
+{"IDM":14,"Bezeichnung":"Bitte achten Sie, dass ein Festplattenschutz vorhanden ist.","_id":"0Y1DLAFTacvQuNum"}
+{"IDM":26,"Bezeichnung":"Konsequente Analyse der Gefahren unter Berücksichtigung aller Betriebsarten und Tätigkeiten an der Maschine durchführen.","_id":"2BoWOHR4Sm9pMjfA"}
 {"IDM":13,"Bezeichnung":"Bitte verwenden Sie sichere/ komplexe Kennwoerter.","_id":"2Dd3o52acjXQXWJm"}
+{"IDM":11,"Bezeichnung":"Zugriffe beschraenken.","_id":"2wTg0TxRDthYMD02"}
 {"IDM":7,"Bezeichnung":"WARNUNG: Schlechtes Katastrophenmanagement. Bitte wenden Sie sich ggf. an ihren Vorgesetzten.","_id":"6Z6f1p2tk2guA3ti"}
 {"IDM":21,"Bezeichnung":"Bitte verbergen Sie die SSID.","_id":"FFYjpk421nxQjxco"}
+{"IDM":13,"Bezeichnung":"Bitte verwenden Sie sichere/ komplexe Kennwoerter.","_id":"G6DEEjzIqOPMxPbb"}
+{"IDM":1,"Bezeichnung":"Firewalls und Anti-Viren-Programme sollten auf jedes Endgeraet installiert sein.","_id":"H3G9M0i7EcehXQlS"}
+{"IDM":3,"Bezeichnung":"Bitte Unkontrollierte/ ungeschützte WiFi-Knoten nicht zulassen.","_id":"MFZYmNDMiKH9vfDb"}
 {"IDM":3,"Bezeichnung":"Bitte Unkontrollierte/ ungeschützte WiFi-Knoten nicht zulassen.","_id":"NgLLq2kSrsgojQJt"}
 {"IDM":11,"Bezeichnung":"Zugriffe beschraenken.","_id":"PLTzolRS5B9qRZVb"}
 {"IDM":2,"Bezeichnung":" Fuehren Sie eine Netzwerkueberwachung durch.","_id":"QXY6tk7rOM722fcI"}
+{"IDM":22,"Bezeichnung":"Bitte deaktivieren Sie die Beacons.","_id":"RaXvRpRzgqokUi9s"}
+{"IDM":23,"Bezeichnung":"Führen Sie eine Applikationskontrolle durch.","_id":"TGgB7H0vEdyhvYNB"}
 {"IDM":19,"Bezeichnung":"Bitte aendern Sie den WLAN Schluessel ab.","_id":"URjCChLDQJ2tWHxX"}
+{"IDM":19,"Bezeichnung":"Bitte aendern Sie den WLAN Schluessel ab.","_id":"UqnU21fgAiQ10lsP"}
 {"IDM":1,"Bezeichnung":"Firewalls und Anti-Viren-Programme sollten auf jedes Endgeraet installiert sein.","_id":"VxvUrtsyQWW0apig"}
+{"IDM":7,"Bezeichnung":"WARNUNG: Schlechtes Katastrophenmanagement. Bitte wenden Sie sich ggf. an ihren Vorgesetzten.","_id":"XARhJsfRpztvPCgK"}
+{"IDM":29,"Bezeichnung":"Bitte führen Sie Protokolle.","_id":"XikQSaXas8elTnAa"}
+{"IDM":21,"Bezeichnung":"Bitte verbergen Sie die SSID.","_id":"YAftAoDHd75f1Bua"}
+{"IDM":17,"Bezeichnung":"Bitte blockieren Sie verdaechtige IP-Adressen.","_id":"YEpmpZ5HfypA6TkT"}
 {"IDM":15,"Bezeichnung":"Standard-SSH-Port aendern","_id":"aCGjgBFAs3ZMaOM2"}
+{"IDM":8,"Bezeichnung":"Bitte lagern Sie die IT-Funktionalitaeten an Dienstleistern aus.","_id":"buHUoOavstN9dgEM"}
 {"IDM":20,"Bezeichnung":"Feste IP-Adressen vergeben","_id":"eLgBP1bpcjc8dtQg"}
+{"IDM":18,"Bezeichnung":"Bitte verwenden Sie VPN statt Port-Freigabe.","_id":"fkj3MD4jRSKmBHTa"}
 {"IDM":14,"Bezeichnung":"Bitte achten Sie, dass ein Festplattenschutz vorhanden ist.","_id":"it2jnSzbQzFvW3FE"}
+{"IDM":16,"Bezeichnung":"Root-Login verhindern","_id":"j0pRJFaBCh0yq6cH"}
+{"IDM":24,"Bezeichnung":"Geeignete Umgebungsbedingungen.","_id":"k38zBrA0wPoL2POL"}
+{"IDM":27,"Bezeichnung":"Sicherheits- und Bedienkonzepte erarbeiten.","_id":"lLtYvlxR3dRp3MbG"}
 {"IDM":18,"Bezeichnung":"Bitte verwenden Sie VPN statt Port-Freigabe.","_id":"oeehUmdIntC57ipj"}
 {"IDM":17,"Bezeichnung":"Bitte blockieren Sie verdaechtige IP-Adressen.","_id":"ou7DEMt9pn8cB4NI"}
 {"IDM":8,"Bezeichnung":"Bitte lagern Sie die IT-Funktionalitaeten an Dienstleistern aus.","_id":"seQNmBKFcInFLhDy"}
 {"IDM":22,"Bezeichnung":"Bitte deaktivieren Sie die Beacons.","_id":"suA4VUcCMI4JG8vS"}
 {"IDM":4,"Bezeichnung":"Bitte halten Sie sich an die Unternehmensrichtlinien.","_id":"t5VhvrRxbIi0YmRP"}
+{"IDM":4,"Bezeichnung":"Bitte halten Sie sich an die Unternehmensrichtlinien.","_id":"tITlOqK72TZuiyVu"}
+{"IDM":2,"Bezeichnung":" Fuehren Sie eine Netzwerkueberwachung durch.","_id":"tm6j9Sxrh46qhJnP"}
+{"IDM":20,"Bezeichnung":"Bitte vergeben Sie eine feste IP-Adresse.","_id":"urVahHx4WzO1CVBi"}
+{"IDM":25,"Bezeichnung":"Firewall/ Web und Mail Filter einsetzten.","_id":"wkXM13ICm6J6bgT4"}
+{"IDM":15,"Bezeichnung":"Bitte aendern Sie den Standard-SSH-Port ab.","_id":"xFLzhC90CnTzT7k0"}

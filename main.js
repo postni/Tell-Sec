@@ -1,6 +1,7 @@
 const electron = require('electron')
 const NetworkScanner = require('./backend/scanner');
 const datastore = require('./backend/data').datastore
+const os = require("os")
 
 // Module to control application life.
 const app = electron.app
@@ -199,4 +200,13 @@ function scanComplete(event, data){
  //  Sonstiges  //
 /////////////////
 
-electron.ipcMain.on('maximize',()=>{mainWindow.maximize();}) 
+electron.ipcMain.on('maximize',()=>{
+  let operatingSystem = os.type()
+  console.log(operatingSystem)
+  if(operatingSystem.toLowerCase().includes("mac")){
+    console.log("mac")
+    mainWindow.setFullscreen(true)
+  }else{
+    mainWindow.maximize();    
+  }
+}) 
