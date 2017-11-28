@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Tell! - Hilfe</title>
+    <!-- Stylesheets-->
+   
+    <link href="css/style.css" rel="stylesheet">
+
+
+    <!--Bootstrap Stylesheets-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- MDB -->
+    <link href="css/mdb.min.css" rel="stylesheet">
+
+</head>
+
+<body onload="loader()">
+    <div class="sk-background hidden" id="loadsc" onclick="toggleLoad()">
+        <div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
+    </div>
+
+    <header>
+        <!--Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark stylish-color">
+            <!-- Links -->
+            <ul class="navbar-nav mr-auto">
+                    <li>
+                            <a>
+                                <img src="img/Logo (1).png" width="100px" alt="Tell!" />
+                            </a>
+                        </li>
+      </ul>
+
+
+      
+
+            <!--elemente rechts-->
+            <ul class="navbar-nav ml-auto">
+                
+             
+
+
+                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Einstellungen" >
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="img/settings.png" width="30px" alt="Einstellungen" />
+                    </a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#" >About</a>
+                        <a class="dropdown-item" onclick="opensave()">Hilfe</a>
+                        <a class="dropdown-item" onclick="callCloseWin()">Schließen</a>
+                    </div>
+
+                </li>
+                
+            </ul>
+            </div>
+        </nav>
+    </header>
+
+
+    <main>
+            <!--div class="container">
+                    <div class="row">
+                      <nav class="col-sm-3">
+                        <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="205">
+                          <li class="active"><a href="#section1">Section 1</a></li>
+                          <li><a href="#section2">Section 2</a></li>
+                          <li><a href="#section3">Section 3</a></li>
+                        </ul>
+                      </nav>
+                    </div>
+            </div-->
+            <div>
+                <div class="row">
+                    <div class="col-sm-2">
+                            <ul class="nav md-pills nav-justified pills-primary flex-column">
+                             
+                                    <li class="nav-item ">
+                                        <a class="nav-link" data-toggle="tab" href="#panel11" role="tab">Vorwort</a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" data-toggle="tab" href="#panel12" role="tab">Wichtigste Funktionen</a>
+                                    
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" data-toggle="tab" href="#panel13" role="tab">Menüleiste</a>
+                                    </li>
+                                    <li class="nav-item ">
+                                            <a class="nav-link" data-toggle="tab" href="#panel14" role="tab">Weitere Infos</a>
+                                        </li>
+                                </ul>
+                    </div>
+
+                    <div class="col-sm-9">
+                            <div class="tab-content">
+                                    
+                                        <!--Panel 1-->
+                                        <div class="tab-pane fade in show active" id="panel11" role="tabpanel">
+                                            <br>
+                                            
+                                            <h1>Vorwort</h1>
+                                            <p>Mit Tell kannst du ganz einfach... </p>
+                                    
+                                        </div>
+                                        <!--/.Panel 1-->
+                                    
+                                        <!--Panel 2-->
+                                        <div class="tab-pane fade" id="panel12" role="tabpanel">
+                                            <br>
+                                            <h1>Wichtigste Funktionen</h1>
+                                            <h2>Netzwerkscan</h2>
+                                            <p>Mit dem Netzwerkscan erhalten Sie in einem Entwurfseditor eine grobe Übersicht über die gescannten Netzwerke und vorhandene Geräte im Unternehmen. Hierbei können Sie bei Bedarf die entstandene Netzwerkstruktur manuell anpassen und erweitern. Dabei wird jedoch vorausgesetzt, dass das Endgerät auf dem die Software läuft, mit dem gewünschten Netzwerk verbunden ist. 
+                                                </p>
+
+                                            <h2>Manueller Netzwerkplan</h2>
+                                            <p>Da Netzwerke sehr komplex sein können, und nicht zwangsläufig durch ein Endgerät erreichbar sein müssen, können Sie solche Netzwerksegmente auch zusätzlich komplett eigenständig modellieren. Diese manuelle Variante des Modellierens können Sie auch verwenden, wenn einzelne Komponenten bei dem Netzwerkscan nicht gefunden wurden. Sie können mit Drag & Drop ganz einfach und unkompliziert Ihren (Produktions-) Netzwerk nachbilden. Hierdurch kann das Scannen des Netzwerks ergänzt oder vollständig ersetzt werden.</p>
+                                        
+                                            <h2>Hilfe bei der Identifizierung unbekannter Geräte</h2>
+                                            <p>Falls der Netzwerkscan ein Netzwerkelement gefunden, aber nicht erkannt hat, symbolisiert ein Fragezeichen an entsprechender Stelle das Problem. „Hovern“ Sie mit Ihrem Cursor über diesem Objekt, so erscheint eine Infobox mit grundlegenden, bekannten Informationen, wie beispielsweise IP- und MAC-Adresse. Anhand dieser Informationen erhalten Sie, um welches Gerät im System es sich tatsächlich handelt.
+                                                    Anschließend können Sie per Tastatureingabe fehlende Information ergänzen. Ferner können auch weitere Netzwerkelemente – wie bspw. Benutzer, Maschinen, Netzwerke, Konnektoren oder technische Komponenten – manuell hinzugefügt werden, falls der Netzwerkscan im Betrieb nicht alles lückenlos erkennen könnte.</p>
+
+                                            <h2>Risikoanalyse</h2>
+                                            <p>Bei vollständig ausgearbeitetem Netzwerkplan können alle bekannten Risikoquellen identifiziert werden. An den Identifizierten „Problemstellen“ wird hier eine Risikobeschreibung inklusive möglicher Lösungsvorschläge angezeigt. Nach dem Netzwerkscan können Sie durch einen Klick auf den Analyse-Button anhand von roten Ausrufezeichen potenzielle Gefahrenquelle aufgezeigt werden. Durch das „hovern“ mit dem Cursor so über das Ausrufezeichen erscheint erneut ein Tooltip mit Informationen über denkbaren Risiken. Im Experten-Modus werden die Informationen detaillierter – für Laien nicht mehr verständlich – dargestellt. </p>
+                                    
+                                        </div>
+                                        <!--/.Panel 2-->
+                                    
+                                        <!--Panel 3-->
+                                        <div class="tab-pane fade" id="panel13" role="tabpanel">
+                                            <br>
+                                    
+                                            <p>Menüleiste</p>
+                                    
+                                        </div>
+                                        <!--/.Panel 3-->
+                                    
+                                        <!--Panel 4-->
+                                        <div class="tab-pane fade" id="panel14" role="tabpanel">
+                                            <br>
+                                    
+                                            <p>weiteres</p>
+                                    
+                                        </div>
+                                        <!--/.Panel 4-->
+                                    
+                                    
+                    </div>
+                </div>
+            </div>
+
+    </main>
+
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script>
+        window.jQuery = window.$ = require('jquery');
+    </script>
+    <!--vis>
+    <script type="text/javascript" src="vis/dist/vis.js"></script>
+    <script type="text/javascript" src="vis/dist/vis.min.js"></script-->
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <!-- Custom -->
+    <script language="javascript" type="text/javascript" src="js/menu.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
