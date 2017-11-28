@@ -367,6 +367,10 @@ class Communicator {
         ipcRenderer.send('maximize');
     }
 
+    pdfPrint(path) {
+        ipcRenderer.send('print-to-pdf', path);
+    }
+
 }
 
 ipcRenderer.on('scan-complete', (event, data) => {

@@ -1,4 +1,5 @@
 var filehandler = require('./js/filehandler')
+var communicator = require('./js/frontend').communicator
 
 /*Sidemenu Map */
 function openNav_user() {
@@ -57,4 +58,10 @@ function cls(choice){
     if(!choice){
         window.close();
     }
+}
+
+ 
+function printToPDF() {
+    filehandler.savePDFDialog()
+    
 }

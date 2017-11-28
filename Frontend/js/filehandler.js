@@ -33,6 +33,21 @@ class Filehandler {
             });
         });
     }
+
+    savePDFDialog() {
+        dialog.showSaveDialog({ filters: [
+            { name: 'PDF-Dokument', extensions: ['pdf'] }
+           ]},(fileName) => {
+            if (fileName === undefined) {
+                console.log("Du hast die Datei nicht gespeichert");
+                return;
+            }
+
+            communicator.pdfPrint(fileName);
+        });
+    }
+    
+
     openDialog() {
 
         //Muss rein
@@ -94,7 +109,7 @@ class Filehandler {
             title: 'Schließen',
             type: 'warning', 
             buttons: buttons, 
-            message: 'Schließen? Ungespeicherte Inhalte werden verloren gehen.'
+            message: 'Programm beenden? Ungespeicherte Inhalte werden verloren gehen.'
         }, (resp) => {
             if(resp === 0) {
                 _callback(false)
@@ -106,6 +121,10 @@ class Filehandler {
         
     }
 }
+
+
+
+
 
 
 module.exports = new Filehandler();
