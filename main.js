@@ -205,7 +205,7 @@ electron.ipcMain.on('maximize',()=>{
   console.log(operatingSystem)
   if(operatingSystem.toLowerCase().includes("mac")||operatingSystem.toLowerCase().includes("darwin")){
     console.log("mac")
-    mainWindow.setFullscreen(true)
+    mainWindow.setFullScreen(true)
   }else{
     mainWindow.maximize();    
   }
