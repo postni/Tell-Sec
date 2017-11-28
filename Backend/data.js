@@ -140,7 +140,20 @@ class Data {
     analyse(event, devices, _callback) {
         var types = []
         for (let id in devices) {
-            let devicetype = devices[id]["devicetype"];
+            let devicetype = ""
+            if(devices[id]["devicetype"]==="stationär"){
+                devicetype = "Statisches Gerät"
+            } else if(devices[id]["devicetype"]==="mobil"){
+                devicetype = "Mobiles Gerät"                
+            }else if( devices[id]["devicetype"]==="Maschine"){
+                devicetype = "Maschinensteuerung"
+            }
+            
+            else{                
+                devicetype = devices[id]["devicetype"]
+            }
+            console.log(devicetype)
+
             let exists = false;
             types.forEach((typ) => {
                 if (typ === devicetype) {
