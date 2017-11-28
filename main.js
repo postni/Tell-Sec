@@ -203,7 +203,7 @@ function scanComplete(event, data){
 electron.ipcMain.on('maximize',()=>{
   let operatingSystem = os.type()
   console.log(operatingSystem)
-  if(operatingSystem.toLowerCase().includes("mac")){
+  if(operatingSystem.toLowerCase().includes("mac")||operatingSystem.toLowerCase().includes("darwin")){
     console.log("mac")
     mainWindow.setFullscreen(true)
   }else{
