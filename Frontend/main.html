@@ -46,7 +46,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark stylish-color">
             <!-- Links -->
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Neu">
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Neu" onclick="callClearMap()">
                     <a class="nav-link" href="#">
                         <img src="img/new.png" width="30px" alt="Neu" />
                     </a>
@@ -56,16 +56,19 @@
                         <img src="img/save.png" width="30px" alt="Speichern" />
                     </a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Speichern</a>
-                        <a class="dropdown-item" href="#">Speichern unter</a>
+                        <a class="dropdown-item" onclick="opensave()">Speichern</a>
                         <a class="dropdown-item" href="#">PDF Export</a>
                     </div>
 
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Öffnen">
-                    <a class="nav-link" href="#">
+                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Öffnen">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="img/open.png" width="35px" alt="Öffnen" />
                     </a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item">Öffnen</a>
+                        <a class="dropdown-item" onclick="openopen()">Hinzufügen</a>
+                    </div>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Zurück">
                     <a class="nav-link" href="#">
@@ -165,7 +168,7 @@
     <script type="text/javascript" src="js/mdb.min.js"></script>
     <!-- Custom -->
     <script src="js/table.js"></script>
-    <script language="javascript" type="text/javascript" src="js/menu_side.js"></script>
+    <script language="javascript" type="text/javascript" src="js/menu.js"></script>
 </body>
 
 </html>
