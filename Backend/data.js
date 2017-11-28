@@ -20,7 +20,14 @@ class Data {
                 res.forEach((element) => {
                     risiken.push(this.findIDRinRisiko(element.IDR))
                 })
-                Promise.all(risiken).then(resolve)
+                let id = 0
+                Promise.all(risiken).then(data => {
+                    let updatedData = data.map(d =>{
+                        d.riskID = id
+                        id++
+                        return d;
+                    })
+                    resolve(updatedData)})
     
             })
         })
@@ -34,7 +41,16 @@ class Data {
                 res.forEach((element) => {
                   massnahmen.push(this.findIDMinMassnahme(element.IDM))  
                 })
-                Promise.all(massnahmen).then(resolve)
+                let id = 0                
+                Promise.all(massnahmen).then(data => {
+                    let updatedData = data.map(dOld =>{
+                        let d ={}                        
+                        d.countermeassuresID = id
+                        d.name = dOld
+                        id++
+                        return d;
+                    })
+                    resolve(updatedData)})
             })
         })
     }
@@ -46,8 +62,6 @@ class Data {
             })
         })
     }
-
-
 
     findIDRinRisiko(idr){
         return new Promise(resolve => {
@@ -75,7 +89,16 @@ class Data {
                 res.forEach((element) => {
                     folgen.push(this.findIDFinFolge(element.IDF))
                 })
-                Promise.all(folgen).then(resolve)
+                let id = 0                
+                Promise.all(folgen).then(data => {
+                    let updatedData = data.map(dOld =>{
+                        let d ={}
+                        d.consequenceID = id
+                        d.name = dOld
+                        id++
+                        return d;
+                    })
+                    resolve(updatedData)})
             })
         })
     }

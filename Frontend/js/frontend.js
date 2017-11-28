@@ -330,12 +330,11 @@ class Datastore {
                     devices[id].risks = {}
                     risks[dType].forEach((risk) => {
                         let newRisk = {}
-                        let riskId = id + "_" + risk.Bezeichnung
                         newRisk.consequences = risk.Folgen
                         newRisk.countermeassures = risk.Massnahmen
                         newRisk.probability = 0
-                        newRisk.damage = 0
-                        devices[id].risks[riskId] = newRisk
+                        newRisk.riskID = risk.riskID
+                        devices[id].risks[risk.Bezeichnung] = newRisk
                     })
                 }
             }
