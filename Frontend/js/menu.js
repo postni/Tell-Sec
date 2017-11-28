@@ -48,3 +48,13 @@ function openopen () {
     sessionStorage.setItem("update", false)
     this.getData = window.setInterval(checkForUpdate, 1000)    
 }
+
+function callCloseWin() {
+    filehandler.showCloseDialog(cls)
+
+}
+function cls(choice){
+    if(!choice){
+        window.close();
+    }
+}

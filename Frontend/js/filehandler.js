@@ -86,6 +86,25 @@ class Filehandler {
             message: 'Ihr Netzwerkplan ist bereits leer.'
         });
     }
+    showCloseDialog(_callback) {
+        var buttons = ['OK', 'Cancel'];
+        
+        
+        dialog.showMessageBox({ 
+            title: 'Schließen',
+            type: 'warning', 
+            buttons: buttons, 
+            message: 'Schließen? Ungespeicherte Inhalte werden verloren gehen.'
+        }, (resp) => {
+            if(resp === 0) {
+                _callback(false)
+            } else {
+               _callback(true)
+            }
+        
+        });
+        
+    }
 }
 
 
