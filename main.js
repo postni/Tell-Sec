@@ -12,6 +12,32 @@ if (handleSquirrelEvent(app)) {
     // squirrel event handled and app will exit in 1000ms, so don't do anything else
     return;
 }
+
+
+///////////////////////////////////
+
+const fs = require('fs');
+const ipc = electron.ipcMain;
+const shell = electron.shell;
+
+ipc.on('print-to-pdf', function(event, path){
+  const win = BrowserWindow.fromWebContents(event.sender);
+
+  win.webContents.printToPDF({}, function(error, data){
+    if(error) return console.log(error.message);
+
+    fs.writeFile(path, data, function(err) {
+      if(err) return console.log(err.message);
+      shell.openExternal('file://' + path);
+    })
+  })
+});
+
+
+
+
+
+
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 

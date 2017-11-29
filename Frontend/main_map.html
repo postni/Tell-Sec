@@ -65,7 +65,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" onclick="opensave()">Speichern</a>
-                        <a class="dropdown-item" href="#">PDF Export</a>
+                        <a class="dropdown-item" id='print-pdf' onclick="printToPDF()">PDF Export</a>
                     </div>
 
                 </li>
@@ -315,11 +315,16 @@
         </div>
 
 
+
+
+
+
     </main>
     <!-- SCRIPTS -->
     <!-- JQuery -->
     <script>
         window.jQuery = window.$ = require('jquery');
+        //require('./filehandler.js')
     </script>
     <!--vis>
     <script type="text/javascript" src="vis/dist/vis.js"></script>
