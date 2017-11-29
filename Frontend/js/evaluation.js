@@ -93,6 +93,28 @@ function getRisks(){
         statusIndicator.setAttribute("pulse","")
         nameCell.appendChild(statusIndicator)
         nameCell.appendChild(document.createTextNode("  "+device.hostname))
+
+ 
+        let nameDiv = document.createElement("div")
+        nameCell.appendChild(nameDiv)
+
+        let space = document.createElement("br")
+        nameDiv.appendChild(space)
+    
+        let toggleInput = document.createElement("input")
+        toggleInput.setAttribute("type","checkbox")
+        toggleInput.setAttribute("id","unchecked")
+        toggleInput.setAttribute("class","cbx hidden")
+        nameDiv.appendChild(toggleInput)
+
+        let toggleBtn = document.createElement("label")
+        toggleBtn.setAttribute("for","unchecked")
+        toggleBtn.setAttribute("class", "lbl")
+        nameDiv.appendChild(toggleBtn)
+        
+        
+
+
         let riskCell = row.insertCell()
 
         riskCell.classList.add("py-0")
