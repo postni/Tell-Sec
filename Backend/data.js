@@ -153,9 +153,7 @@ class Data {
                 devicetype = "Mobiles Gerät"                
             }else if( devices[id]["devicetype"]==="Maschine"){
                 devicetype = "Maschinensteuerung"
-            }
-            
-            else{                
+            }else if(devices[id]["devicetype"] && devices[id]["devicetype"].toLowerCase()!=="unbekannt"){       
                 devicetype = devices[id]["devicetype"]
             }
             console.log(devicetype)
