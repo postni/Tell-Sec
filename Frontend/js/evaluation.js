@@ -112,7 +112,17 @@ function getRisks(){
         toggleBtn.setAttribute("class", "lbl")
         nameDiv.appendChild(toggleBtn)
         
+        console.log (toggleInput.checked)
         
+        if(toggleInput.checked === false){
+            $(".cbx").click(function(){
+                $(riskTable).hide();
+            })
+        }else if (toggleInput.checked === true){
+            $(".cbx").click(function(){
+                $(riskTable).show();
+            })
+        }
 
 
         let riskCell = row.insertCell()
@@ -168,6 +178,8 @@ function getRisks(){
 
 }
 getRisks()
+
+
 
 function insertprobabilitySlider(table,id){
     let container = document.createElement("div")
