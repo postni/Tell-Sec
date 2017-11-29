@@ -69,7 +69,8 @@ class Data {
                 var risiko = {
                     Bezeichnung: res.Bezeichnung,
                     Folgen: [],
-                    Massnahmen: []
+                    Massnahmen: [],
+                    Eintrittswahrscheinlich: res.Eintrittswahrscheinlich? res.Eintrittswahrscheinlich:0.5
                 }
                 this.findIDRinFuehrtZu(idr).then((res)=>{
                     risiko.Folgen = res;
@@ -94,7 +95,8 @@ class Data {
                     let updatedData = data.map(dOld =>{
                         let d ={}
                         d.consequenceID = id
-                        d.name = dOld
+                        d.name = dOld.Name
+                        d.damage = dOld.Schadensklasse
                         id++
                         return d;
                     })
@@ -106,7 +108,11 @@ class Data {
     findIDFinFolge(id){
         return new Promise(resolve =>{
             this.db.folge.findOne({ IDF: id }, (err, res) => {
-                resolve(res.Bezeichnung)
+                let folge = {
+                    Name: res.Bezeichnung,
+                    Schadensklasse: res.Schadensklasse
+                }
+                resolve(folge)
             })
         })
     }

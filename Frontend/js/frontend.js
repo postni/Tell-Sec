@@ -332,7 +332,7 @@ class Datastore {
                         let newRisk = {}
                         newRisk.consequences = risk.Folgen
                         newRisk.countermeassures = risk.Massnahmen
-                        newRisk.probability = 0
+                        newRisk.probability = risk.Eintrittswahrscheinlich
                         newRisk.riskID = risk.riskID
                         devices[id].risks[risk.Bezeichnung] = newRisk
                     })
@@ -366,7 +366,9 @@ class Communicator {
     maximize() {
         ipcRenderer.send('maximize');
     }
-
+    pdfPrint(path) {
+        ipcRenderer.send('print-to-pdf', path);
+    }
 }
 
 ipcRenderer.on('scan-complete', (event, data) => {
