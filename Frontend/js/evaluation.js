@@ -37,26 +37,29 @@ function getRisks(){
     
         let toggleInput = document.createElement("input")
         toggleInput.setAttribute("type","checkbox")
-        toggleInput.setAttribute("id","unchecked")
+        toggleInput.setAttribute("id",id+"-toggle")
         toggleInput.setAttribute("class","cbx hidden")
         nameDiv.appendChild(toggleInput)
 
         let toggleBtn = document.createElement("label")
-        toggleBtn.setAttribute("for","unchecked")
+        toggleBtn.setAttribute("for",id+"-toggle")
         toggleBtn.setAttribute("class", "lbl")
         nameDiv.appendChild(toggleBtn)
         
         console.log (toggleInput.checked)
+       
+        toggleInput.onclick = (event) => {
+
         
-        if(toggleInput.checked === false){
-            $(".cbx").click(function(){
+        if(event.target.checked === false){
+           
                 $(riskTable).hide();
-            })
-        }else if (toggleInput.checked === true){
-            $(".cbx").click(function(){
+            
+        }else if (event.target.checked === true){
+           
                 $(riskTable).show();
-            })
-        }
+            
+        }}
 
 
         let riskCell = row.insertCell()
@@ -64,6 +67,7 @@ function getRisks(){
         riskCell.classList.add("py-0")
 
         let riskTable = document.createElement("table")
+        riskTable.setAttribute("style","display:none")
         // console.log("=============")
         // console.log("Risikotabelle")
         // console.log("=============")
@@ -168,12 +172,13 @@ function insertprobabilitySlider(table,id){
 }
 
 function insertDamageSlider(cell,riskId, consequenceID){
-    cell.setAttribute("width","150px")
+    cell.setAttribute("width","200px")
     let container = document.createElement("div")
     let ids = riskId.split("-")
     //container.id=riskId+"-"+consequenceID+"-consequence"
     let slider =  document.createElement("input")
     slider.setAttribute("type","range")
+    slider.setAttribute("style","width:100px; margin-top:6px")
     slider.min = 1
     slider.max = 5
     slider.value = this.score[ids[0]][ids[1]].consequences[consequenceID].damage
@@ -204,8 +209,9 @@ function insertDamageSlider(cell,riskId, consequenceID){
     container.appendChild(slider)
 
     let label = document.createElement("label")
+    label.setAttribute("style","margin-top:0px")
     //label.setAttribute("id",id+"-damage-label")
-    label.innerHTML ="Schadenshöhe: <span id='"+riskId+"-"+consequenceID+"-damage'>"+slider.value+"</span>"
+    label.innerHTML ="&nbsp &nbsp Schaden: <span id='"+riskId+"-"+consequenceID+"-damage'>"+slider.value+"</span>"
     container.appendChild(label)
     cell.appendChild(container)
 }
