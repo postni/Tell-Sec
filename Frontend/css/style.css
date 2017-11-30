@@ -389,3 +389,21 @@ span.modal-text-line{
     .cbx:disabled ~ label:after { background: #bcbdbc; }
     
     .hidden { display: none; }
+
+
+    .netzwerkscan {
+        position: relative;
+        width: 470px; 
+        margin-bottom: 20px;
+        margin-right: 20px; 
+        border-radius: 10px;
+      }
+    
+      .netzwerkscan1 {
+        position: relative;
+        width: 470px;  
+        margin-bottom: 20px;
+        border-radius: 10px;
+        
+      }
+    
