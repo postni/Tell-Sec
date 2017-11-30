@@ -58,7 +58,8 @@ class Datastore {
                         "service": "FTP"
                     }
                 ],
-                "devicetype": "Client",
+                //rausnehmen
+                /*devicetype": "Client",*/
                 "risks": [],
                 "categories": []
             },
@@ -81,7 +82,8 @@ class Datastore {
                         "service": "FTP"
                     }
                 ],
-                "devicetype": "Router",
+                //rausnehmen?
+                /*"devicetype": "Router",*/
                 "risks": [],
                 "categories": []
             },
@@ -226,7 +228,7 @@ class Datastore {
     addDevice(device) {
         let devices = this.getDevices();
 
-        let devicetype = device.devicetype === "Person" ? "Client" : device.devicetype;
+        let devicetype = device.devicetype === "Person" ? "Unbekannt" : device.devicetype;
         devices[device.id] = { "devicetype": devicetype };
 
         sessionStorage.setItem("devices", JSON.stringify(devices))
@@ -301,7 +303,7 @@ class Datastore {
                     devices[nextID]["ports"] = newDevices[n].openPorts ? newDevices[n].openPorts : null
                     devices[nextID]["os"] = newDevices[n].osNmap ? newDevices[n].osNmap : null
                     devices[nextID]["vendor"] = newDevices[n].vendor ? newDevices[n].vendor : null
-                    devices[nextID]["devicetype"] = newDevices[n].devicetype ? newDevices[n].devicetype : "Client"
+                    devices[nextID]["devicetype"] = newDevices[n].devicetype ? newDevices[n].devicetype : "Unbekannt"
                     devices[nextID]["connetedTo"] = newDevices[n].connetedTo ? newDevices[n].connetedTo : []
                     devices[nextID]["connectionsToMe"] = newDevices[n].connectionsToMe ? newDevices[n].connectionsToMe : []
                     nextID++;

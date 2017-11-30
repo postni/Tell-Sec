@@ -114,7 +114,8 @@ function updateMyData() {
         console.log(typeof (i) + " - " + i)
         let d = devices[i]
         let label = d.hostname ? d.hostname : d.devicetype
-        let help = d.devicetype ? d.devicetype.toLowerCase() : "person"
+        let help = d.devicetype ? d.devicetype.toLowerCase() : "unbekannt"
+        console.log(help)
         let img = d.devicetype === "Client" ? "person" : "symbole/" + help
         appendNode(label, img, i);
     }
