@@ -1,69 +1,4 @@
 var datastore = require("./js/frontend").datastore
-/*
-// Slider1
-var prob = document.getElementById("probability");
-var output = document.getElementById("demo");
-output.innerHTML = prob.value;
-
-prob.oninput = function () {
-    output.innerHTML = this.value;
-}
-
-// Slider2
-var damage = document.getElementById("damage");
-var outputd = document.getElementById("demod");
-outputd.innerHTML = 'mittel';
-
-damage.oninput = function (i) {
-    console.log(i.target)
-    if (parseInt(this.value) === 1) {
-        console.log(outputd)
-
-        outputd.innerHTML = 'sehr gering';
-    } else if (parseInt(this.value) === 2) {
-        console.log(outputd)
-
-        outputd.innerHTML = 'gering';
-    } else if (parseInt(this.value) === 3) {
-        console.log(outputd)
-
-        outputd.innerHTML = 'mittel';
-    } else if (parseInt(this.value) === 4) {
-        console.log(outputd)
-
-        outputd.innerHTML = 'hoch';
-    } else if (parseInt(this.value) === 5) {
-        console.log(outputd)
-
-        outputd.innerHTML = 'sehr hoch';
-
-    }
-
-}
-*/
-
-
-
-var decision = getRandomInt(0, 100)
-console.log(decision)
-
-
-var good=document.getElementById('good');
-var ok=document.getElementById('ok');
-var stop=document.getElementById('stop');
-if (decision >= 0 && decision <= 30) {
-    good.style.display = "block";
-} else if (decision >= 31 && decision <= 60) {
-    ok.style.display = "block";
-} else {
-    stop.style.display = "block";
-}
-
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-}
 
 function getRisks(){
     if(!this.score){
@@ -89,8 +24,7 @@ function getRisks(){
         let nameCell = row.insertCell()
 
         let statusIndicator = document.createElement("status-indicator")
-        statusIndicator.setAttribute("negative","")
-        statusIndicator.setAttribute("pulse","")
+        statusIndicator.id = id+"-status"
         nameCell.appendChild(statusIndicator)
         nameCell.appendChild(document.createTextNode("  "+device.hostname))
 
@@ -128,7 +62,7 @@ function getRisks(){
         riskTable.setAttribute("width","100%")
         riskCell.appendChild(riskTable)
         for(let risk in device.risks){
-            console.log(risk)
+            //console.log(risk)
             if(!this.score[id][device.risks[risk].riskID]){
                 this.score[id][device.risks[risk].riskID]={
                     "probability": device.risks[risk].probability*100,
@@ -149,6 +83,7 @@ function getRisks(){
             let innerRiskTable = document.createElement("table")
             cellRiskRight.appendChild(innerRiskTable)
             innerRiskTable.classList.add("col-sm-12")
+            innerRiskTable.id = id+"-"+device.risks[risk].riskID+"-consequences"
             //console.log(device.risks)
             device.risks[risk].consequences.forEach((consequence)=>{
                 if(!this.score[id][device.risks[risk].riskID].consequences[consequence.consequenceID]){
@@ -162,6 +97,7 @@ function getRisks(){
                 consequenceText.innerText = consequence.name
                 insertDamageSlider(consequenceRow.insertCell(),id+"-"+device.risks[risk].riskID, consequence.consequenceID)
             })
+            checkRiskLevelFor([id,device.risks[risk].riskID])
 
         }
     }
@@ -171,13 +107,14 @@ getRisks()
 
 function insertprobabilitySlider(table,id){
     let container = document.createElement("div")
-    container.setAttribute("id",id+"-propability")
+    container.setAttribute("style","width:175px")
     let ids = id.split("-")
     let slider =  document.createElement("input")
     slider.setAttribute("type","range")
     slider.min = 0
     slider.max = 100
     slider.value = this.score[ids[0]][ids[1]].probability
+    slider.classList.add("slider")        
     // console.log("=================")
     // console.log("Warscheinlichkeit")
     // console.log("=================")
@@ -191,16 +128,22 @@ function insertprobabilitySlider(table,id){
     slider.oninput = (event) =>{
         event.stopPropagation()
         let value = event.target.value
-        let id = event.target.id.split(/[-_]+/)
+        let id = event.target.id.split('-')
         let label = document.getElementById((id[0]+"-"+id[1]+"-probability"))
         label.innerText = value
     }
     slider.onchange = (event)=>{
         let value = event.target.value  
-        let id = event.target.id.split(/[-_]+/)
-
+        let id = event.target.id.split('-')
         this.score[id[0]][id[1]].probability = value
-        console.log(this.score[id[0]][id[1]])
+        let consTable = document.getElementById(id[0]+"-"+id[1]+"-consequences")        
+        if(value <= 0){
+            consTable.classList.add("hidden")
+        }else{
+            consTable.classList.remove("hidden")            
+        }
+        checkRiskLevelFor(id);
+        //console.log(this.score[id[0]][id[1]])
     }
     container.appendChild(slider)
 
@@ -234,8 +177,17 @@ function insertDamageSlider(cell,riskId, consequenceID){
         console.log(id.slice(0,3).join("-")+"damage")        
         let label = document.getElementById(id.slice(0,3).join("-")+"-damage")
         label.innerText=value
-        //datastore.changeValue(id[0],"risks",id.slice(0,3).join("-"),value)
-        //if(this.data[id[0]][id[1]])
+    }
+
+    slider.onchange = (event) =>{
+        let value = event.target.value  
+        let id = event.target.id.split('-')   
+        console.log(id)     
+        this.score[id[0]][id[1]].consequences[id[2]].damage = value
+
+        checkRiskLevelFor(id);
+        //TODO:
+        //Change Value in SessionStorage
     }
     container.appendChild(slider)
 
@@ -244,4 +196,78 @@ function insertDamageSlider(cell,riskId, consequenceID){
     label.innerHTML ="Schadenshöhe: <span id='"+riskId+"-"+consequenceID+"-damage'>"+slider.value+"</span>"
     container.appendChild(label)
     cell.appendChild(container)
+}
+
+function checkRiskLevelFor(elementID){
+    risk = 0.0;
+    let allDamageElements = document.querySelectorAll("[id^='"+elementID[0]+"-"+elementID[1]+"'][id$='-damage-slider']")
+    let probabilityElement = document.getElementById(elementID[0]+"-"+elementID[1]+"-probability-slider")
+    let riskDamage = 0;
+    for(damageElement in allDamageElements){
+        if(parseInt(damageElement)){
+        //console.log(allDamageElements[damageElement].value)
+        riskDamage+=parseInt(allDamageElements[damageElement].value)
+        }
+    }
+    risk = (riskDamage*parseFloat(probabilityElement.value))/100
+
+    this.score[elementID[0]][elementID[1]].riskLevel = risk
+    checkRiskForDevice(elementID[0])
+}
+
+function checkRiskForDevice(deviceID){
+    let sumAllRiskLevels = 0.0
+    for(risk in this.score[deviceID]){
+        if(parseInt(risk)){
+            sumAllRiskLevels+= this.score[deviceID][risk].riskLevel
+        }
+    }
+    console.log(sumAllRiskLevels);
+    this.score[deviceID].riskLevel = sumAllRiskLevels
+    let statusIndicator = document.getElementById(deviceID+"-status")
+    console.log(statusIndicator)
+    if(sumAllRiskLevels<=20){
+        statusIndicator.removeAttribute("negative")
+        statusIndicator.removeAttribute("intermediary")
+        statusIndicator.removeAttribute("pulse")        
+        statusIndicator.setAttribute("positive","")
+    }else if(sumAllRiskLevels>20 && sumAllRiskLevels<=60){
+        statusIndicator.removeAttribute("negative")
+        statusIndicator.removeAttribute("positive")
+        statusIndicator.removeAttribute("pulse")        
+        statusIndicator.setAttribute("intermediary","")
+    }else{
+        statusIndicator.removeAttribute("intermediary")
+        statusIndicator.removeAttribute("positive")
+        statusIndicator.setAttribute("pulse","")        
+        statusIndicator.setAttribute("negative","")
+    }
+    checkOverallRisk()
+}
+function checkOverallRisk(){
+    let sumAllRiskLevels =0.0
+    let deviceCount = 0
+    var good=document.getElementById('good');
+    var ok=document.getElementById('ok');
+    var stop=document.getElementById('stop');
+
+    for(let id in this.score){
+        sumAllRiskLevels+=score[id].riskLevel
+        deviceCount++
+    }
+    sumAllRiskLevels/=deviceCount
+    if(sumAllRiskLevels<=20){
+        good.style.display = "block";
+        stop.style.display = "none";
+        ok.style.display = "none";        
+    }else if(sumAllRiskLevels>20 && sumAllRiskLevels<=60){
+        good.style.display = "none";        
+        ok.style.display = "block";
+        stop.style.display = "none";                
+    }else{
+        good.style.display = "none";        
+        stop.style.display = "block";     
+        ok.style.display = "none";        
+    }
+
 }
