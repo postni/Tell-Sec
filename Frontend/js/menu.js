@@ -1,5 +1,6 @@
 var filehandler = require('./js/filehandler')
 var communicator = require('./js/frontend').communicator
+var datastore = require('./js/frontend').datastore
 
 /*Sidemenu Map */
 function openNav_user() {
@@ -22,6 +23,13 @@ function closeNav_network() {
 
 /*TOP MENU*/
 /*Clear Map */
+function startanalysis() {
+    let dev = JSON.stringify(datastore.getDevices())
+    if(dev.includes('')){
+/*notfisnished */
+    }
+}
+
 function callClearMap() {
     if(sessionStorage.getItem('devices')!=='{}'){
     filehandler.showAlertDialog(clearMap)

@@ -8,10 +8,10 @@ function getRisks(){
     //console.log(devices)
     let table = document.getElementById("risk-table")
     let tablehead = table.insertRow()
-    let headerText = ["Gerät", "Risiken"]
+    let headerText = ["Gerät", "Risiken &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Folgen &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Schaden"]
     headerText.forEach((text)=>{
         let th = document.createElement("th")
-        th.innerText = text
+        th.innerHTML = text
         tablehead.appendChild(th)        
     })
     for(let id in devices){
@@ -22,11 +22,20 @@ function getRisks(){
         //console.log(device)
         let row = table.insertRow()
         let nameCell = row.insertCell()
+        nameCell.setAttribute("style","width:180px")
 
         let statusIndicator = document.createElement("status-indicator")
         statusIndicator.id = id+"-status"
         nameCell.appendChild(statusIndicator)
-        nameCell.appendChild(document.createTextNode("  "+device.hostname))
+
+        let devicet
+        if (device.devicetype === undefined){
+            devicet = "unbekannt"
+        }else {
+            devicet = device.devicetype
+        }
+
+        nameCell.appendChild(document.createTextNode("  "+device.hostname+" ("+devicet+")"))
 
  
         let nameDiv = document.createElement("div")
@@ -178,7 +187,7 @@ function insertDamageSlider(cell,riskId, consequenceID){
     //container.id=riskId+"-"+consequenceID+"-consequence"
     let slider =  document.createElement("input")
     slider.setAttribute("type","range")
-    slider.setAttribute("style","width:100px; margin-top:6px")
+    slider.setAttribute("style","width:100px; margin-top:7px")
     slider.min = 1
     slider.max = 5
     slider.value = this.score[ids[0]][ids[1]].consequences[consequenceID].damage
@@ -189,11 +198,24 @@ function insertDamageSlider(cell,riskId, consequenceID){
     slider.id = riskId+"-"+consequenceID+"-damage-slider"
     slider.classList.add("slider")    
     slider.oninput = (event) =>{        
-        let value = event.target.value
+        let value = parseInt(event.target.value)
         let id = event.target.id.split("-")
         console.log(id.slice(0,3).join("-")+"damage")        
         let label = document.getElementById(id.slice(0,3).join("-")+"-damage")
-        label.innerText=value
+        console.log(value)
+        let valueshow
+        if(value===1){
+            valueshow='sehr gering'
+        }else if (value===2){
+            valueshow='gering'
+        }else if (value===3){
+            valueshow='mittel'
+        }else if (value===4){
+            valueshow='hoch'
+        }else if (value===5){
+            valueshow='sehr hoch'
+        }
+        label.innerText=valueshow
     }
 
     slider.onchange = (event) =>{
@@ -211,7 +233,19 @@ function insertDamageSlider(cell,riskId, consequenceID){
     let label = document.createElement("label")
     label.setAttribute("style","margin-top:0px")
     //label.setAttribute("id",id+"-damage-label")
-    label.innerHTML ="&nbsp &nbsp Schaden: <span id='"+riskId+"-"+consequenceID+"-damage'>"+slider.value+"</span>"
+    let hoehe
+    if(parseInt(slider.value) === 1) {
+        hoehe = 'sehr gering'
+    }else if(parseInt(slider.value) === 2){
+        hoehe = 'gering'
+    }else if(parseInt(slider.value) === 3){
+        hoehe = 'mittel'
+    }else if(parseInt(slider.value) === 4){
+        hoehe = 'hoch'
+    }else if(parseInt(slider.value) === 5){
+        hoehe = 'sehr hoch'
+    }
+    label.innerHTML ="&nbsp &nbsp <span id='"+riskId+"-"+consequenceID+"-damage'>"+hoehe+"</span>"
     container.appendChild(label)
     cell.appendChild(container)
 }
