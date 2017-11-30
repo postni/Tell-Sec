@@ -131,8 +131,9 @@ class Data {
                 Risiken: []
             }
             this.db.risikoquelle.findOne({ Bezeichnung: bezeichnung }, (err, res) => {
-                if (err) console.log("err: " + err);                
-                ergebnis.Bezeichnung = res.Bezeichnung;
+                if (err) console.log("err: " + err);
+                console.log(res)                
+                ergebnis.Bezeichnung = res.Bezeichnung?res.Bezeichnung:"unbekannt";
                 this.findIDRQinEnthaelt(res.IDRQ).then(res =>{
                     ergebnis.Risiken = res;
                     resolve(ergebnis);
@@ -144,8 +145,10 @@ class Data {
 
 
     analyse(event, devices, _callback) {
+        let exists = false;        
         var types = []
         for (let id in devices) {
+            console.log(devices[id]["devicetype"])
             let devicetype = ""
             if(devices[id]["devicetype"]==="stationär"){
                 devicetype = "Statisches Gerät"
@@ -155,10 +158,11 @@ class Data {
                 devicetype = "Maschinensteuerung"
             }else if(devices[id]["devicetype"] && devices[id]["devicetype"].toLowerCase()!=="unbekannt"){       
                 devicetype = devices[id]["devicetype"]
+            }else{
+                exists=true;
             }
-            console.log(devicetype)
+            //console.log(devicetype)
 
-            let exists = false;
             types.forEach((typ) => {
                 if (typ === devicetype) {
                     exists = true;
@@ -170,12 +174,12 @@ class Data {
             }
 
         }
-        console.log(types)
+        //console.log(types)
         Promise.all(types.map((bezeichnung) => { return this.findBezeichnunginRisikoquelle(bezeichnung).then(r => { return r }) })).then((res) => {
-            console.log("|||||||||||||||||||||||||||||||");
-            console.log("||||||----promise-all----||||||");
-            console.log("|||||||||||||||||||||||||||||||") ;           
-            console.log(res);
+            //console.log("|||||||||||||||||||||||||||||||");
+            //console.log("||||||----promise-all----||||||");
+            //console.log("|||||||||||||||||||||||||||||||") ;           
+            //console.log(res);
             _callback(event,res);
         })
     }
