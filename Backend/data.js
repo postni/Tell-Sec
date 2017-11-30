@@ -148,7 +148,8 @@ class Data {
         let exists = false;        
         var types = []
         for (let id in devices) {
-            console.log(devices[id]["devicetype"])
+            exists = false;
+            //console.log(devices[id]["devicetype"])
             let devicetype = ""
             if(devices[id]["devicetype"]==="stationär"){
                 devicetype = "Statisches Gerät"
@@ -156,19 +157,22 @@ class Data {
                 devicetype = "Mobiles Gerät"                
             }else if( devices[id]["devicetype"]==="Maschine"){
                 devicetype = "Maschinensteuerung"
-            }else if(devices[id]["devicetype"] && devices[id]["devicetype"].toLowerCase()!=="unbekannt"){       
+            }else if(devices[id]["devicetype"]){       
                 devicetype = devices[id]["devicetype"]
-            }else{
-                exists=true;
             }
             //console.log(devicetype)
+            if(devicetype===""){
+                console.log("true")
+                exists = true;
+            }
 
             types.forEach((typ) => {
+                //console.log("->"+typ)
                 if (typ === devicetype) {
                     exists = true;
                 }
             })
-
+            console.log("exists: "+exists+" |devicetype: "+devicetype+" |types: "+types)
             if (!exists) {
                 types.push(devicetype);
             }
