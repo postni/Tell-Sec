@@ -279,17 +279,19 @@ class Datastore {
             let newItems = Object.keys(newDevices).length
             let items = Object.keys(devices).length
             let nextID = this.newID();
+            let idMapper = {}
             for (let n in newDevices) {
                 let exists = false;
 
                 for (let o in devices) {
-                    if ((newDevices[n].ip === devices[o].ip && newDevices[n].ip) || (newDevices[n].mac === devices[o].mac && newDevices[n].mac)) {
+                    if ((newDevices[n].ip === devices[o].ip && newDevices[n].ip) || (newDevices[n].mac === devices[o].mac && newDevices[n].mac)|| (newDevices[n].hostname === devices[o].hostname && newDevices[n].hostname && newDevices[n].hostname!=="Unbekannt")) {
                         devices[o].hostname = newDevices[n].hostname ? devices[o].hostname : newDevices[n].hostname;
                         devices[o].ip = devices[o].ip ? devices[o].ip : newDevices[n].ip;
                         devices[o].mac = devices[o].mac ? devices[o].mac : newDevices[n].mac;
                         devices[o].ports = newDevices[n].openPorts ? devices[o].ports : newDevices[n].openPorts;
                         devices[o].os = devices[o].os ? devices[o].os : newDevices[n].osNmap;
                         devices[o].vendor = devices[o].vendor ? devices[o].vendor : newDevices[n].vendor;
+                        idMapper[n]=o;
                         exists = true
                     }
                     //itemsInner--
@@ -304,19 +306,38 @@ class Datastore {
                     devices[nextID]["os"] = newDevices[n].osNmap ? newDevices[n].osNmap : null
                     devices[nextID]["vendor"] = newDevices[n].vendor ? newDevices[n].vendor : null
                     devices[nextID]["devicetype"] = newDevices[n].devicetype ? newDevices[n].devicetype : "Unbekannt"
-                    devices[nextID]["connetedTo"] = newDevices[n].connetedTo ? newDevices[n].connetedTo : []
-                    devices[nextID]["connectionsToMe"] = newDevices[n].connectionsToMe ? newDevices[n].connectionsToMe : []
+                    idMapper[n]=nextID;
+                    // devices[nextID]["connetedTo"] = newDevices[n].connetedTo ? newDevices[n].connetedTo : []
+                    // devices[nextID]["connectionsToMe"] = newDevices[n].connectionsToMe ? newDevices[n].connectionsToMe : []
                     nextID++;
                 }
 
             }
+            console.log(idMapper)
+
+            for(let id in idMapper){
+                if(newDevices[id].connectedTo){
+                    newDevices[id].connectedTo.forEach((connection)=>{
+                        if(!devices[idMapper[id]].connectedTo)devices[idMapper[id]].connectedTo=[] 
+                        devices[idMapper[id]].connectedTo.push(idMapper[connection])
+                    })
+                }
+                if(newDevices[id].connectionsToMe){
+                    newDevices[id].connectionsToMe.forEach((connection)=>{
+                        if(!devices[idMapper[id]].connectionsToMe)devices[idMapper[id]].connectionsToMe=[]                         
+                        devices[idMapper[id]].connectionsToMe.push(idMapper[connection])
+                    })
+                }
+            }
+
             console.log("devices - after")
             console.log(devices)
 
             sessionStorage.setItem("devices", JSON.stringify(devices))
-            sessionStorage.setItem("update", true)
+            
             console.log("==========================================")
         }
+        sessionStorage.setItem("update", true)        
     }
 
     checkForRisks() {
@@ -342,6 +363,7 @@ class Datastore {
             }
         }
         sessionStorage.setItem("devices", JSON.stringify(devices))
+        sessionStorage.setItem("update", true)        
     }
 }
 

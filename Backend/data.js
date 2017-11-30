@@ -161,7 +161,7 @@ class Data {
                 devicetype = devices[id]["devicetype"]
             }
             //console.log(devicetype)
-            if(devicetype===""){
+            if(devicetype===""||devicetype==="Unbekannt"){
                 console.log("true")
                 exists = true;
             }
