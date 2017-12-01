@@ -132,7 +132,7 @@ class Data {
             }
             this.db.risikoquelle.findOne({ Bezeichnung: bezeichnung }, (err, res) => {
                 if (err) console.log("err: " + err);
-                console.log(res)                
+                console.log(res)              
                 ergebnis.Bezeichnung = res.Bezeichnung?res.Bezeichnung:"unbekannt";
                 this.findIDRQinEnthaelt(res.IDRQ).then(res =>{
                     ergebnis.Risiken = res;
@@ -157,11 +157,15 @@ class Data {
                 devicetype = "Mobiles Gerät"                
             }else if( devices[id]["devicetype"]==="Maschine"){
                 devicetype = "Maschinensteuerung"
+            }else if( devices[id]["devicetype"]==="NAS"){
+                devicetype = "Netzwerkspeicher"
+            }else if( devices[id]["devicetype"]==="Access Point"){              //TEMPORÄR
+                devicetype = "Acces Point"                                      //TEMPORÄR
             }else if(devices[id]["devicetype"]){       
                 devicetype = devices[id]["devicetype"]
             }
             //console.log(devicetype)
-            if(devicetype===""||devicetype==="Unbekannt"){
+            if(!devicetype ||devicetype===""||devicetype==="Unbekannt"){
                 console.log("true")
                 exists = true;
             }

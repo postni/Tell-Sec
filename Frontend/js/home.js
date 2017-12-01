@@ -19,7 +19,6 @@ defaultBtn.onclick = ()=>{
     
     if(clicked==""){
         clicked = "default"
-        datastore.getTestdata()
         btnClicked()
     }
 }
@@ -39,6 +38,8 @@ function startWithNwScan(){
     console.log(clicked)
     if(clicked ==="expert"){
         communicator.scanNetwork();
+    } else{
+        datastore.getTestdata()
     }
     
     communicator.maximize();
@@ -47,12 +48,6 @@ function startWithNwScan(){
 
 function startNoNwScan(){
     console.log("Netzwerk wird nicht gescannt");
-    
-    /*
-    if(clicked ==="expert"){
-        communicator.scanLocalhost();
-    }
-    */
     
     communicator.maximize();
     window.location.href = 'main_map.html';
