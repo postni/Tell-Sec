@@ -393,17 +393,13 @@ span.modal-text-line{
 
     .netzwerkscan {
         position: relative;
-        width: 470px; 
-        margin-bottom: 20px;
-        margin-right: 20px; 
         border-radius: 10px;
+        height: 100%;
       }
     
       .netzwerkscan1 {
         position: relative;
-        width: 470px;  
-        margin-bottom: 20px;
         border-radius: 10px;
-        
+        height: 100%;        
       }
     
