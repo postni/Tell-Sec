@@ -2,6 +2,7 @@ var filehandler = require('./js/filehandler')
 var communicator = require('./js/frontend').communicator
 var datastore = require('./js/frontend').datastore
 
+
 /*Sidemenu Map */
 function openNav_user() {
     document.getElementById("user").style.width = "200px";
@@ -24,11 +25,28 @@ function closeNav_network() {
 /*TOP MENU*/
 /*Clear Map */
 function startanalysis() {
-    let dev = JSON.stringify(datastore.getDevices())
-    if(dev.includes('')){
-/*notfisnished */
+    /*fehlerhaft!*/
+    let dev = datastore.getDevices()
+    let decision = false
+    for(let d in dev){
+        
+        if (dev[d].devicetype === "unbekannt" || !dev[d].devicetype){
+            decision = true;       
+        }
     }
-}
+    
+    if(decision){
+        filehandler.showAlertUnknownDevices(dec)
+     } else {
+        window.location.href = "./evaluation.html"
+    }
+    }
+
+    function dec(dec){
+        if(!dec){
+            window.location.href = "./evaluation.html"
+        }
+    }
 
 function callClearMap() {
     if(sessionStorage.getItem('devices')!=='{}'){

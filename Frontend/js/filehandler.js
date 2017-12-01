@@ -101,12 +101,18 @@ class Filehandler {
             message: 'Ihr Netzwerkplan ist bereits leer.'
         });
     }
-    showAlertUnknownDevices() {
+    showAlertUnknownDevices(_callback) {
         dialog.showMessageBox({ 
             title: 'Auswertung',
             type: 'warning', 
-            buttons: ['OK'], 
+            buttons: ['OK', 'Cancel'], 
             message: 'Sie haben nicht alle Netzwerkgeräte identifiziert. Dies könnte zu einer weniger aussagekräftigen Auswertung führen.'
+        }, (resp) => {
+            if(resp === 0){
+                _callback(false)
+            }else {
+                _callback(true)
+            }
         });
     }
     showCloseDialog(_callback) {
