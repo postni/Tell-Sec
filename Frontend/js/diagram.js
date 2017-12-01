@@ -218,7 +218,27 @@ network.on("click", (params) => {
         document.getElementById("modal-mac").value = devices[myId].mac ? devices[myId].mac : "unbekannt"
         document.getElementById("modal-vendor").value = devices[myId].vendor ? devices[myId].vendor : "unbekannt"
         document.getElementById("modal-os").value = devices[myId].os ? devices[myId].os : "unbekannt"
+        let select = document.getElementById("modal-devicetype")
+        
+        select.selectedIndex = 0
+        let dtype = !devices[myId].devicetype || devices[myId].devicetype ==="Client" ?"Unbekannt": devices[myId].devicetype
+        for(let i=0; i< select.options.length;i++){
+            console.log(select.options)
+            console.log(select.options[i].value)
+            console.log(dtype)
+            
+            if(select.options[i].value === dtype){
+                console.log(select.selectedIndex)
+                select.selectedIndex = i
+                console.log(select.selectedIndex)
+                select.parentElement.getElementsByTagName("input")[0].value = dtype
+                
+            }
+        }
+        console.log(select.selectedIndex)
+        
         let add = document.getElementById("add-ports");
+        console.log(devices[myId].devicetype)
 
 
         let ports = document.getElementById("modal-ports");
