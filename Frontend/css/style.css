@@ -416,13 +416,14 @@ span.modal-text-line{
         position: center;
         margin-bottom: 30px  
     }
-    .menuleiste {
-        position: center;
-        margin-bottom: 30px 
+  
+    .menuscreen {
+        border-radius: 70px;
+        margin-bottom: 100px
       }
-    
-    .bild1 {
-        margin-bottom: 100px 
 
+    .Manuell1 {
+        width: 100%; 
+        height: auto 
     }
     
