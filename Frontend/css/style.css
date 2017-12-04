@@ -390,20 +390,39 @@ span.modal-text-line{
     
     .hidden { display: none; }
 
-
     .netzwerkscan {
         position: relative;
-        width: 470px; 
-        margin-bottom: 20px;
-        margin-right: 20px; 
         border-radius: 10px;
+        height: 100%;
+        margin-bottom: 30px
       }
     
-      .netzwerkscan1 {
+    .netzwerkscan1 {
         position: relative;
-        width: 470px;  
-        margin-bottom: 20px;
         border-radius: 10px;
-        
+        height: 100%;  
+        margin-bottom: 30px      
       }
+
+    .unbekanntegeraete {
+        position: center;
+        border-radius: 10px;
+        height: 100%;  
+        margin-bottom: 30px  
+    }
+
+    .risikoanalyse {
+       
+        position: center;
+        margin-bottom: 30px  
+    }
+    .menuleiste {
+        position: center;
+        margin-bottom: 30px 
+      }
+    
+    .bild1 {
+        margin-bottom: 100px 
+
+    }
     

@@ -56,20 +56,11 @@
             <ul class="navbar-nav ml-auto">
                 
              
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Map-Ansicht">
-                    <a class="nav-link" href="main_map.html">
-                        <img src="img/map.png" width="35px" alt="Map" />
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Listenansicht">
-                        <a class="nav-link" href="main.html">
-                            <img src="img/list.png" width="35px" alt="Liste" />
-                        </a>
-                    </li>
+
 
                 <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Einstellungen" >
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="img/settings.png" width="35px" alt="Einstellungen" />
+                        <img src="img/settings.png" width="30px" alt="Einstellungen" />
                     </a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="#" >About</a>
@@ -96,14 +87,15 @@
                                         <a class="nav-link" data-toggle="tab" href="#panel11" role="tab">Vorwort</a>
                                     </li>
                                 </li>
+                                <li class="nav-item ">
+                                        <a class="nav-link" data-toggle="tab" href="#panel15" role="tab">Menüleiste</a>
+                                    </li>
                                     <li class="nav-item ">
                                         <a class="nav-link" data-toggle="tab" href="#panel12" role="tab">Wichtigste Funktionen</a>
                                     </li>
                                     <li class="nav-item ">
-                                        <a class="nav-link" data-toggle="tab" href="#panel13" role="tab">Häufig gestellte Fragen</a>
-                                    </li>
-                                    <li class="nav-item ">
                                             <a class="nav-link" data-toggle="tab" href="#panel14" role="tab">Supportanfrage</a>
+                                    </li>               
                              </ul>
                     </div>
 
@@ -117,10 +109,25 @@
                                             <p>Heutzutage sind so gut wie alle Geräte in einem Unternehmen über ein Netzwerk miteinander verbunden.</p>
                                                 <p>Tell! ist ein neuartiges Tool zur Risikoanalyse. Egal ob Einsteiger oder Experte - für jeden Interessierten bietet die Software ein innovatives Layout mit entsprechend angepassten Inhalten. </p>
                                                 <p>Somit übersiehst du keine Schnittstellen, die potenzielle Gefahren mit sich bringen. Diese Webseite begleitet dich durch die Software, um einen perfekten Start mit Tell! zu gewährleisten.</p>
-                                               <p>Probieren sie es doch einfach aus!</p>
+                                               <p>Probieren Sie es doch einfach aus!</p>
                                     
                                         </div>
                                         <!--/.Panel 1-->
+
+                                        <!--Panel 4-->
+                                        <div class="tab-pane fade" id="panel15" role="tabpanel" align="justify">
+                                                <br>
+                                                <h1><strong>Menüleiste</strong></h1><br>
+                                                <img class= "menuleiste col-sm-12" src="Menüleiste.png ">
+                                            
+                                                <img src="1.png" align="left" /> <p>Dieser Button ermöglicht Ihnen einen neuen Entwurfseditor zu öffnen.</p><br>
+                                                <img src="2.png" align="left" /> <p>Hier können Sie Ihre erstellte(n) Systemlandschaft(en) speichern.</p><br>
+                                                <img src="3.png" align="left" /> <p>Bereits erstellte Systemlandschaften können Sie hier öffnen oder hinzufügen.</p><br>
+                                                <img src="4.png" align="left" /> <p>Wenn Sie mehrere Systemlandschaften in einem Entwurfseditor erstellt haben, können Sie hier die Seiten blättern.</p><br>
+                                                <img src="5.png" align="left" /> <p>Tell! bietet Ihnen die Suche nach bestimmten Inhalten in Ihrem Dokument.</p><br>
+                                                <img src="6.png" align="left" /> <p>Hier gelangen Sie auf About, Hilfe und könnnen das Tool schließen.</p><br>
+                                            </div>
+                                            <!--/.Panel 4-->     
 
                                         <!--Panel 2-->
                                         <div class="tab-pane fade" id="panel12" role="tabpanel" align="justify">
@@ -129,42 +136,37 @@
                                             <h3>Netzwerkscan</h3>
                                             <p>Mit dem Netzwerkscan erhalten Sie in einem Entwurfseditor eine grobe Übersicht über die gescannten Netzwerke und vorhandene Geräte im Unternehmen. Hierbei können Sie bei Bedarf die entstandene Netzwerkstruktur manuell anpassen und erweitern. Dabei wird jedoch vorausgesetzt, dass das Endgerät auf dem die Software läuft, mit dem gewünschten Netzwerk verbunden ist.</p>
                                            
-                                            <div>
-                                                <img class= "netzwerkscan" src="netzwerkscan.png">
-                                                <img class= "netzwerkscan1" src="netzwerkscan1.png">
+                                            <div class="row">
+                                                <img class= "netzwerkscan col-sm-6" src="netzwerkscan.png">
+                                                <img class= "netzwerkscan1 col-sm-6" src="netzwerkscan1.png">
                                             </div>
 
                                             <h3>Manueller Netzwerkplan</h3>
-                                            <p>Da Netzwerke sehr komplex sein können, und nicht zwangsläufig durch ein Endgerät erreichbar sein müssen, können Sie solche Netzwerksegmente auch zusätzlich komplett eigenständig modellieren. Diese manuelle Variante des Modellierens können Sie auch verwenden, wenn einzelne Komponenten bei dem Netzwerkscan nicht gefunden wurden. Sie können mit Drag & Drop ganz einfach und unkompliziert Ihren (Produktions-) Netzwerk nachbilden. Hierdurch kann das Scannen des Netzwerks ergänzt oder vollständig ersetzt werden.</p>
-                                        
+                                            <p>Da Netzwerke sehr komplex sein können, und nicht zwangsläufig durch ein Endgerät erreichbar sein müssen, können Sie solche Netzwerksegmente auch zusätzlich komplett eigenständig modellieren. Diese manuelle Variante des Modellierens können Sie auch verwenden, wenn einzelne Komponenten bei dem Netzwerkscan nicht gefunden wurden. Sie können per Klick ganz einfach und unkompliziert Ihren (Produktions-) Netzwerk nachbilden. Hierdurch kann das Scannen des Netzwerks ergänzt oder vollständig ersetzt werden.</p>
+                                                <img src= "Manuell1.png" alt="Manuell1">
+                                   
                                             <h3>Hilfe bei der Identifizierung unbekannter Geräte</h3>
-                                            <p>Falls der Netzwerkscan ein Netzwerkelement gefunden, aber nicht erkannt hat, symbolisiert ein Fragezeichen an entsprechender Stelle das Problem. „Hovern“ Sie mit Ihrem Cursor über diesem Objekt, so erscheint eine Infobox mit grundlegenden, bekannten Informationen, wie beispielsweise IP- und MAC-Adresse. Anhand dieser Informationen erhalten Sie, um welches Gerät im System es sich tatsächlich handelt.
+                                            <p>Falls der Netzwerkscan ein Netzwerkelement gefunden, aber nicht erkannt hat, symbolisiert ein Fragezeichen an entsprechender Stelle das Problem. Klicken Sie mit Ihrem Cursor auf das Objekt, so erscheint eine Infobox mit grundlegenden, bekannten Informationen, wie beispielsweise IP- und MAC-Adresse. Anhand dieser Informationen erhalten Sie, um welches Gerät im System es sich tatsächlich handelt.
                                                     Anschließend können Sie per Tastatureingabe fehlende Information ergänzen. Ferner können auch weitere Netzwerkelemente – wie bspw. Benutzer, Maschinen, Netzwerke, Konnektoren oder technische Komponenten – manuell hinzugefügt werden, falls der Netzwerkscan im Betrieb nicht alles lückenlos erkennen könnte.</p>
+                                                <img class= "unbekanntegeraete col-sm-9" src="UnbekannteGeräte.png ">
 
                                             <h3>Risikoanalyse</h3>
-                                            <p>Bei vollständig ausgearbeitetem Netzwerkplan können alle bekannten Risikoquellen identifiziert werden. An den Identifizierten „Problemstellen“ wird hier eine Risikobeschreibung inklusive möglicher Lösungsvorschläge angezeigt. Nach dem Netzwerkscan können Sie durch einen Klick auf den Analyse-Button anhand von roten Ausrufezeichen potenzielle Gefahrenquelle aufgezeigt werden. Durch das „hovern“ mit dem Cursor so über das Ausrufezeichen erscheint erneut ein Tooltip mit Informationen über denkbaren Risiken. Im Experten-Modus werden die Informationen detaillierter – für Laien nicht mehr verständlich – dargestellt. </p>
-                                    
+                                            <p>Bei vollständig ausgearbeitetem Netzwerkplan können alle bekannten Risikoquellen identifiziert werden. An den Identifizierten „Problemstellen“ wird hier eine Risikobeschreibung inklusive möglicher Lösungsvorschläge angezeigt. Die Risikobewertung zeigt Ihnen die erste Auswertung der Systemlandschaft an, diese können Sie mit einem Schieberegler zusätzlich mit Wahrscheinlichkeit- und Schadenshöhe individuell anpassen.
+                                                </p>
+                                                <img class= "risikoanalyse col-sm-9" src="Risikoanalyse.png ">
                                         </div>
                                         <!--/.Panel 2-->
                                     
                                         <!--Panel 3-->
-                                        <div class="tab-pane fade" id="panel13" role="tabpanel" align="justify">
-                                            <br>
-                                            <h1><strong>Häufig gestellte Fragen</strong></h1><br>
-                                            <p>In diesem Kapitel werden wir alle Auswahlmöglichkeiten der Tell! Menüleiste genauer unter die Lupe nehmen.Jede Funktion wird hier genau erklärt.<br>
-                                            </p>
-                                        </div>
-                                        <!--/.Panel 3-->
-                                    
-                                        <!--Panel 4-->
                                         <div class="tab-pane fade" id="panel14" role="tabpanel" align="justify">
                                             <br>
                                             <h1><strong>Supportanfrage</strong></h1><br>
                                             <p>Hier können Sie uns dabei unterstützen, Tell! weiter zu verbessern.</p>
                                             <p>Bitte beachten Sie, dass wir auf solche Supportanfragen nicht persönlich antworten können. Dennoch ist jede Information unserer User für uns sehr aufschlussreich und hilfreich. Alle Suportanfragen werden von uns aufmerksam gelesen und jeweils an die richtigen Stellen weitergeleitet, um sie effektiv zu bearbeiten.
-                                                Sollten Sie eine direkte Frage,dann schreiben Sie und eine E-Mail an support@tell </p>
+                                            <p>Sollten Sie eine direkte Frage, dann schreiben Sie und eine E-Mail an <a href="mailto:support@tell.de">support@tell.de</a> Wir sind bemüht, jede Frage zu technischen Themen zu beantworten. Falls Sie eine Frage zur Bedienung der Tell! haben, wenden Sie zunächst an die Suchfunktion hier im Handbuch. Sollten Sie keine Antwort finden, benachrichtigen Sie uns bitte über Ihr genaues Bedienproblem. Wir werden natürlich auch in unserem Handbuch weitere Nachbesserungen führen.</p>
+                                            </p>
                                         </div>
-                                        <!--/.Panel 4-->                   
+                                        <!--/.Panel 3-->                   
                     </div>
                 </div>
             </div>
