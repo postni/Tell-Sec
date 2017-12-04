@@ -1,119 +1,96 @@
-//const fs = require('fs');
-const IpSubnetCalculator = require('ip-subnet-calculator');
-const nmap = require('node-nmap');
 const os = require('os');
+const nmap = require('node-nmap');
 const ifaces = os.networkInterfaces();
-nmap.nmapLocation = "nmap"; //default 
+const IpSubnetCalculator = require('ip-subnet-calculator');
 
-var NmapScanner = class NmapScanner {
+
+class NWtester {
     constructor() {
-        this.activeHosts = {};
+
     }
 
-    //gibt eine Liste(Array) aller Netzwerke zurück (jeweils kleinste und größte IP im Netzwerk)
-    getMyNetworks(){
-        console.log("MyNetworks");
-        var subnets = [];
-
-        //berechnet für jeden Netzwerkadapter die niedrigste und höchste IP-Adresse
-        Object.keys(ifaces).forEach((ifname) => {
-
-            ifaces[ifname].forEach((iface) => {
-                if ('IPv4' !== iface.family || iface.internal !== false || (IpSubnetCalculator.toDecimal(iface.address) <= 2852126719 && IpSubnetCalculator.toDecimal(iface.address) >= 2835349504)) {
-                    console.log("TODO (IPv6 etc.)");
-                    return;
-                } else {
-                    let ipLow = IpSubnetCalculator.calculateCIDRPrefix(iface.address, iface.netmask).ipLow;
-                    let ipHigh = IpSubnetCalculator.calculateCIDRPrefix(iface.address, iface.netmask).ipHigh;
-                    console.log("MyIP: " + iface.address + " - MyNetmask: " + iface.netmask)
-                    console.log("Lowest IP in subnet: " + ipLow + " / " + IpSubnetCalculator.toString(ipLow))
-                    console.log("Highest IP in subnet: " + ipHigh + " / " + IpSubnetCalculator.toString(ipHigh))
-                    console.log("====================================================")
-                    subnets.push({ ipLow: ipLow, ipHigh: ipHigh });
-                }
-            });
-        });
-        return subnets;
-    }
-
-    //bekommt ein Array aus subnetzen (jeweils niedriste/höchste IP) und gibt eine Liste aktiver Hosts in allen Subnetzen zurück.
-    getActiveIPs(subnets, completeScan, event){
-        let ipList = '';
-        let ipCount = 0;
-        subnets.forEach((subnet) => {
-            console.log("subnet: ")
-            console.log(JSON.stringify(subnet));
-            for (let i = subnet.ipLow; i <= subnet.ipHigh; i++) {
-                ipList = (ipList === "") ? IpSubnetCalculator.toString(i) : ipList + " " + IpSubnetCalculator.toString(i);
-                ipCount++;
-            }
-        });
-        //console.log("ipList");
-        //console.log(ipList);
-        let scan = new nmap.NmapScan(ipList, '-sn');
-
-        scan.on('complete',(data) => {
-            //console.log("===== complete =====");
-            let hosts = [];
-            data.forEach((d)=>{
-                hosts.push(d.ip);
+    scanNetwork(event, _callback) {
+        let ifaceList = []
+        let myIPs = []
+        Object.keys(ifaces).forEach(i => {
+                let iface = ifaces[i]
+                iface = iface.forEach(adapter => {
+                    myIPs.push(adapter.address)
+                    let devices = this.getDevices(adapter)
+                    ifaceList.push(devices)
+                })
+        })
+        //console.log(ifaceList)
+        Promise.all(ifaceList).then(r => {
+            let mergedResponse = [].concat.apply([],r)
+            let promises = []
+            mergedResponse.forEach(host=>{ 
+                promises.push( this.getHostInformation(host, myIPs))
             })
-            //console.log(this.activeHosts)
-            this.getPortsAndOS(hosts,completeScan, event);       
-            
-        });
-        scan.on('error', (error) => {
-            console.log(error);
-        });
-        scan.startScan();
+            console.log("IPscan: "+promises)
+            Promise.all(promises).then(r =>{
+                //console.log(r)
+                let mergedResponse = [].concat.apply([],r)
+                //console.log(mergedResponse)
+                _callback(event, mergedResponse)
+            })
+                
+            //console.log(r)
+            //console.log(mergedResponse)
+        })
     }
 
-    getPortsAndOS(hosts, completeScan, event){
-        let itemsToProcess = hosts.length;
-        hosts.forEach((ip)=>{
-            let scanner = new nmap.OsAndPortScan(ip);
-            scanner.on('complete', (data) => {
-                console.log("Host: " + ip);
-                console.log(data);
-                this.activeHosts[ip] = data[0];
-                itemsToProcess--;
-                if(itemsToProcess===0){
-                    console.log(event)
-                    console.log("geht :)")
-                    completeScan(event,this.activeHosts);
-                }
-                //console.log(JSON.stringify(this.activeIPs[IP]));
-            });
-            scanner.on('error', function (error) {
-                itemsToProcess--;
-                if(itemsToProcess===0){
-                    console.log(event)
-                    console.log("?????? geht nicht ????????")
-                    completeScan(event,[]);
-                }
-                console.log("error: "+error);
-            });
-    
-            scanner.startScan();
-        });
-    }
-    
-    getMyIPs(completeScan, event){
-        let ips = []
-        Object.keys(ifaces).forEach((ifname) => {
+    getDevices(adapter) {
+        return new Promise(resolve => {
+            if (adapter.family === 'IPv4' && adapter.internal === false && !(IpSubnetCalculator.toDecimal(adapter.address) <= 2852126719 && IpSubnetCalculator.toDecimal(adapter.address) >= 2835349504) && IpSubnetCalculator.toDecimal(adapter.netmask)>=4294836224) {
+                let subnet = IpSubnetCalculator.calculateCIDRPrefix(adapter.address, adapter.netmask).ipLowStr + "/" + IpSubnetCalculator.calculateCIDRPrefix(adapter.address, adapter.netmask).prefixSize
 
-            ifaces[ifname].forEach((iface) => {
-                if ('IPv4' !== iface.family || iface.internal !== false || (IpSubnetCalculator.toDecimal(iface.address) <= 2852126719 && IpSubnetCalculator.toDecimal(iface.address) >= 2835349504)) {
-                    return;
-                } else {
-                    let myIP = iface.address;
-                    ips.push(myIP);
-                }
-            });
-            this.getPortsAndOS(ips,completeScan, event); 
-        });
+                var nmapscan = new nmap.NmapScan(subnet, '-sP');
+                nmapscan.on('complete', (data) => {
+
+                    console.log("complete")
+                    console.log(subnet)
+                    resolve(data)
+                });
+                nmapscan.on('error', (error) => {
+                    console.log("subnet")
+                    resolve([])
+                });
+                nmapscan.startScan();
+            } else {
+                resolve([])
+            }
+        })
     }
+    getHostInformation(host, myIPs){
+      
+        console.log("OS Scan for "+host.ip)
+        return new Promise(resolve =>{
+
+            var nmapscan = new nmap.OsAndPortScan(host.ip);
+            nmapscan.on('complete', (data) => {
+
+                console.log("complete")
+                console.log(host.ip)
+                if(myIPs.includes(data.ip)&&!data.hostname){
+                    console.log(data)
+                    data.hostname = os.hostname()
+                }
+                resolve(data)
+            });
+            nmapscan.on('error', (error) => {
+                console.log(error)
+                console.log(myIPs+" <- "+host.ip)
+                if(myIPs.includes(host.ip)&&!host.hostname){
+                    console.log(host)
+                    host.hostname = os.hostname()
+                }
+                resolve([host])
+            });
+            nmapscan.startScan();
+        })
+    }
+    
 
 }
-
-module.exports = NmapScanner;
+module.exports = new NWtester();

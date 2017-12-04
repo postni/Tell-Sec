@@ -1,5 +1,5 @@
 const electron = require('electron')
-const NetworkScanner = require('./backend/scanner');
+const networkScanner = require('./backend/scanner');
 const datastore = require('./backend/data').datastore
 const os = require("os")
 
@@ -205,20 +205,14 @@ function analysisComplete( event, risks ){
 
 electron.ipcMain.on('scan-network', (event) => {
   console.log("scan network")  
-  let scanner = new NetworkScanner();
-  scanner.getActiveIPs(scanner.getMyNetworks(),scanComplete, event);
-})
-
-electron.ipcMain.on('scan-localhost', (event) => {
-  let scanner = new NetworkScanner();
-  scanner.getMyIPs(scanComplete, event);
-  console.log("scan localhost");
+  networkScanner.scanNetwork(event, scanComplete)
 })
 
 function scanComplete(event, data){
   console.log("#################################################")
   console.log("/////////////////////DONE////////////////////////")
   console.log("#################################################")
+  console.log(data)
   event.sender.send('scan-complete', data);  
 }
 
