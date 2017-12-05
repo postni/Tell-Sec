@@ -92,8 +92,8 @@ function toggleVideo() {
     let divVideo = document.getElementById('divVideo')
     let video = document.getElementById('video')
     if(showVideo) {
-        
         divVideo.style.display = "block";
+        localStorage.setItem('showVideo', false)
     } else {
         divVideo.style.display = "none";
         video.pause()
