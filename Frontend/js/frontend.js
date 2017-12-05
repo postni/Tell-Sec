@@ -37,38 +37,44 @@ class Datastore {
     getTestdata() {
         console.log("<getTestdata()>")
         let testdata = {
-            "1": {
-                "hostname": "Timo",
-                "vendor": "TimoTec",
-                "connectedTo": ["3"],
-                "connectionsToMe": [""],
-                "os": "Timo94",
+            "0": {
+                "hostname": "DIR-868L",
+                "vendor": "D-LINK",
+                "connectedTo": [""],
+                "connectionsToMe": ["3", "4", "10"],
+                "os": "DD-WRT Linux-based",
                 "ip": "10.23.4.61",
                 "mac": "F2:34:A5:67:B2:81",
                 "ports": [
                     {
-                        "port": "123",
-                        "protocol": "test",
-                        "service": "SSH"
+                        "port": "80",
+                        "protocol": "TCP",
+                        "service": "HTTP"
                     },
                     {
-                        "port": "2345",
-                        "protocol": "test",
-                        "service": "FTP"
+                        "port": "143",
+                        "protocol": "TCP/UDP",
+                        "service": "IMAP"
+                    },
+                    {
+                        "port": "107",
+                        "protocol": "TCP",
+                        "service": "Remote Tellnet Service Protocol"
                     }
                 ],
                 //rausnehmen
-                /*devicetype": "Client",*/
+                "devicetype": "Router",
                 "risks": [],
                 "categories": []
             },
-            "2": {
-                "hostname": "Niklas",
-                "vendor": "NiklasTec",
+            "1": {
+                "hostname": "HGST Ultrastar 7K4000",
+                "vendor": "Hitachi",
                 "os": "Niklas94",
                 "ip": "10.23.4.62",
                 "mac": "F2:34:A5:67:B2:92",
-                "connectionsToMe": ["2"],
+                "connectedTo": ["4"],
+                "connectionsToMe": [""],
                 "ports": [
                     {
                         "port": "123",
@@ -82,18 +88,42 @@ class Datastore {
                     }
                 ],
                 //rausnehmen?
-                /*"devicetype": "Router",*/
+                "devicetype": "Server",
+                "risks": [],
+                "categories": []
+            },
+            "2": {
+                "hostname": "Allegro-13SE",
+                "vendor": "Toshiba",
+                "connectedTo": ["3"],
+                "connectionsToMe": [""],
+                "os": "Bene94",
+                "ip": "10.23.4.63",
+                "mac": "F2:34:A5:67:B2:83",
+                "ports": [
+                    {
+                        "port": "123",
+                        "protocol": "test",
+                        "service": "SSH"
+                    },
+                    {
+                        "port": "2345",
+                        "protocol": "test",
+                        "service": "FTP"
+                    }
+                ],
+                "devicetype": "Server",
                 "risks": [],
                 "categories": []
             },
             "3": {
-                "hostname": "Benedikt",
-                "vendor": "BeneTec",
-                "connectedTo": ["2"],
-                "connectionsToMe": ["1", "4", "5", "6"],
-                "os": "Bene94",
-                "ip": "10.23.4.63",
-                "mac": "F2:34:A5:67:B2:83",
+                "hostname": "RJ45 GO-SW-8E",
+                "vendor": "D-Link",
+                "connectedTo": ["0"],
+                "connectionsToMe": ["2", "6", "7"],
+                "os": "Kübra94",
+                "ip": "10.23.4.74",
+                "mac": "F2:34:A5:67:B2:94",
                 "ports": [
                     {
                         "port": "123",
@@ -111,32 +141,10 @@ class Datastore {
                 "categories": []
             },
             "4": {
-                "hostname": "Kübra",
-                "vendor": "KübraTec",
-                "connectedTo": ["3"],
-                "os": "Kübra94",
-                "ip": "10.23.4.74",
-                "mac": "F2:34:A5:67:B2:94",
-                "ports": [
-                    {
-                        "port": "123",
-                        "protocol": "test",
-                        "service": "SSH"
-                    },
-                    {
-                        "port": "2345",
-                        "protocol": "test",
-                        "service": "FTP"
-                    }
-                ],
-                "devicetype": "Client",
-                "risks": [],
-                "categories": []
-            },
-            "5": {
-                "hostname": "Gülce",
-                "vendor": "GülceTec",
-                "connectedTo": ["3"],
+                "hostname": "RJ45 GO-SW-8E",
+                "vendor": "D-Link",
+                "connectedTo": ["0"],
+                "connectionsToMe": ["1", "5"],
                 "os": "Gülce94",
                 "ip": "10.23.4.65",
                 "mac": "F2:34:A5:67:B2:85",
@@ -152,13 +160,36 @@ class Datastore {
                         "service": "FTP"
                     }
                 ],
-                "devicetype": "Client",
+                "devicetype": "Switch",
+                "risks": [],
+                "categories": []
+            },
+            "5": {
+                "hostname": "DiskStation DS218",
+                "vendor": "Synology",
+                "connectedTo": ["4"],
+                "os": "Hakan94",
+                "ip": "10.23.4.66",
+                "mac": "F2:34:A5:67:B2:86",
+                "ports": [
+                    {
+                        "port": "123",
+                        "protocol": "test",
+                        "service": "SSH"
+                    },
+                    {
+                        "port": "2345",
+                        "protocol": "test",
+                        "service": "FTP"
+                    }
+                ],
+                "devicetype": "NAS",
                 "risks": [],
                 "categories": []
             },
             "6": {
-                "hostname": "Hakan",
-                "vendor": "HakanTec",
+                "hostname": "BHX 200",
+                "vendor": "Homag",
                 "connectedTo": ["3"],
                 "os": "Hakan94",
                 "ip": "10.23.4.66",
@@ -175,10 +206,111 @@ class Datastore {
                         "service": "FTP"
                     }
                 ],
-                "devicetype": "Client",
+                "devicetype": "Maschine",
                 "risks": [],
                 "categories": []
-            }
+            },
+            "7": {
+                "hostname": "BHX 050/055",
+                "vendor": "Homag",
+                "connectedTo": ["3"],
+                "os": "Hakan94",
+                "ip": "10.23.4.66",
+                "mac": "F2:34:A5:67:B2:86",
+                "ports": [
+                    {
+                        "port": "123",
+                        "protocol": "test",
+                        "service": "SSH"
+                    },
+                    {
+                        "port": "2345",
+                        "protocol": "test",
+                        "service": "FTP"
+                    }
+                ],
+                "devicetype": "Maschine",
+                "risks": [],
+                "categories": []
+            },
+            "10": {
+                "hostname": "WAC510",
+                "vendor": "Netgear",
+                "connectedTo": ["0"],
+                "connectionsToMe": ["11","14"],
+            
+                "os": "Hakan94",
+                "ip": "10.23.4.66",
+                "mac": "F2:34:A5:67:B2:86",
+                "ports": [
+                    {
+                        "port": "123",
+                        "protocol": "test",
+                        "service": "SSH"
+                    },
+                    {
+                        "port": "2345",
+                        "protocol": "test",
+                        "service": "FTP"
+                    }
+                ],
+                "devicetype": "Access Point",
+                "risks": [],
+                "categories": []
+            },
+            "11": {
+                "hostname": "Inspiron DT 3668",
+                "vendor": "Dell",
+                "connectedTo": ["10"],
+                "connectionsToMe": [""],
+            
+                "os": "Hakan94",
+                "ip": "10.23.4.66",
+                "mac": "F2:34:A5:67:B2:86",
+                "ports": [
+                    {
+                        "port": "123",
+                        "protocol": "test",
+                        "service": "SSH"
+                    },
+                    {
+                        "port": "2345",
+                        "protocol": "test",
+                        "service": "FTP"
+                    }
+                ],
+                "devicetype": "stationär",
+                "risks": [],
+                "categories": []
+            },
+            "14": {
+                "hostname": "Galaxy S8",
+                "vendor": "Samsung",
+                "connectedTo": ["10"],
+                "connectionsToMe": [""],
+            
+                "os": "Hakan94",
+                "ip": "10.23.4.66",
+                "mac": "F2:34:A5:67:B2:86",
+                "ports": [
+                    {
+                        "port": "123",
+                        "protocol": "test",
+                        "service": "SSH"
+                    },
+                    {
+                        "port": "2345",
+                        "protocol": "test",
+                        "service": "FTP"
+                    }
+                ],
+                "devicetype": "mobil",
+                "risks": [],
+                "categories": []
+            },
+            
+            
+            
         }
         sessionStorage.setItem("devices", JSON.stringify(testdata));
         sessionStorage.setItem("update", true)
