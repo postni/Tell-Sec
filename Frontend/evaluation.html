@@ -47,36 +47,15 @@
         <nav class="navbar navbar-expand-lg navbar-dark stylish-color" style="z-index:100">
             <!-- Links -->
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Neu">
-                    <a class="nav-link" href="#">
-                        <img src="img/new.png" width="30px" alt="Neu" />
-                    </a>
-                </li>
+    
                 <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Speichern">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="img/save.png" width="30px" alt="Speichern" />
                     </a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Speichern</a>
-                        <a class="dropdown-item" href="#">Speichern unter</a>
-                        <a class="dropdown-item" href="#">PDF Export</a>
+                        <a class="dropdown-item" onclick="opensave()">Speichern</a>
+                        <a class="dropdown-item" id='print-pdf' onclick="printToPDF()">PDF Export</a>
                     </div>
-
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Öffnen">
-                    <a class="nav-link" href="#">
-                        <img src="img/open.png" width="35px" alt="Öffnen" />
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Zurück">
-                    <a class="nav-link" href="#">
-                        <img src="img/undo.png" width="20px" alt="Undo" />
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Vorwärts">
-                    <a class="nav-link" href="#">
-                        <img src="img/redo.png" width="20px" alt="Redo" />
-                    </a>
                 </li>
             </ul>
 
@@ -102,11 +81,16 @@
                             <img src="img/list.png" width="35px" alt="Liste" />
                         </a>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
-                            <a class="nav-link" href="#">
-                                <img src="img/settings.png" width="35px" alt="Einstellungen" />
-                            </a>
-                        </li>
+                    <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="img/settings.png" width="35px" alt="Einstellungen" />
+                        </a>
+                        <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">About</a>
+                            <a class="dropdown-item" href="./help.html">Hilfe</a>
+                            <a class="dropdown-item" onclick="callCloseWin()">Schließen</a>
+                        </div>
+                    </li>
             </ul>
             </div>
         </nav>
@@ -166,6 +150,21 @@
 
 
             </div>
+            <div class="row" id="empty" style="display:none">
+                
+             <div class="col-md-12 evaluation grey lighten-4 card card-body">
+                 <div >
+                     
+                     <div class="intro-text">
+                         <h1>Keine Daten.</h1>
+                         <img class="img-fluid" src="img/symbole/unbekannt.png" width="100px" alt="Keine Daten" />
+                         <p class="skills">Um eine Analyse durchführen zu können, müssen Sie zuerst Ihre Systemlandschaft im Editor abbilden.</p><br>
+                       </div>
+                 </div>
+             </div>
+
+
+         </div>
             <br>
 
             <div class="row">
