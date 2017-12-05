@@ -392,34 +392,42 @@ span.modal-text-line{
 
     .netzwerkscan {
         position: relative;
-        border-radius: 10px;
+        border-radius: 15px;
         height: 100%;
-        margin-bottom: 30px
+        margin-bottom: 35px
       }
     
     .netzwerkscan1 {
         position: relative;
-        border-radius: 10px;
+        border-radius: 15px;
         height: 100%;  
-        margin-bottom: 30px      
+        margin-bottom: 35px      
       }
 
-    .unbekanntegeraete {
-        position: center;
-        border-radius: 10px;
-        height: 100%;  
-        margin-bottom: 30px  
-    }
-
-    .risikoanalyse {
-       
-        position: center;
-        margin-bottom: 30px  
-    }
-  
     .menuscreen {
-        border-radius: 70px;
+        border-radius: 100px;
         margin-bottom: 100px
       }
 
-   
+   .innen {
+       float:left;
+       margin-right: 15px;
+       border-radius: 15px;  
+       margin-bottom: 30px    
+   }
+
+    IMG.unbekanntegeraete {
+        display: block;
+        margin-bottom: 30px;
+        border-radius: 15px;
+        margin-left: auto;
+        margin-right: auto 
+    }
+
+    IMG.risikoanalyse {
+        display: block;
+        margin-bottom: 200px;
+        border-radius: 15px;
+        margin-left: auto;
+        margin-right: auto 
+    }
