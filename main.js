@@ -49,9 +49,10 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width:900,
-    height:567,
+    height:600,
     resizable: false,
-    icon: 'Frontend/img/LogoS.png'
+    icon: 'Frontend/img/LogoS.png',
+    autoHideMenuBar: true
   }
 
   )

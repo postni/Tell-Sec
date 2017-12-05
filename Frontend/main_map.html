@@ -59,7 +59,7 @@
                         <img src="img/new.png" width="30px" alt="Neu" />
                     </a>
                 </li>
-                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Speichern" >
+                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Speichern">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="img/save.png" width="30px" alt="Speichern" />
                     </a>
@@ -78,7 +78,7 @@
                         <a class="dropdown-item" onclick="openopen()">Hinzufügen</a>
                     </div>
                 </li>
-    
+
             </ul>
 
 
@@ -95,7 +95,8 @@
             <!--elemente rechts-->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Analyse starten" onclick="startanalysis()">
-                    <a class="nav-link"> <!-- href evaluation -->
+                    <a class="nav-link">
+                        <!-- href evaluation -->
                         <img src="img/start.png" width="30px" alt="Redo" />
                     </a>
                 </li>
@@ -104,15 +105,15 @@
                         <img src="img/scan.png" width="30px" alt="Scan" />
                     </a>
                 </li>
-             
 
 
-                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Einstellungen" >
+
+                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="img/settings.png" width="35px" alt="Einstellungen" />
                     </a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#" >About</a>
+                        <a class="dropdown-item" href="#">About</a>
                         <a class="dropdown-item" href="./help.html">Hilfe</a>
                         <a class="dropdown-item" onclick="callCloseWin()">Schließen</a>
                     </div>
@@ -146,7 +147,7 @@
 
                     <!-- Sidemenu-->
                     <div class="border" id="siden">
-                        <div id="user" class="sidenav" >
+                        <div id="user" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_user()">&times;</a>
                             <a onclick="addNode('stationär', 'symbole/stationär')">stationär</a>
                             <a onclick="addNode('mobil', 'symbole/mobil')">mobil</a>
@@ -154,7 +155,7 @@
                         </div>
                         <div id="machine" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_machine()">&times;</a>
- 
+
                         </div>
                         <div id="network" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_network()">&times;</a>
@@ -172,7 +173,7 @@
 
 
                         <span style="font-size:30px;cursor:pointer" onclick="openNav_user()">
-                            <img class="menu_pic" name="person" src="img/person.png" width="75" alt="User"  />
+                            <img class="menu_pic" name="person" src="img/person.png" width="75" alt="User" />
                         </span>
                         <p></p>
                         <span style="font-size:30px;cursor:pointer">
@@ -193,118 +194,128 @@
                     <!--PopUp-->
                     <div id="myModal" class="modal form-elegant">
                         <div class="container" style="position:absolute;bottom:0;margin:0;width:100%;margin-left:105px;">
-                            <div class="row"> 
+                            <div class="row">
                                 <div class="modal-content card card-body mx-4">
                                     <div class="modal-body pb-0">
-                                            <div class="row">
-                                                    <div class="col-sm-4">
-            
-            
-                                                        <p class="modal-text-line md-form form-sm">
-            
-                                                            <select class="mdb-select" id="modal-devicetype" onchange="updateContent('devicetype', this)">
-                                                                <option value="Repeater">Repeater</option>
-                                                                <option value="Hub">Hub</option>
-                                                                <option value="Bridge">Bridge</option>
-                                                                <option value="Switch">Switch</option>
-                                                                <option value="Router">Router</option>
-                                                                <option value="Gateway">Gateway</option>
-                                                                <option value="Access Point">Access Point</option>
-                                                                <option value="Firewall">Firewall</option>
-                                                                <option value="NAS">NAS</option>
-                                                                <option value="Server">Server</option>
-                                                                <option value="mobil">mobil</option>
-                                                                <option value="stationär">stationär</option>
-                                                                <option value="machine">Maschine</option>
-                                                                <option value="Unbekannt">Unbekannt</option>
-            
-                                                            </select>
-                                                            <label>Geräteart</label>
-                                                            </span>
-                                                        </p>
-            
-                                                        
-            
-                                                        <!--p class="modal-text-line"><label for="modal-hostname">Gerätename: </label> <span class="modal-text" id="modal-hostname">X</span></p-->
-                                                        <p class="modal-text-line md-form form-sm">
-                                                            <label for="modal-ip">IP </label>
-                                                            <input type="text" class="modal-text form-control" onchange="updateContent('ip', this)" id="modal-ip" value="X">
-                                                        </p>
-                                                        
-                                                    </div>
-            
-            
-                                                       
-                                        
-                                                    <!--2.reihe-->
-                                                    <div class="col-sm-4">
-                                                            <p class="modal-text-line md-form form-sm">
-                                                                    <label for="modal-hostname">Gerätename</label>
-                                                                    <input type="text" class="modal-text form-control" onchange="updateContent('hostname', this)" id="modal-hostname" name="modal-hostname" value="X">
-                                                                </p>
-                                                                <p class="modal-text-line md-form form-sm">
-                                                                    <label for="modal-mac">MAC </label>
-                                                                    <input type="text" class="modal-text form-control" onchange="updateContent('mac', this)" id="modal-mac" value="X">
-                                                                </p>
-                                                               
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <p class="modal-text-line md-form form-sm">
-                                                            <label for="modal-vendor">Hersteller </label>
-                                                            <input type="text" class="modal-text form-control" onchange="updateContent('vendor', this)" id="modal-vendor" value="X">
-                                                        </p>
-                                                        <p class="modal-text-line md-form form-sm">
-                                                            <label for="modal-os">Betriebssystem </label>
-                                                            <input type="text" class="modal-text form-control" onchange="updateContent('os', this)" id="modal-os" value="X">
-                                                        </p>
-                                                    </div>
-                                                    
-                                                    <p id="modal-id" style="display:none"></p>
-                                                    </div>
-            
-                                                </div>
-                                                <div class="modal-body pt-0 pb-0">
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-4">
 
-                                                                    <p class="modal-text-line md-form form-sm">
-                                                                            <label for="modal-ports">Offene Ports:</label>
-                                                                            <div class="modal-text-line md-form form-sm pt-4" id="modal-ports" style="max-height:145px; overflow-y: scroll">X</div>            
-                                                                    </p>
-                                                                    <p>
-                                                                        
-                                                                        
-                                                                    </p>
 
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-xs-1">
-                                                                <span class="close"><img src="img/cross.png" width="25px" alt="Schließen"></span>
-                                                            </div>
-                                                            
-                                                            <div class="col-xs-1">
-                                                                    <span id="add-ports"> 
-                                                                        <img src="img/ethernet.png" width="30px" alt="Port hinzufügen">
-                                                                    </span>
-                                                                </div>
-                                                              
-                                                            <div class="col-xs-1">
-                                                                <a onclick="removeElement()">
-                                                                    <img src="img/trash.png" width="30px" alt="Entfernen">
-                                                                    </a>
-                                                            </div>
-                                                            <div class="col-xs-9"></div>
-                                                        </div>
-                                                </div>
+                                                <p class="modal-text-line md-form form-sm">
+
+                                                    <select class="mdb-select" id="modal-devicetype" onchange="updateContent('devicetype', this)">
+                                                        <option value="Repeater">Repeater</option>
+                                                        <option value="Hub">Hub</option>
+                                                        <option value="Bridge">Bridge</option>
+                                                        <option value="Switch">Switch</option>
+                                                        <option value="Router">Router</option>
+                                                        <option value="Gateway">Gateway</option>
+                                                        <option value="Access Point">Access Point</option>
+                                                        <option value="Firewall">Firewall</option>
+                                                        <option value="NAS">NAS</option>
+                                                        <option value="Server">Server</option>
+                                                        <option value="mobil">mobil</option>
+                                                        <option value="stationär">stationär</option>
+                                                        <option value="machine">Maschine</option>
+                                                        <option value="Unbekannt">Unbekannt</option>
+
+                                                    </select>
+                                                    <label>Geräteart</label>
+                                                    </span>
+                                                </p>
+
+
+
+                                                <!--p class="modal-text-line"><label for="modal-hostname">Gerätename: </label> <span class="modal-text" id="modal-hostname">X</span></p-->
+                                                <p class="modal-text-line md-form form-sm">
+                                                    <label for="modal-ip">IP </label>
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('ip', this)" id="modal-ip" value="X">
+                                                </p>
+
+                                            </div>
+
+
+
+
+                                            <!--2.reihe-->
+                                            <div class="col-sm-4">
+                                                <p class="modal-text-line md-form form-sm">
+                                                    <label for="modal-hostname">Gerätename</label>
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('hostname', this)" id="modal-hostname" name="modal-hostname"
+                                                        value="X">
+                                                </p>
+                                                <p class="modal-text-line md-form form-sm">
+                                                    <label for="modal-mac">MAC </label>
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('mac', this)" id="modal-mac" value="X">
+                                                </p>
+
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <p class="modal-text-line md-form form-sm">
+                                                    <label for="modal-vendor">Hersteller </label>
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('vendor', this)" id="modal-vendor" value="X">
+                                                </p>
+                                                <p class="modal-text-line md-form form-sm">
+                                                    <label for="modal-os">Betriebssystem </label>
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('os', this)" id="modal-os" value="X">
+                                                </p>
+                                            </div>
+
+                                            <p id="modal-id" style="display:none"></p>
+                                        </div>
+
                                     </div>
-                                    
+                                    <div class="modal-body pt-0 pb-0">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+
+                                                <p class="modal-text-line md-form form-sm">
+                                                    <label for="modal-ports">Offene Ports:</label>
+                                                    <div class="modal-text-line md-form form-sm pt-4" id="modal-ports" style="max-height:145px; overflow-y: scroll">X</div>
+                                                </p>
+                                                <p>
+
+
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-1">
+                                                <span class="close">
+                                                    <img src="img/cross.png" width="25px" alt="Schließen">
+                                                </span>
+                                            </div>
+
+                                            <div class="col-xs-1">
+                                                <span id="add-ports">
+                                                    <img src="img/ethernet.png" width="30px" alt="Port hinzufügen">
+                                                </span>
+                                            </div>
+
+                                            <div class="col-xs-1">
+                                                <a onclick="removeElement()">
+                                                    <img src="img/trash.png" width="30px" alt="Entfernen">
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-9"></div>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="divVideo" style="display:none">
+                <video id="video"  autoplay>
+                    <source src="video/introTell.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+                    <!--   <source src="video/trailer.webm" type='video/webm; codecs="vp8, vorbis"' />-->
+                    Video not supported.
+                </video>
+            </div>
+        </div>  
         </div>
         </div>
         </div>
