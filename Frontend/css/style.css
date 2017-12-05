@@ -420,14 +420,14 @@ span.modal-text-line{
         position: relative;
         border-radius: 15px;
         height: 100%;
-        margin-bottom: 70px
+        margin-bottom: 30px
       }
     
     .netzwerkscan1 {
         position: relative;
         border-radius: 15px;
         height: 100%;  
-        margin-bottom: 70px      
+        margin-bottom: 30px      
       }
 
     .menuscreen {
@@ -444,7 +444,7 @@ span.modal-text-line{
 
     IMG.unbekanntegeraete {
         display: block;
-        margin-bottom: 15px;
+        margin-bottom: 30px;
         border-radius: 15px;
         margin-left: auto;
         margin-right: auto 
