@@ -399,6 +399,10 @@ span.modal-text-line{
         width: 80%;
         z-index: 100000000
     }
+    #videohelp {
+        
+        width: 80%;
+    }
   
     #divVideo {
         text-align: center;
@@ -416,14 +420,14 @@ span.modal-text-line{
         position: relative;
         border-radius: 15px;
         height: 100%;
-        margin-bottom: 35px
+        margin-bottom: 70px
       }
     
     .netzwerkscan1 {
         position: relative;
         border-radius: 15px;
         height: 100%;  
-        margin-bottom: 35px      
+        margin-bottom: 70px      
       }
 
     .menuscreen {
@@ -439,6 +443,14 @@ span.modal-text-line{
    }
 
     IMG.unbekanntegeraete {
+        display: block;
+        margin-bottom: 15px;
+        border-radius: 15px;
+        margin-left: auto;
+        margin-right: auto 
+    }
+
+    IMG.unbekanntegeraete1 {
         display: block;
         margin-bottom: 30px;
         border-radius: 15px;
