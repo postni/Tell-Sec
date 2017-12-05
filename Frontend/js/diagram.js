@@ -84,6 +84,23 @@ var ids = 100;
 function loader() {
     toggleLoad()
     this.getData = window.setInterval(checkForUpdate, 1000)
+    toggleVideo()
+
+}
+function toggleVideo() {
+    let showVideo = JSON.parse(localStorage.getItem('showVideo'))
+    let divVideo = document.getElementById('divVideo')
+    if(showVideo) {
+        
+        divVideo.style.display = "block";
+    } else {
+        divVideo.style.display = "none";
+    }
+    console.log(showVideo)
+    document.getElementById('video').addEventListener('ended',myHandler,false);
+    function myHandler(e) {
+        divVideo.style.display='none';
+    }
 }
 function checkForUpdate() {
     let updater = JSON.parse(sessionStorage.getItem("update"))

@@ -8,12 +8,7 @@ var clicked = ""
 
 //filehandler.saveDialog()
 
-expertBtn.onclick = ()=>{
-    if(clicked ==""){
-        clicked = "expert"
-        btnClicked()
-    }
-}
+
 
 defaultBtn.onclick = ()=>{
     
@@ -22,6 +17,26 @@ defaultBtn.onclick = ()=>{
         btnClicked()
     }
 }
+
+function loader() {
+    let checked = JSON.parse(localStorage.getItem('showVideo'))
+    console.log(checked)
+    checked = checked === undefined || checked === null? true : checked
+    let checkbox = document.getElementById('startvid')
+    if(checked) {
+        checkbox.setAttribute('checked',"")
+    }else {
+        checkbox.removeAttribute('checked')
+    }
+    localStorage.setItem('showVideo', checked)
+    checkbox.onchange = (event => {
+        localStorage.setItem('showVideo', event.target.checked)
+
+        
+
+    })
+}
+
 
 function btnClicked(){
     let nwScan = document.getElementById("nwScan").checked

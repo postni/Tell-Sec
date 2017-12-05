@@ -308,12 +308,13 @@
                     </div>
                 </div>
             </div>
-            <div class="divVideo" style="display:none">
-                <video id="video"  autoplay>
+            <div id="divVideo" style="display:none">
+                <video id="video"  autoplay controls>
                     <source src="video/introTell.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
                     <!--   <source src="video/trailer.webm" type='video/webm; codecs="vp8, vorbis"' />-->
                     Video not supported.
                 </video>
+                <button onclick="divVideo.style.display='none'; video.pause()">Skip</button>
             </div>
         </div>  
         </div>
