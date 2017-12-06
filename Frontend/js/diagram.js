@@ -59,7 +59,7 @@ var options = {
     manipulation: {
         addNode: false,
         deleteNode: false,
-        deleteEdge: false,
+        deleteEdge: true,
         initiallyActive: true,
         addEdge: function (data, callback) {
             if (data.from == data.to) {

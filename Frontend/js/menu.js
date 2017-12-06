@@ -47,7 +47,21 @@ function startanalysis() {
             window.location.href = "./evaluation.html"
         }
     }
-
+    function callClearMapforOpen() {
+        if(sessionStorage.getItem('devices')!=='{}'){
+        filehandler.showAlertDialog(clearMapforOpen)
+    
+    } 
+    }
+    function clearMapforOpen(choice) {
+        
+     
+        if(!choice) {
+        sessionStorage.setItem('devices', '{}'); 
+        updateMyData()
+        openopen()
+        } 
+    }
 function callClearMap() {
     if(sessionStorage.getItem('devices')!=='{}'){
     filehandler.showAlertDialog(clearMap)
