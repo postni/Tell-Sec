@@ -1,6 +1,7 @@
 var datastore = require("./js/frontend").datastore
 
 function getRisks() {
+    checkOverallRisk()
     if (!this.score) {
         this.score = {}
     }
@@ -86,6 +87,7 @@ function getRisks() {
             // console.log(id+"-risks")
             riskTable.id = id + "-risks"
             riskTable.setAttribute("width", "100%")
+            
             riskCell.appendChild(riskTable)
             for (let risk in device.risks) {
                 //console.log(risk)
@@ -104,26 +106,93 @@ function getRisks() {
 
                 insertprobabilitySlider(cellRiskLeft, id + "-" + device.risks[risk].riskID)
 
+
+
+                
                 riskNameTable.insertRow().innerText = risk
 
-                let innerRiskTable = document.createElement("table")
-                cellRiskRight.appendChild(innerRiskTable)
-                innerRiskTable.classList.add("col-sm-12")
-                innerRiskTable.id = id + "-" + device.risks[risk].riskID + "-consequences"
-                //console.log(device.risks)
+                let consequencesTable = document.createElement("table")
+                cellRiskRight.appendChild(consequencesTable)
+                consequencesTable.classList.add("col-sm-12")
+                consequencesTable.id = id + "-" + device.risks[risk].riskID + "-consequences"
                 device.risks[risk].consequences.forEach((consequence) => {
                     if (!this.score[id][device.risks[risk].riskID].consequences[consequence.consequenceID]) {
                         this.score[id][device.risks[risk].riskID].consequences[consequence.consequenceID] = {
                             "damage": consequence.damage
                         }
                     }
-                    let consequenceRow = innerRiskTable.insertRow()
+                    let consequenceRow = consequencesTable.insertRow()
                     consequenceRow.classList.add("justify-content-between")
                     let consequenceText = consequenceRow.insertCell()
                     consequenceText.innerText = consequence.name
                     insertDamageSlider(consequenceRow.insertCell(), id + "-" + device.risks[risk].riskID, consequence.consequenceID)
                 })
+
+
+                let countermeasuresTable = document.createElement("table")
+                countermeasuresTable.setAttribute("style","display:none")
+                cellRiskRight.appendChild(countermeasuresTable)
+                countermeasuresTable.classList.add("col-sm-12")
+                countermeasuresTable.id = id + "-" + device.risks[risk].riskID + "-countermeasures"
+                device.risks[risk].countermeasures.forEach((countermeasure) => {
+                    let countermeasureRow = countermeasuresTable.insertRow()
+                    countermeasureRow.innerText = countermeasure.name
+                })
+
+
+
                 checkRiskLevelFor([id, device.risks[risk].riskID])
+
+
+                let space1 = document.createElement("br")
+                cellRiskLeft.appendChild(space1)
+
+                let toggleText = document.createElement("a")
+                cellRiskLeft.appendChild(toggleText)
+                
+
+
+                let toggleTextLeft = document.createElement("a")
+                toggleText.appendChild(toggleTextLeft)
+                toggleTextLeft.innerText = 'Folgen ';
+
+                let toggleInputSw = document.createElement("input")
+                toggleInputSw.setAttribute("type", "checkbox")
+                toggleInputSw.setAttribute("id", id +"-"+ device.risks[risk].riskID + "-toggleSw")
+                toggleInputSw.setAttribute("class", "cbx1 hidden")
+                toggleText.appendChild(toggleInputSw)
+    
+                let toggleBtnSw = document.createElement("label")
+                toggleBtnSw.setAttribute("for", id +"-"+ device.risks[risk].riskID + "-toggleSw")
+                toggleBtnSw.setAttribute("class", "lbl1 mb-0")
+                toggleText.appendChild(toggleBtnSw)
+                
+                let toggleTextRight = document.createElement("a")
+                toggleText.appendChild(toggleTextRight)
+                toggleTextRight.innerText = ' Maßnahmen';
+                //console.log(toggleInput.checked)
+    
+           
+           
+                toggleInputSw.onclick = (event) => {
+    
+    
+                    if (event.target.checked === false) {
+    
+                        $(consequencesTable).show();
+                        $(countermeasuresTable).hide();
+
+    
+                    } else if (event.target.checked === true) {
+    
+                        $(consequencesTable).hide();
+                        $(countermeasuresTable).show();
+    
+                    }
+                }
+
+
+
 
             }
         }
@@ -301,18 +370,31 @@ function checkRiskForDevice(deviceID) {
     checkOverallRisk()
 }
 function checkOverallRisk() {
-    let sumAllRiskLevels = 0.0
+    let sumAllRiskLevels = -50.0
+    let riskLevelChanged = false;
     let deviceCount = 0
     var good = document.getElementById('good');
     var ok = document.getElementById('ok');
     var stop = document.getElementById('stop');
+    var empty = document.getElementById('empty')
 
     for (let id in this.score) {
         sumAllRiskLevels += score[id].riskLevel
+        if (sumAllRiskLevels >-50.0 && !riskLevelChanged){
+            riskLevelChanged = true;
+            sumAllRiskLevels += 50.0
+        }
         deviceCount++
     }
+    
     sumAllRiskLevels /= deviceCount
-    if (sumAllRiskLevels <= 20) {
+    console.log(riskLevelChanged)
+    if (sessionStorage.getItem('devices')==='{}' || riskLevelChanged === false) {
+        good.style.display = "none";
+        stop.style.display = "none";
+        ok.style.display = "none";
+        empty.style.display = "block";
+    } else if (sumAllRiskLevels <= 20) {
         good.style.display = "block";
         stop.style.display = "none";
         ok.style.display = "none";
@@ -327,11 +409,6 @@ function checkOverallRisk() {
         stop.style.display = "block";
         ok.style.display = "none";
         empty.style.display = "none";
-    } else {
-        good.style.display = "none";
-        stop.style.display = "none";
-        ok.style.display = "none";
-        empty.style.display = "block";
     } 
 
 }

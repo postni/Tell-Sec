@@ -494,7 +494,7 @@ class Datastore {
                     risks[dType].forEach((risk) => {
                         let newRisk = {}
                         newRisk.consequences = risk.Folgen
-                        newRisk.countermeassures = risk.Massnahmen
+                        newRisk.countermeasures = risk.Massnahmen
                         newRisk.probability = risk.Eintrittswahrscheinlich
                         newRisk.riskID = risk.riskID
                         devices[id].risks[risk.Bezeichnung] = newRisk
