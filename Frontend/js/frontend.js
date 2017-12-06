@@ -375,31 +375,37 @@ class Datastore {
         let devices = this.getDevices();
         // console.log(devices[deviceId])
         //console.log(deviceId)
-        var con = devices[deviceId].connectedTo ? devices[deviceId].connectedTo : null;
+        var con = undefined
+        if (devices[deviceId].connectedTo) {
+            con = devices[deviceId].connectedTo
+        }
 
-        var con2me = devices[deviceId].connectionsToMe ? devices[deviceId].connectionsToMe : null;
-        console.log(con2me)
+        var con2me = undefined
+        if (devices[deviceId].connectionsToMe) {
+            con2me = devices[deviceId].connectionsToMe
+        }
+
         delete devices[deviceId];
         //console.log(devices)
-        //console.log(con)
+        //console.log(devices)
+        console.log(con)
         if (con) {
             con.forEach((connection) => {
+                console.log(connection)
                 devices[connection].connectionsToMe = devices[connection].connectionsToMe.filter((id) => {
                     return !(id === deviceId);
                 })
 
             })
         }
+        console.log(con2me)
         if (con2me) {
             con2me.forEach((connection) => {
                 devices[connection].connectedTo = devices[connection].connectedTo.filter((id) => {
                     return !(id === deviceId);
                 })
-
             })
         }
-
-
         console.log(devices)
         var d = JSON.stringify(devices)
         sessionStorage.setItem('devices', d);
@@ -408,7 +414,7 @@ class Datastore {
 
     setDevices(newDevices) {
         console.log("<setDevice()>")
-        
+
         if (!newDevices) {
             console.log("keine neuen Geräte")
             sessionStorage.setItem("update", true)
@@ -423,14 +429,14 @@ class Datastore {
                 let exists = false;
 
                 for (let o in devices) {
-                    if ((newDevices[n].ip === devices[o].ip && newDevices[n].ip) || (newDevices[n].mac === devices[o].mac && newDevices[n].mac)|| (newDevices[n].hostname === devices[o].hostname && newDevices[n].hostname && newDevices[n].hostname!=="Unbekannt")) {
-                        devices[o].hostname = devices[o].hostname ? devices[o].hostname : newDevices[n].hostname?newDevices[n].hostname:devices[o].devicetype?devices[o].devicetype:newDevices[n].devicetype;
-                        devices[o].ip = devices[o].ip ? devices[o].ip : newDevices[n].ip?newDevices[n].ip:"Unbekannt";
-                        devices[o].mac = devices[o].mac ? devices[o].mac : newDevices[n].mac?newDevices[n].mac:"Unbekannt";
-                        devices[o].ports = devices[o].ports ? devices[o].ports : newDevices[n].openPorts?newDevices[n].openPorts:"Unbekannt";
-                        devices[o].os = devices[o].os ? devices[o].os : newDevices[n].osNmap?newDevices[n].osNmap:"Unbekannt";
-                        devices[o].vendor = devices[o].vendor ? devices[o].vendor : newDevices[n].vendor?newDevices[n].vendor:"Unbekannt";
-                        idMapper[n]=o;
+                    if ((newDevices[n].ip === devices[o].ip && newDevices[n].ip) || (newDevices[n].mac === devices[o].mac && newDevices[n].mac) || (newDevices[n].hostname === devices[o].hostname && newDevices[n].hostname && newDevices[n].hostname !== "Unbekannt")) {
+                        devices[o].hostname = devices[o].hostname ? devices[o].hostname : newDevices[n].hostname ? newDevices[n].hostname : devices[o].devicetype ? devices[o].devicetype : newDevices[n].devicetype;
+                        devices[o].ip = devices[o].ip ? devices[o].ip : newDevices[n].ip ? newDevices[n].ip : "Unbekannt";
+                        devices[o].mac = devices[o].mac ? devices[o].mac : newDevices[n].mac ? newDevices[n].mac : "Unbekannt";
+                        devices[o].ports = devices[o].ports ? devices[o].ports : newDevices[n].openPorts ? newDevices[n].openPorts : "Unbekannt";
+                        devices[o].os = devices[o].os ? devices[o].os : newDevices[n].osNmap ? newDevices[n].osNmap : "Unbekannt";
+                        devices[o].vendor = devices[o].vendor ? devices[o].vendor : newDevices[n].vendor ? newDevices[n].vendor : "Unbekannt";
+                        idMapper[n] = o;
                         exists = true
                     }
                     //itemsInner--
@@ -438,14 +444,14 @@ class Datastore {
                 if (!exists) {
                     devices[nextID] = {
                     }
-                    devices[nextID]["hostname"] = newDevices[n].hostname ? newDevices[n].hostname : newDevices[n].devicetype ? newDevices[n].devicetype: "Unbekannt";
+                    devices[nextID]["hostname"] = newDevices[n].hostname ? newDevices[n].hostname : newDevices[n].devicetype ? newDevices[n].devicetype : "Unbekannt";
                     devices[nextID]["ip"] = newDevices[n].ip ? newDevices[n].ip : "Unbekannt"
                     devices[nextID]["mac"] = newDevices[n].mac ? newDevices[n].mac : "Unbekannt"
                     devices[nextID]["ports"] = newDevices[n].openPorts ? newDevices[n].openPorts : []
                     devices[nextID]["os"] = newDevices[n].osNmap ? newDevices[n].osNmap : "Unbekannt"
                     devices[nextID]["vendor"] = newDevices[n].vendor ? newDevices[n].vendor : "Unbekannt"
                     devices[nextID]["devicetype"] = newDevices[n].devicetype ? newDevices[n].devicetype : "Unbekannt"
-                    idMapper[n]=nextID;
+                    idMapper[n] = nextID;
                     // devices[nextID]["connetedTo"] = newDevices[n].connetedTo ? newDevices[n].connetedTo : []
                     // devices[nextID]["connectionsToMe"] = newDevices[n].connectionsToMe ? newDevices[n].connectionsToMe : []
                     nextID++;
@@ -454,16 +460,16 @@ class Datastore {
             }
             console.log(idMapper)
 
-            for(let id in idMapper){
-                if(newDevices[id].connectedTo){
-                    newDevices[id].connectedTo.forEach((connection)=>{
-                        if(!devices[idMapper[id]].connectedTo)devices[idMapper[id]].connectedTo=[] 
+            for (let id in idMapper) {
+                if (newDevices[id].connectedTo) {
+                    newDevices[id].connectedTo.forEach((connection) => {
+                        if (!devices[idMapper[id]].connectedTo) devices[idMapper[id]].connectedTo = []
                         devices[idMapper[id]].connectedTo.push(idMapper[connection])
                     })
                 }
-                if(newDevices[id].connectionsToMe){
-                    newDevices[id].connectionsToMe.forEach((connection)=>{
-                        if(!devices[idMapper[id]].connectionsToMe)devices[idMapper[id]].connectionsToMe=[]                         
+                if (newDevices[id].connectionsToMe) {
+                    newDevices[id].connectionsToMe.forEach((connection) => {
+                        if (!devices[idMapper[id]].connectionsToMe) devices[idMapper[id]].connectionsToMe = []
                         devices[idMapper[id]].connectionsToMe.push(idMapper[connection])
                     })
                 }
@@ -473,10 +479,10 @@ class Datastore {
             console.log(devices)
 
             sessionStorage.setItem("devices", JSON.stringify(devices))
-            
+
             console.log("==========================================")
         }
-        sessionStorage.setItem("update", true)        
+        sessionStorage.setItem("update", true)
     }
 
     checkForRisks() {
@@ -512,26 +518,26 @@ class Communicator {
     }
 
     analyseSecurity() {
-        console.log("<analyseSecurity()>")        
+        console.log("<analyseSecurity()>")
         let risks = ipcRenderer.sendSync('analyse-devices', datastore.getDevices());
         console.log(risks)
         datastore.addRisks(risks)
     }
 
     scanNetwork() {
-        console.log("<scanNetwork()>")        
+        console.log("<scanNetwork()>")
         sessionStorage.setItem("update", false)
         ipcRenderer.send('scan-network');
     }
 
     maximize() {
         console.log("<maximize()>")
-        
+
         ipcRenderer.send('maximize');
     }
 
     pdfPrint(path) {
-        console.log("<pdfPrint()>")        
+        console.log("<pdfPrint()>")
         ipcRenderer.send('print-to-pdf', path);
     }
 
