@@ -59,7 +59,7 @@ var options = {
     manipulation: {
         addNode: false,
         deleteNode: false,
-        deleteEdge: false,
+        deleteEdge: true,
         initiallyActive: true,
         addEdge: function (data, callback) {
             if (data.from == data.to) {
@@ -90,11 +90,13 @@ function loader() {
 function toggleVideo() {
     let showVideo = JSON.parse(localStorage.getItem('showVideo'))
     let divVideo = document.getElementById('divVideo')
+    let video = document.getElementById('video')
     if(showVideo) {
-        
         divVideo.style.display = "block";
+        localStorage.setItem('showVideo', false)
     } else {
         divVideo.style.display = "none";
+        video.pause()
     }
     console.log(showVideo)
     document.getElementById('video').addEventListener('ended',myHandler,false);

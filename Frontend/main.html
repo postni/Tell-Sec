@@ -66,7 +66,7 @@
                         <img src="img/open.png" width="35px" alt="Öffnen" />
                     </a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item">Öffnen</a>
+                        <a class="dropdown-item" onclick="callClearMapforOpen()">Öffnen</a>
                         <a class="dropdown-item" onclick="openopen()">Hinzufügen</a>
                     </div>
                 </li>
@@ -82,20 +82,26 @@
             </ul>
             <!--elemente rechts-->
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Analyse starten">
-                    <a class="nav-link" href="./evaluation.html">
+                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Analyse starten" onclick="startanalysis()">
+                    <a class="nav-link">
+                        <!-- href evaluation -->
                         <img src="img/start.png" width="30px" alt="Redo" />
                     </a>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Netzwerkscan starten">
-                    <a class="nav-link" href="#" onclick="startScan()">
+                    <a class="nav-link" onclick="startScan()">
                         <img src="img/scan.png" width="30px" alt="Scan" />
                     </a>
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
-                    <a class="nav-link" href="#">
+                <li class="nav-item dropdown" data-toggle="tooltip" data-placement="bottom" title="Einstellungen">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="img/settings.png" width="35px" alt="Einstellungen" />
                     </a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">About</a>
+                        <a class="dropdown-item" href="./help.html">Hilfe</a>
+                        <a class="dropdown-item" onclick="callCloseWin()">Schließen</a>
+                    </div>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Map-Ansicht">
                     <a class="nav-link" href="main_map.html">

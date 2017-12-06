@@ -319,14 +319,22 @@ function checkOverallRisk() {
         good.style.display = "block";
         stop.style.display = "none";
         ok.style.display = "none";
+        empty.style.display = "none";
     } else if (sumAllRiskLevels > 20 && sumAllRiskLevels <= 60) {
         good.style.display = "none";
         ok.style.display = "block";
         stop.style.display = "none";
-    } else {
+        empty.style.display = "none";
+    } else if (sumAllRiskLevels >= 61 && sumAllRiskLevels <= 100){
         good.style.display = "none";
         stop.style.display = "block";
         ok.style.display = "none";
-    }
+        empty.style.display = "none";
+    } else {
+        good.style.display = "none";
+        stop.style.display = "none";
+        ok.style.display = "none";
+        empty.style.display = "block";
+    } 
 
 }
