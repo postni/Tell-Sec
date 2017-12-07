@@ -68,3 +68,9 @@ function startNoNwScan(){
     window.location.href = 'main_map.html';
     
 }
+function startRealScan(){
+    if(clicked==""){
+        clicked = "expert"
+        btnClicked()
+    }
+}
