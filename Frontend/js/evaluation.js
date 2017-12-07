@@ -16,7 +16,11 @@ function getRisks() {
         tablehead.appendChild(th)
     })
     for (let id in devices) {
-        if (devices[id].devicetype && devices[id].devicetype !=="Unbekannt") {
+        if(!devices[id].risks||typeof devices[id].risks === typeof []){
+            devices[id].risks = {}
+        }
+        console.log(devices[id].risks)
+        if (devices[id].devicetype && devices[id].devicetype !=="Unbekannt" && Object.keys(devices[id].risks).length>0) {
             console.log(devices[id].devicetype)
             if (!this.score[id]) {
                 this.score[id] = {}
@@ -62,13 +66,13 @@ function getRisks() {
 
             toggleInput.onclick = (event) => {
 
-
+                //console.log(event)
                 if (event.target.checked === false) {
-
+                    //console.log(riskTable)
                     $(riskTable).hide();
 
                 } else if (event.target.checked === true) {
-
+                    //console.log(riskTable)                    
                     $(riskTable).show();
 
                 }
@@ -89,8 +93,9 @@ function getRisks() {
             riskTable.setAttribute("width", "100%")
             
             riskCell.appendChild(riskTable)
+            console.log(device)
             for (let risk in device.risks) {
-                //console.log(risk)
+                console.log(risk)
                 if (!this.score[id][device.risks[risk].riskID]) {
                     this.score[id][device.risks[risk].riskID] = {
                         "probability": device.risks[risk].probability * 100,
@@ -197,8 +202,6 @@ function getRisks() {
     }
 
 }
-getRisks()
-
 
 
 function insertprobabilitySlider(table, id) {

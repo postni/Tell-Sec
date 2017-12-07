@@ -26,7 +26,11 @@ function closeNav_network() {
 /*Clear Map */
 function startanalysis() {
     /*fehlerhaft!*/
+<<<<<<< HEAD
     datastore.checkForRisks()
+=======
+    datastore.checkForRisks()    
+>>>>>>> d44f59b31309962b062a972db43c8040d95c009e
     let dev = datastore.getDevices()
     let decision = false
     for(let d in dev){
