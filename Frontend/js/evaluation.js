@@ -9,7 +9,7 @@ function getRisks() {
     //console.log(devices)
     let table = document.getElementById("risk-table")
     let tablehead = table.insertRow()
-    let headerText = ["Gerät", "Risiken &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Folgen &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Schaden"]
+    let headerText = ["Gerät", "Risiken &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Folgen/ Maßnahmen &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  Schaden"]
     headerText.forEach((text) => {
         let th = document.createElement("th")
         th.innerHTML = text
@@ -146,9 +146,11 @@ function getRisks() {
 
                 let space1 = document.createElement("br")
                 cellRiskLeft.appendChild(space1)
+                space1.setAttribute("id", id +"-"+ device.risks[risk].riskID + "-space1")
 
                 let toggleText = document.createElement("a")
                 cellRiskLeft.appendChild(toggleText)
+                toggleText.setAttribute("id", id +"-"+ device.risks[risk].riskID + "-toggleText")
                 
 
 
@@ -190,10 +192,6 @@ function getRisks() {
     
                     }
                 }
-
-
-
-
             }
         }
     }
@@ -235,10 +233,21 @@ function insertprobabilitySlider(table, id) {
         let id = event.target.id.split('-')
         this.score[id[0]][id[1]].probability = value
         let consTable = document.getElementById(id[0] + "-" + id[1] + "-consequences")
+        let countermTable = document.getElementById(id[0] + "-" + id[1] + "-countermeasures")
+        let sp = document.getElementById(id[0] +"-"+ id[1] + "-space1")
+        let toggleT = document.getElementById(id[0] +"-"+ id[1] + "-toggleText")
+        console.log(toggleT)
         if (value <= 0) {
             consTable.classList.add("hidden")
+            countermTable.classList.add("hidden")
+            sp.style.display='none';
+            toggleT.style.display='none';
+ 
         } else {
             consTable.classList.remove("hidden")
+            countermTable.classList.remove("hidden")
+            sp.style.display='block';
+            toggleT.style.display='block';
         }
         checkRiskLevelFor(id);
         //console.log(this.score[id[0]][id[1]])

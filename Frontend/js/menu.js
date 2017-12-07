@@ -26,6 +26,7 @@ function closeNav_network() {
 /*Clear Map */
 function startanalysis() {
     /*fehlerhaft!*/
+    datastore.checkForRisks()
     let dev = datastore.getDevices()
     let decision = false
     for(let d in dev){
@@ -47,6 +48,7 @@ function startanalysis() {
             window.location.href = "./evaluation.html"
         }
     }
+
     function callClearMapforOpen() {
         if(sessionStorage.getItem('devices')!=='{}'){
         filehandler.showAlertDialog(clearMapforOpen)

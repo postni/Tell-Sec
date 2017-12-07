@@ -139,7 +139,7 @@ function updateMyData() {
        
         console.log(help)
         let img = d.devicetype === "Client" ? "person" : "symbole/" +  help.replace(" ", "")
-        appendNode(label, img, i);
+        appendNode(label, img, i, d.devicetype);
     }
     for (let j in devices) {
         console.log(typeof (j) + " - " + j)
@@ -168,7 +168,7 @@ function appendEdge(from, to) {
         alert(err);
     }
 }
-function updateContent(key, element) {
+function updateContent(key, element, title) {
     console.log(document.getElementById('modal-id'));
     console.log(document.getElementById('modal-id'))
     var i = document.getElementById('modal-id').innerText;
