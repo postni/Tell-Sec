@@ -113,7 +113,7 @@
                         <img src="img/settings.png" width="35px" alt="Einstellungen" />
                     </a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">About</a>
+                        <a class="dropdown-item" href="./about.html">About</a>
                         <a class="dropdown-item" href="./help.html">Hilfe</a>
                         <a class="dropdown-item" onclick="callCloseWin()">Schließen</a>
                     </div>
@@ -138,8 +138,8 @@
                     <div class="border" id="siden">
                         <div id="user" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_user()">&times;</a>
-                            <a onclick="addNode('stationär', 'symbole/stationär')">stationär</a>
-                            <a onclick="addNode('mobil', 'symbole/mobil')">mobil</a>
+                            <a onclick="addNode('stationär', 'symbole/stationär', 'Stationär')">stationär</a>
+                            <a onclick="addNode('mobil', 'symbole/mobil', 'Mobil')">mobil</a>
 
                         </div>
                         <div id="machine" class="sidenav">
@@ -148,16 +148,16 @@
                         </div>
                         <div id="network" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav_network()">&times;</a>
-                            <a onclick="addNode('Repeater', 'symbole/repeater')">Repeater</a>
-                            <a onclick="addNode('Hub', 'symbole/hub')">Hub</a>
-                            <a onclick="addNode('Bridge', 'symbole/bridge')">Bridge</a>
-                            <a onclick="addNode('Switch', 'symbole/switch')">Switch</a>
-                            <a onclick="addNode('Router', 'symbole/router')">Router</a>
-                            <a onclick="addNode('Gateway', 'symbole/gateway')">Gateway</a>
-                            <a onclick="addNode('Access Point', 'symbole/accesspoint')">Access Point</a>
-                            <a onclick="addNode('Firewall', 'symbole/firewall')">Firewall</a>
-                            <a onclick="addNode('NAS', 'symbole/nas')">NAS</a>
-                            <a onclick="addNode('Server', 'symbole/server')">Server</a>
+                            <a onclick="addNode('Repeater', 'symbole/repeater', 'Repeater')">Repeater</a>
+                            <a onclick="addNode('Hub', 'symbole/hub', 'Hub')">Hub</a>
+                            <a onclick="addNode('Bridge', 'symbole/bridge', 'Bridge')">Bridge</a>
+                            <a onclick="addNode('Switch', 'symbole/switch', 'Switch')">Switch</a>
+                            <a onclick="addNode('Router', 'symbole/router', 'Router')">Router</a>
+                            <a onclick="addNode('Gateway', 'symbole/gateway', 'Gateway')">Gateway</a>
+                            <a onclick="addNode('Access Point', 'symbole/accesspoint', 'Access Point')">Access Point</a>
+                            <a onclick="addNode('Firewall', 'symbole/firewall', 'Firewall')">Firewall</a>
+                            <a onclick="addNode('NAS', 'symbole/nas', 'NAS')">NAS</a>
+                            <a onclick="addNode('Server', 'symbole/server', 'Server')">Server</a>
                         </div>
 
 
@@ -166,7 +166,7 @@
                         </span>
                         <p></p>
                         <span style="font-size:30px;cursor:pointer">
-                            <img name="machine" src="img/machine1.png" width="75px" alt="Maschine" onclick="addNode('Maschine', 'machine')" />
+                            <img name="machine" src="img/machine1.png" width="75px" alt="Maschine" onclick="addNode('Maschine', 'machine', 'Maschine')" />
                         </span>
                         <p></p>
                         <span style="font-size:30px;cursor:pointer" onclick="openNav_network()">
@@ -272,20 +272,26 @@
                                         <div class="row">
                                             <div class="col-xs-1">
                                                 <span class="close">
-                                                    <img src="img/cross.png" width="25px" alt="Schließen">
+                                                        <li class="nav-link" data-toggle="tooltip" data-placement="bottom" title="Schließen">
+                                                          <img src="img/cross.png" width="25px" alt="Schließen">       
+                                                        </li>
                                                 </span>
                                             </div>
 
                                             <div class="col-xs-1">
                                                 <span id="add-ports">
-                                                    <img src="img/ethernet.png" width="30px" alt="Port hinzufügen">
+                                                     <li class="nav-link" data-toggle="tooltip" data-placement="bottom" title="Port hinzufügen">
+                                                       <img src="img/ethernet.png" width="30px" alt="Port hinzufügen">
+                                                     </li>
                                                 </span>
                                             </div>
 
                                             <div class="col-xs-1">
-                                                <a onclick="removeElement()">
-                                                    <img src="img/trash.png" width="30px" alt="Entfernen">
-                                                </a>
+                                                    <li  class="nav-link" data-toggle="tooltip" data-placement="bottom" title="Entfernen">
+                                                      <a onclick="removeElement()">
+                                                        <img src="img/trash.png" width="30px" alt="Entfernen">
+                                                      </a>
+                                                    </li>
                                             </div>
                                             <div class="col-xs-9"></div>
                                         </div>
@@ -305,7 +311,7 @@
                 </video>
                 <button class="btn btn-primary btn-md" onclick="divVideo.style.display='none'; video.pause()">Skip</button>
             </div>
-        </div>  
+        </div>
         </div>
         </div>
         </div>

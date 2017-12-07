@@ -45,7 +45,7 @@ class Data {
                 Promise.all(massnahmen).then(data => {
                     let updatedData = data.map(dOld =>{
                         let d ={}                        
-                        d.countermeassuresID = id
+                        d.countermeasuresID = id
                         d.name = dOld
                         id++
                         return d;

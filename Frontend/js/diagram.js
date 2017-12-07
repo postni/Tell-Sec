@@ -30,6 +30,7 @@ var options = {
     interaction: {
         navigationButtons: true,
         keyboard: true,
+        tooltipDelay: 300,
        // multiselect: true
       },
     layout: {
@@ -63,6 +64,7 @@ var options = {
         initiallyActive: true,
         addEdge: function (data, callback) {
             if (data.from == data.to) {
+
 
             }
             else {
@@ -175,20 +177,21 @@ function updateContent(key, element) {
     }
 
 }
-function addNode(label, img) {
+function addNode(label, img, title) {
     let myId = datastore.newID()
     let data = { id: myId, "devicetype": label }
     datastore.addDevice(data);
-    appendNode(label, img, myId);
+    appendNode(label, img, myId, title);
 }
 
-function appendNode(label, img, id) {
+function appendNode(label, img, id, title) {
     try {
         nodes.add({
             id: id,
             label: label,
             shape: 'image',
-            image: 'img/' + img + '.png'
+            image: 'img/' + img + '.png',
+            title: title
         });
         ids++;
     }

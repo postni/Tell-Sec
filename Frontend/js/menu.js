@@ -52,7 +52,9 @@ function startanalysis() {
         if(sessionStorage.getItem('devices')!=='{}'){
         filehandler.showAlertDialog(clearMapforOpen)
     
-    } 
+    } else {
+        openopen()
+    }
     }
     function clearMapforOpen(choice) {
         
