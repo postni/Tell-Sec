@@ -238,8 +238,8 @@ class Datastore {
                 "hostname": "WAC510",
                 "vendor": "Netgear",
                 "connectedTo": ["0"],
-                "connectionsToMe": ["11","14"],
-            
+                "connectionsToMe": ["11", "14"],
+
                 "os": "Hakan94",
                 "ip": "10.23.4.66",
                 "mac": "F2:34:A5:67:B2:86",
@@ -264,7 +264,7 @@ class Datastore {
                 "vendor": "Dell",
                 "connectedTo": ["10"],
                 "connectionsToMe": [""],
-            
+
                 "os": "Hakan94",
                 "ip": "10.23.4.66",
                 "mac": "F2:34:A5:67:B2:86",
@@ -289,7 +289,7 @@ class Datastore {
                 "vendor": "Samsung",
                 "connectedTo": ["10"],
                 "connectionsToMe": [""],
-            
+
                 "os": "Hakan94",
                 "ip": "10.23.4.66",
                 "mac": "F2:34:A5:67:B2:86",
@@ -309,9 +309,9 @@ class Datastore {
                 "risks": [],
                 "categories": []
             },
-            
-            
-            
+
+
+
         }
         sessionStorage.setItem("devices", JSON.stringify(testdata));
         sessionStorage.setItem("update", true)
@@ -321,16 +321,38 @@ class Datastore {
 
     getDevices() {
         console.log("<getDevices()>")
-        let rueckgabe = JSON.parse(sessionStorage.getItem("devices"))?JSON.parse(sessionStorage.getItem("devices")):{};
+        let rueckgabe = JSON.parse(sessionStorage.getItem("devices")) ? JSON.parse(sessionStorage.getItem("devices")) : {};
         return rueckgabe;
     }
 
-    changeValue(id, key, subkey, value) {
+    changeValue(id, key, subkey, subsubkey, value) {
         console.log("<changeValue()>")
-        
+
         let devices = this.getDevices();
         console.log(devices)
-        if (subkey) {
+
+
+        if (subsubkey) {
+
+            if (!devices[id][key]) {
+                if(typeof subkey === "number") {
+                    devices[id][key] = []
+                } else {
+                devices[id][key] = {}
+                }
+            }
+            if (!devices[id][key][subkey]) {
+                devices[id][key][subkey] = {}
+                console.log(devices[id][key][subkey])
+            }
+            if (!devices[id][key][subkey][subsubkey]) {
+                devices[id][key][subkey][subsubkey] = {}
+            }
+
+
+
+            devices[id][key][subkey][subsubkey] = value;
+        } else if (subkey) {
             devices[id][key][subkey] = value;
         } else {
             devices[id][key] = value;
@@ -342,7 +364,7 @@ class Datastore {
     }
 
     addTo(id, key, subkey, value) {
-        console.log("<addTo()>")        
+        console.log("<addTo()>")
         let devices = this.getDevices();
         console.log(devices)
         if (!devices[id][key]) {
@@ -361,7 +383,7 @@ class Datastore {
     }
 
     addDevice(device) {
-        console.log("<addDevice()>")        
+        console.log("<addDevice()>")
         let devices = this.getDevices();
 
         let devicetype = device.devicetype === "Person" ? "Unbekannt" : device.devicetype;
@@ -372,7 +394,7 @@ class Datastore {
 
     removeDevice(deviceId) {
         console.log("<removeDevice()>")
-        
+
         let devices = this.getDevices();
         // console.log(devices[deviceId])
         //console.log(deviceId)
@@ -424,53 +446,53 @@ class Datastore {
 
             let ipIdMapper = {}
 
-            for(let n in newDevices){
+            for (let n in newDevices) {
                 console.log(newDevices[n])
-                if(newDevices[n].connectionsToMe){
-                    console.log(newDevices[n].connectionsToMe)                    
-                    if(newDevices[n].connectionsToMe[0].length > 3  ){
-                        console.log(newDevices[n].connectionsToMe[0])                                            
+                if (newDevices[n].connectionsToMe) {
+                    console.log(newDevices[n].connectionsToMe)
+                    if (newDevices[n].connectionsToMe[0].length > 3) {
+                        console.log(newDevices[n].connectionsToMe[0])
                         connectionsFromOthers[n] = newDevices[n].connectionsToMe
                         console.log(delete newDevices[n].connectionsToMe)
                         console.log()
                     }
                 }
-                if(newDevices[n].connectedTo){
-                    console.log(newDevices[n].connectedTo)                                        
-                    if(newDevices[n].connectedTo[0].length > 3  ) {
-                        console.log(newDevices[n].connectedTo[0])                                                                
+                if (newDevices[n].connectedTo) {
+                    console.log(newDevices[n].connectedTo)
+                    if (newDevices[n].connectedTo[0].length > 3) {
+                        console.log(newDevices[n].connectedTo[0])
                         connectionsToOthers[n] = newDevices[n].connectedTo
                         console.log(delete newDevices[n].connectedTo)
                     }
                 }
-                if(!ipIdMapper[newDevices[n].ip]){
+                if (!ipIdMapper[newDevices[n].ip]) {
                     ipIdMapper[newDevices[n].ip] = n
                 }
-                console.log(newDevices[n])                
+                console.log(newDevices[n])
             }
-            for(let ip in ipIdMapper){
-                for(let id in connectionsToOthers){
+            for (let ip in ipIdMapper) {
+                for (let id in connectionsToOthers) {
                     connectionsToOthers[id] = connectionsToOthers[id].map(connection => {
-                        if(connection===ip) return ipIdMapper[ip]
+                        if (connection === ip) return ipIdMapper[ip]
                         else return connection
                     })
                 }
-                for(let id in connectionsFromOthers){
+                for (let id in connectionsFromOthers) {
                     connectionsFromOthers[id] = connectionsFromOthers[id].map(connection => {
-                        if(connection===ip) return ipIdMapper[ip]
+                        if (connection === ip) return ipIdMapper[ip]
                         else return connection
                     })
                 }
             }
             console.log(newDevices)
-            for( let id in newDevices){
+            for (let id in newDevices) {
                 console.log(id)
-                if(!newDevices[id].connectedTo){
+                if (!newDevices[id].connectedTo) {
                     console.log(connectionsToOthers[id])
                     newDevices[id].connectedTo = connectionsToOthers[id]
                 }
-                if(!newDevices[id].connectionsToMe){
-                    console.log(connectionsFromOthers[id])                    
+                if (!newDevices[id].connectionsToMe) {
+                    console.log(connectionsFromOthers[id])
                     newDevices[id].connectionsToMe = connectionsFromOthers[id]
                 }
             }
@@ -516,7 +538,7 @@ class Datastore {
                     nextID++;
                 }
                 console.log(newDevices[n])
-                
+
             }
             console.log(idMapper)
             for (let id in idMapper) {
@@ -526,14 +548,14 @@ class Datastore {
                     newDevices[id].connectedTo.forEach((connection) => {
                         console.log(connection)
                         console.log(idMapper[id])
-                        if(!devices[idMapper[id]].connectedTo) devices[idMapper[id]].connectedTo = []
+                        if (!devices[idMapper[id]].connectedTo) devices[idMapper[id]].connectedTo = []
                         devices[idMapper[id]].connectedTo.push(idMapper[connection])
                     })
                 }
                 if (newDevices[id].connectionsToMe) {
-                    console.log(newDevices[id].connectionsToMe)                    
+                    console.log(newDevices[id].connectionsToMe)
                     newDevices[id].connectionsToMe.forEach((connection) => {
-                        console.log(connection)                                                
+                        console.log(connection)
                         if (!devices[idMapper[id]].connectionsToMe) devices[idMapper[id]].connectionsToMe = []
                         devices[idMapper[id]].connectionsToMe.push(idMapper[connection])
                     })
@@ -556,7 +578,7 @@ class Datastore {
     }
 
     addRisks(risks) {
-        console.log("<addRisk()>")        
+        console.log("<addRisk()>")
         let devices = this.getDevices()
         for (let dType in risks) {
             for (let id in devices) {
@@ -574,7 +596,7 @@ class Datastore {
             }
         }
         sessionStorage.setItem("devices", JSON.stringify(devices))
-        sessionStorage.setItem("update", true)        
+        sessionStorage.setItem("update", true)
     }
 }
 
@@ -606,7 +628,7 @@ class Communicator {
         ipcRenderer.send('print-to-pdf', path);
     }
 
-    callHomepage(){
+    callHomepage() {
         shell.openExternal("https://1524300.wixsite.com/tellmesec")
     }
 

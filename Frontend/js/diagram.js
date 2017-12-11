@@ -48,8 +48,18 @@ var options = {
           sortMethod: 'hubsize'   // hubsize, directed
         }
     },
-    
-    locale: 'de',
+    locales: {
+        "myde": {
+            edit: 'Editieren',
+            del: 'Verbindung löschen',
+            back: 'Zurück',
+            addEdge: 'Verbindung hinzufügen',
+            editEdge: 'Verbindung editieren',
+            edgeDescription: 'Klicke auf ein Netzwerk-Element und ziehe die Verbindung zu einem anderen, um diese zu verbinden.',
+            editEdgeDescription: 'Klicke auf einen der Verbindungspunkte und ziehe diesen auf ein anderes Netzwerk-Element, um die Verbindung zu editieren.',
+        }
+    },
+    locale: 'myde',
     edges:{
         arrows: {
           to:     {enabled: true, scaleFactor:1, type:'arrow'},
@@ -167,11 +177,15 @@ function appendEdge(from, to) {
         alert(err);
     }
 }
-function updateContent(key, element, title) {
+function updateContent(key, subkey, subsubkey, element) {
     console.log(document.getElementById('modal-id'));
     console.log(document.getElementById('modal-id'))
     var i = document.getElementById('modal-id').innerText;
-    datastore.changeValue(i, key, null, element.value)
+    if(key==='ports'){
+        datastore.changeValue(i, key, subkey, subsubkey, element)
+    } else{
+    datastore.changeValue(i, key, null, null, element.value)
+    }
     if (key === 'hostname' || key === 'devicetype') {
         updateMyData()
     }
@@ -387,6 +401,12 @@ network.on("click", (params) => {
             p1.appendChild(port)
             d1.appendChild(p1)
 
+            port.onchange = (event)=> {
+                let content = event.target.value
+
+                let portid = JSON.parse(event.target.id.split('-')[1])
+                updateContent('ports', portid, 'port', content)
+            }
             let d2 = document.createElement("div")
             d2.classList.add("col-sm-5")
             let p2 = document.createElement("p")
@@ -401,6 +421,12 @@ network.on("click", (params) => {
             p2.appendChild(protocolLabel)
             p2.appendChild(protocol)
             d2.appendChild(p2)
+            protocol.onchange = (event)=> {
+                let content = event.target.value
+
+                let portid = JSON.parse(event.target.id.split('-')[1])
+                updateContent('ports', portid, 'protocol', content)
+            }
 
             let d3 = document.createElement("div")
             d3.classList.add("col-sm-4")
@@ -416,6 +442,12 @@ network.on("click", (params) => {
             p3.appendChild(serviceLabel)
             p3.appendChild(service)
             d3.appendChild(p3)
+            service.onchange = (event)=> {
+                let content = event.target.value
+
+                let portid = JSON.parse(event.target.id.split('-')[1])
+                updateContent('ports', portid, 'service', content)
+            }
 
             div.appendChild(d1);
             div.appendChild(d2);

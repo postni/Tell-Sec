@@ -192,7 +192,7 @@
 
                                                 <p class="modal-text-line md-form form-sm">
 
-                                                    <select class="mdb-select" id="modal-devicetype" onchange="updateContent('devicetype', this)">
+                                                    <select class="mdb-select" id="modal-devicetype" onchange="updateContent('devicetype', null, null, this)">
                                                         <option value="Repeater">Repeater</option>
                                                         <option value="Hub">Hub</option>
                                                         <option value="Bridge">Bridge</option>
@@ -205,7 +205,7 @@
                                                         <option value="Server">Server</option>
                                                         <option value="mobil">mobil</option>
                                                         <option value="stationär">stationär</option>
-                                                        <option value="machine">Maschine</option>
+                                                        <option value="Maschine">Maschine</option>
                                                         <option value="Unbekannt">Unbekannt</option>
 
                                                     </select>
@@ -218,7 +218,7 @@
                                                 <!--p class="modal-text-line"><label for="modal-hostname">Gerätename: </label> <span class="modal-text" id="modal-hostname">X</span></p-->
                                                 <p class="modal-text-line md-form form-sm">
                                                     <label for="modal-ip">IP </label>
-                                                    <input type="text" class="modal-text form-control" onchange="updateContent('ip', this)" id="modal-ip" value="X">
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('ip', null, null, this)" id="modal-ip" value="X">
                                                 </p>
 
                                             </div>
@@ -230,23 +230,23 @@
                                             <div class="col-sm-4">
                                                 <p class="modal-text-line md-form form-sm">
                                                     <label for="modal-hostname">Gerätename</label>
-                                                    <input type="text" class="modal-text form-control" onchange="updateContent('hostname', this)" id="modal-hostname" name="modal-hostname"
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('hostname', null, null, this)" id="modal-hostname" name="modal-hostname"
                                                         value="X">
                                                 </p>
                                                 <p class="modal-text-line md-form form-sm">
                                                     <label for="modal-mac">MAC </label>
-                                                    <input type="text" class="modal-text form-control" onchange="updateContent('mac', this)" id="modal-mac" value="X">
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('mac', null, null, this)" id="modal-mac" value="X">
                                                 </p>
 
                                             </div>
                                             <div class="col-sm-4">
                                                 <p class="modal-text-line md-form form-sm">
                                                     <label for="modal-vendor">Hersteller </label>
-                                                    <input type="text" class="modal-text form-control" onchange="updateContent('vendor', this)" id="modal-vendor" value="X">
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('vendor', null, null, this)" id="modal-vendor" value="X">
                                                 </p>
                                                 <p class="modal-text-line md-form form-sm">
                                                     <label for="modal-os">Betriebssystem </label>
-                                                    <input type="text" class="modal-text form-control" onchange="updateContent('os', this)" id="modal-os" value="X">
+                                                    <input type="text" class="modal-text form-control" onchange="updateContent('os', null, null, this)" id="modal-os" value="X">
                                                 </p>
                                             </div>
 
