@@ -321,12 +321,7 @@ class Datastore {
 
     getDevices() {
         console.log("<getDevices()>")
-<<<<<<< HEAD
-        let rueckgabe = JSON.parse(sessionStorage.getItem("devices"))?JSON.parse(sessionStorage.getItem("devices")):{};
-        console.log(rueckgabe)
-=======
         let rueckgabe = JSON.parse(sessionStorage.getItem("devices")) ? JSON.parse(sessionStorage.getItem("devices")) : {};
->>>>>>> 180c988566bb69cf38d0baa6187c965fcf03b266
         return rueckgabe;
     }
 
@@ -590,7 +585,6 @@ class Datastore {
     }
 
     addRisks(risks) {
-<<<<<<< HEAD
         return new Promise(resolve =>{
             console.log("<addRisk()>")        
             let devices = this.getDevices()
@@ -656,27 +650,6 @@ class Datastore {
                 }
             })
         })
-=======
-        console.log("<addRisk()>")
-        let devices = this.getDevices()
-        for (let dType in risks) {
-            for (let id in devices) {
-                if (devices[id].devicetype === dType && devices[id].risks) {
-                    devices[id].risks = {}
-                    risks[dType].forEach((risk) => {
-                        let newRisk = {}
-                        newRisk.consequences = risk.Folgen
-                        newRisk.countermeasures = risk.Massnahmen
-                        newRisk.probability = risk.Eintrittswahrscheinlich
-                        newRisk.riskID = risk.riskID
-                        devices[id].risks[risk.Bezeichnung] = newRisk
-                    })
-                }
-            }
-        }
-        sessionStorage.setItem("devices", JSON.stringify(devices))
-        sessionStorage.setItem("update", true)
->>>>>>> 180c988566bb69cf38d0baa6187c965fcf03b266
     }
 }
 
