@@ -1,11 +1,21 @@
 var datastore = require("./js/frontend").datastore
 
-function getRisks() {
+function loader() {
+    toggleLoad()
+    datastore.checkForRisks().then(res =>{
+        console.log(res)
+        let dev = JSON.parse(res)
+        console.log(dev)
+        toggleLoad()
+        getRisks(dev)
+    })    
+}
+
+function getRisks(devices) {
     checkOverallRisk()
     if (!this.score) {
         this.score = {}
     }
-    let devices = datastore.getDevices();
     //console.log(devices)
     let table = document.getElementById("risk-table")
     let tablehead = table.insertRow()
@@ -16,10 +26,14 @@ function getRisks() {
         tablehead.appendChild(th)
     })
     for (let id in devices) {
-        if(!devices[id].risks||typeof devices[id].risks === typeof []){
-            devices[id].risks = {}
-        }
+        console.log(id)
+        // console.log(devices[id])
+        // if(!devices[id].risks||typeof devices[id].risks === typeof []){
+        //     devices[id].risks = {}
+        // }
+        
         console.log(devices[id].risks)
+        
         if (devices[id].devicetype && devices[id].devicetype !=="Unbekannt" && Object.keys(devices[id].risks).length>0) {
             console.log(devices[id].devicetype)
             if (!this.score[id]) {
@@ -117,6 +131,7 @@ function getRisks() {
                 riskNameTable.insertRow().innerText = risk
 
                 let consequencesTable = document.createElement("table")
+                cellRiskRight.classList.add("py-0")                
                 cellRiskRight.appendChild(consequencesTable)
                 consequencesTable.classList.add("col-sm-12")
                 consequencesTable.id = id + "-" + device.risks[risk].riskID + "-consequences"
@@ -129,7 +144,14 @@ function getRisks() {
                     let consequenceRow = consequencesTable.insertRow()
                     consequenceRow.classList.add("justify-content-between")
                     let consequenceText = consequenceRow.insertCell()
-                    consequenceText.innerText = consequence.name
+                    let consequenceTitle = document.createElement("div")
+                    let consequenceDescription = document.createElement("div")
+                    consequenceTitle.innerText = consequence.name+":"
+                    consequenceDescription.innerText = consequence.description
+
+                    consequenceText.appendChild(consequenceTitle)
+                    consequenceText.appendChild(consequenceDescription)
+
                     insertDamageSlider(consequenceRow.insertCell(), id + "-" + device.risks[risk].riskID, consequence.consequenceID)
                 })
 
@@ -363,12 +385,12 @@ function checkRiskForDevice(deviceID) {
     this.score[deviceID].riskLevel = sumAllRiskLevels
     let statusIndicator = document.getElementById(deviceID + "-status")
     //console.log(statusIndicator)
-    if (sumAllRiskLevels <= 20) {
+    if (sumAllRiskLevels <= 10) {
         statusIndicator.removeAttribute("negative")
         statusIndicator.removeAttribute("intermediary")
         statusIndicator.removeAttribute("pulse")
         statusIndicator.setAttribute("positive", "")
-    } else if (sumAllRiskLevels > 20 && sumAllRiskLevels <= 60) {
+    } else if (sumAllRiskLevels > 10 && sumAllRiskLevels <= 40) {
         statusIndicator.removeAttribute("negative")
         statusIndicator.removeAttribute("positive")
         statusIndicator.removeAttribute("pulse")
@@ -406,21 +428,26 @@ function checkOverallRisk() {
         stop.style.display = "none";
         ok.style.display = "none";
         empty.style.display = "block";
-    } else if (sumAllRiskLevels <= 20) {
+    } else if (sumAllRiskLevels <= 10) {
         good.style.display = "block";
         stop.style.display = "none";
         ok.style.display = "none";
         empty.style.display = "none";
-    } else if (sumAllRiskLevels > 20 && sumAllRiskLevels <= 60) {
+    } else if (sumAllRiskLevels > 10 && sumAllRiskLevels <= 40) {
         good.style.display = "none";
         ok.style.display = "block";
         stop.style.display = "none";
         empty.style.display = "none";
-    } else if (sumAllRiskLevels >= 61 && sumAllRiskLevels <= 100){
+    } else{
         good.style.display = "none";
         stop.style.display = "block";
         ok.style.display = "none";
         empty.style.display = "none";
     } 
 
+}
+
+function toggleLoad() {
+    var i = document.getElementById('loadsc');
+    i.classList.toggle("hidden");
 }

@@ -26,86 +26,88 @@ function closeNav_network() {
 /*Clear Map */
 function startanalysis() {
     /*fehlerhaft!*/
-    datastore.checkForRisks()
     let dev = datastore.getDevices()
     let decision = false
-    for(let d in dev){
-        
-        if (dev[d].devicetype === "unbekannt" || !dev[d].devicetype){
-            decision = true;       
+    for (let d in dev) {
+
+        if (dev[d].devicetype === "unbekannt" || !dev[d].devicetype) {
+            decision = true;
         }
     }
-    
-    if(decision){
+
+    if (decision) {
         filehandler.showAlertUnknownDevices(dec)
-     } else {
+    } else {
         window.location.href = "./evaluation.html"
     }
-    }
+}
 
-    function dec(dec){
-        if(!dec){
+function dec(dec) {
+    if (!dec) {
+        datastore.checkForRisks().then(res =>{
+            console.log("res: "+res)
             window.location.href = "./evaluation.html"
-        }
+        })
     }
+}
 
-    function callClearMapforOpen() {
-        if(sessionStorage.getItem('devices')!=='{}'){
+function callClearMapforOpen() {
+    if (sessionStorage.getItem('devices') !== '{}') {
         filehandler.showAlertDialog(clearMapforOpen)
-    
+
     } else {
         openopen()
     }
-    }
-    function clearMapforOpen(choice) {
-        
-     
-        if(!choice) {
-        sessionStorage.setItem('devices', '{}'); 
+}
+function clearMapforOpen(choice) {
+
+
+    if (!choice) {
+        sessionStorage.setItem('devices', '{}');
         updateMyData()
         openopen()
-        } 
     }
-function callClearMap() {
-    if(sessionStorage.getItem('devices')!=='{}'){
-    filehandler.showAlertDialog(clearMap)
-
-} else if(sessionStorage.getItem('devices')==='{}') {
-    filehandler.showAlertDialogFalse()
 }
+function callClearMap() {
+    if (sessionStorage.getItem('devices') !== '{}') {
+        filehandler.showAlertDialog(clearMap)
+
+    } else if (sessionStorage.getItem('devices') === '{}') {
+        filehandler.showAlertDialogFalse()
+    }
 }
 
 function clearMap(choice) {
-    
- 
-    if(!choice) {
-    sessionStorage.setItem('devices', '{}'); 
-    updateMyData()
-    } 
+
+
+    if (!choice) {
+        sessionStorage.setItem('devices', '{}');
+        updateMyData()
+    }
 }
 /*Save Dialog */
-function opensave () {
+function opensave() {
     filehandler.saveDialog()
 }
 /*Open Dialog*/
-function openopen () {
+function openopen() {
     filehandler.openDialog()
     sessionStorage.setItem("update", false)
-    this.getData = window.setInterval(checkForUpdate, 1000)    
+    this.getData = window.setInterval(checkForUpdate, 1000)
 }
 
 function callCloseWin() {
     filehandler.showCloseDialog(cls)
 
 }
-function cls(choice){
-    if(!choice){
+function cls(choice) {
+    if (!choice) {
         window.close();
     }
 }
 
- 
+
 function printToPDF() {
     filehandler.savePDFDialog()
-    
+
 }
