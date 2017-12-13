@@ -187,15 +187,16 @@ function analysisComplete( event, risks ){
 
   let riskObject = {}
   risks.forEach(element => {
-    console.log("element: ")
-    console.log(element)
+    console.log("element: "+element.Bezeichnung)
+    //console.log(element)
     riskObject[element.Bezeichnung] = element.Risiken
   });
 
-  console.log("#################################################")
-  console.log(".......................DONE......................")
-  console.log("#################################################")
+  console.log("-#################################################-")
+  console.log("|.......................DONE......................|")
+  console.log("+#################################################+")
   event.returnValue = riskObject  
+  //console.log(event.returnValue)
 
 }
 
@@ -232,3 +233,6 @@ electron.ipcMain.on('maximize',()=>{
     mainWindow.maximize();    
   }
 }) 
+electron.ipcMain.on("test",()=>{
+  mainWindow.loadURL(`file://${__dirname}/frontend/evaluation.html`)
+})

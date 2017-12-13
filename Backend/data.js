@@ -22,11 +22,24 @@ class Data {
                 })
                 let id = 0
                 Promise.all(risiken).then(data => {
-                    let updatedData = data.map(d =>{
-                        d.riskID = id
-                        id++
-                        return d;
+                    let existing = []
+                    let updatedData = data.filter(d =>{
+                        if(!existing.includes(d.Bezeichnung)){
+                            existing.push(d.Bezeichnung)
+                            return true
+                        }else{
+                            console.log("!")
+                            return false
+                        }
+                    }).map(d =>{
+                        //console.log(d.Bezeichnung)
+                        //console.log(bezeichnungen)
+                            d.riskID = id
+                            id++
+                            return d;
                     })
+                    //console.log("updated Data")
+                    //console.log(updatedData)
                     resolve(updatedData)})
     
             })
@@ -87,16 +100,30 @@ class Data {
         return new Promise(resolve =>{
             this.db.fuehrt_zu.find({ IDR: idr }, (err, res) => {
                 let folgen = []
+                let existing = []
                 res.forEach((element) => {
                     folgen.push(this.findIDFinFolge(element.IDF))
                 })
                 let id = 0                
                 Promise.all(folgen).then(data => {
-                    let updatedData = data.map(dOld =>{
+                    //console.log("data: "+ data)
+                    let existing = []
+                    let updatedData = data.filter(d => {
+                        //console.log(existing)
+                        if(!existing.includes(d.Name)){
+                            existing.push(d.Name)
+                            //console.log(d.Name)
+                            return true
+                        }else{
+                            console.log("!")
+                            return false
+                        }
+                    }).map(dOld =>{
                         let d ={}
                         d.consequenceID = id
                         d.name = dOld.Name
                         d.damage = dOld.Schadensklasse
+                        d.description = dOld.Beschreibung
                         id++
                         return d;
                     })
@@ -110,6 +137,7 @@ class Data {
             this.db.folge.findOne({ IDF: id }, (err, res) => {
                 let folge = {
                     Name: res.Bezeichnung,
+                    Beschreibung: res.Beschreibung,
                     Schadensklasse: res.Schadensklasse
                 }
                 resolve(folge)
@@ -132,8 +160,13 @@ class Data {
             }
             this.db.risikoquelle.findOne({ Bezeichnung: bezeichnung }, (err, res) => {
                 if (err) console.log("err: " + err);
-                console.log(res)              
+                //console.log(res)
                 ergebnis.Bezeichnung = res.Bezeichnung?res.Bezeichnung:"unbekannt";
+                if(ergebnis.Bezeichnung === "Mobiles Gerät") ergebnis.Bezeichnung = "mobil"
+                else if(ergebnis.Bezeichnung === "Statisches Gerät") ergebnis.Bezeichnung = "stationär"
+                else if(ergebnis.Bezeichnung === "Netzwerkspeicher") ergebnis.Bezeichnung = "NAS"
+                else if(ergebnis.Bezeichnung === "Maschinensteuerung") ergebnis.Bezeichnung = "Maschine"
+                
                 this.findIDRQinEnthaelt(res.IDRQ).then(res =>{
                     ergebnis.Risiken = res;
                     resolve(ergebnis);
@@ -159,8 +192,6 @@ class Data {
                 devicetype = "Maschinensteuerung"
             }else if( devices[id]["devicetype"]==="NAS"){
                 devicetype = "Netzwerkspeicher"
-            }else if( devices[id]["devicetype"]==="Access Point"){              //TEMPORÄR
-                devicetype = "Acces Point"                                      //TEMPORÄR
             }else if(devices[id]["devicetype"]){       
                 devicetype = devices[id]["devicetype"]
             }
@@ -183,7 +214,8 @@ class Data {
 
         }
         //console.log(types)
-        Promise.all(types.map((bezeichnung) => { return this.findBezeichnunginRisikoquelle(bezeichnung).then(r => { return r }) })).then((res) => {
+        Promise.all(types.map((bezeichnung) => { return this.findBezeichnunginRisikoquelle(bezeichnung).then(r => {return r }) })).then((res) => {
+            console.log("!!done!!");
             //console.log("|||||||||||||||||||||||||||||||");
             //console.log("||||||----promise-all----||||||");
             //console.log("|||||||||||||||||||||||||||||||") ;           

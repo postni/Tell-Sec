@@ -573,30 +573,83 @@ class Datastore {
     }
 
     checkForRisks() {
-        console.log("<checkForRisks()>")
-        communicator.analyseSecurity();
+        return new Promise(resolve =>{
+            console.log("<checkForRisks()>")
+            sessionStorage.setItem("update", false)        
+            communicator.analyseSecurity().then((risks)=>{
+                console.log("addRisks:")
+                this.addRisks(risks).then(res =>{console.log(res)+resolve(res)})
+            })
+        })
+        
     }
 
     addRisks(risks) {
-        console.log("<addRisk()>")
-        let devices = this.getDevices()
-        for (let dType in risks) {
-            for (let id in devices) {
-                if (devices[id].devicetype === dType && devices[id].risks) {
-                    devices[id].risks = {}
-                    risks[dType].forEach((risk) => {
-                        let newRisk = {}
-                        newRisk.consequences = risk.Folgen
-                        newRisk.countermeasures = risk.Massnahmen
-                        newRisk.probability = risk.Eintrittswahrscheinlich
-                        newRisk.riskID = risk.riskID
-                        devices[id].risks[risk.Bezeichnung] = newRisk
-                    })
-                }
+        return new Promise(resolve =>{
+            console.log("<addRisk()>")        
+            let devices = this.getDevices()
+            let dTypesPromises = []
+            for(let dType in risks){
+                dTypesPromises.push(new Promise(resolve =>{
+                    let type = dType==="Statisches Gerät"? "stationär": dType==="Mobiles Gerät"? "mobil":dType==="Maschinensteuerung"?"Maschine":dType==="Netzwerkspeicher"?"NAS":dType;
+                    //console.log(type)
+                    let devicePromises = []
+                    for(let id in devices){
+                        //console.log(id)                        
+                        devicePromises.push(new Promise(resolve =>{
+                            let risklist = []
+                            //console.log(devices[id].devicetype+" - "+type+" | "+Object.keys(devices[id].risks).length>0)
+                            if (devices[id].devicetype!=="Unbekannt" && devices[id].devicetype === type && !Object.keys(devices[id].risks).length>0) {
+                                risks[dType].forEach((risk) => {
+                                    let newRisk = {}
+                                    newRisk.consequences = risk.Folgen
+                                    newRisk.countermeasures = risk.Massnahmen
+                                    newRisk.probability = risk.Eintrittswahrscheinlich
+                                    newRisk.riskID = risk.riskID
+                                    risklist.push({"device":id,"name":risk.Bezeichnung,"data":newRisk})
+                                })
+                            }
+                            resolve(risklist)                            
+                        }))
+                    }
+                    Promise.all(devicePromises).then(resp => {
+                        let merged = [].concat.apply([], resp);
+                        resolve(merged)})
+                }))
+                //console.log(dTypesPromises)
             }
-        }
-        sessionStorage.setItem("devices", JSON.stringify(devices))
-        sessionStorage.setItem("update", true)
+            Promise.all(dTypesPromises).then(res => { 
+                    let merged = [].concat.apply([], res);
+                    this.assignRisks(devices, merged).then(res => {
+                        let deviceString = JSON.stringify(res)
+                        //console.log(deviceString)
+                        sessionStorage.setItem("devices", deviceString)
+                        sessionStorage.setItem("update", true)
+                        resolve(deviceString)
+                    })                      
+                
+            })
+        })        
+    }
+    assignRisks(devices, risks){
+        //console.log(JSON.stringify(risks))
+        // console.log(JSON.stringify(devices))
+        return new Promise(resolve =>{
+            let devWithRisks = devices
+            let riskLength = Object.keys(risks).length
+            if(riskLength===0) resolve(devices)
+            risks.forEach(risk => {
+                //console.log(Object.keys(devWithRisks)+" - "+risk.device)
+                if(!devWithRisks[risk.device].risks || Array.isArray(devWithRisks[risk.device].risks)) devWithRisks[risk.device].risks = {}
+                devWithRisks[risk.device].risks[risk.name] = risk.data
+                //console.log(JSON.stringify(devWithRisks[risk.device]))
+                riskLength--
+                console.log(riskLength)
+                if(riskLength===0){
+                    resolve(devWithRisks)                    
+                }
+            })
+        })
     }
 }
 
@@ -605,10 +658,13 @@ class Communicator {
     }
 
     analyseSecurity() {
-        console.log("<analyseSecurity()>")
-        let risks = ipcRenderer.sendSync('analyse-devices', datastore.getDevices());
-        console.log(risks)
-        datastore.addRisks(risks)
+        return new Promise(resolve => {
+            console.log("<analyseSecurity()>")
+            let dev = datastore.getDevices()
+            let risks = ipcRenderer.sendSync('analyse-devices', dev);
+            console.log(risks)
+            resolve(risks)
+        })        
     }
 
     scanNetwork() {
@@ -630,6 +686,10 @@ class Communicator {
 
     callHomepage() {
         shell.openExternal("https://1524300.wixsite.com/tellmesec")
+    }
+
+    toAnalysis(){
+        ipcRenderer.send('test');
     }
 
 }
