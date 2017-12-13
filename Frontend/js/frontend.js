@@ -238,8 +238,8 @@ class Datastore {
                 "hostname": "WAC510",
                 "vendor": "Netgear",
                 "connectedTo": ["0"],
-                "connectionsToMe": ["11","14"],
-            
+                "connectionsToMe": ["11", "14"],
+
                 "os": "Hakan94",
                 "ip": "10.23.4.66",
                 "mac": "F2:34:A5:67:B2:86",
@@ -264,7 +264,7 @@ class Datastore {
                 "vendor": "Dell",
                 "connectedTo": ["10"],
                 "connectionsToMe": [""],
-            
+
                 "os": "Hakan94",
                 "ip": "10.23.4.66",
                 "mac": "F2:34:A5:67:B2:86",
@@ -289,7 +289,7 @@ class Datastore {
                 "vendor": "Samsung",
                 "connectedTo": ["10"],
                 "connectionsToMe": [""],
-            
+
                 "os": "Hakan94",
                 "ip": "10.23.4.66",
                 "mac": "F2:34:A5:67:B2:86",
@@ -309,9 +309,9 @@ class Datastore {
                 "risks": [],
                 "categories": []
             },
-            
-            
-            
+
+
+
         }
         sessionStorage.setItem("devices", JSON.stringify(testdata));
         sessionStorage.setItem("update", true)
@@ -321,16 +321,38 @@ class Datastore {
 
     getDevices() {
         console.log("<getDevices()>")
-        let rueckgabe = JSON.parse(sessionStorage.getItem("devices"))?JSON.parse(sessionStorage.getItem("devices")):{};
+        let rueckgabe = JSON.parse(sessionStorage.getItem("devices")) ? JSON.parse(sessionStorage.getItem("devices")) : {};
         return rueckgabe;
     }
 
-    changeValue(id, key, subkey, value) {
+    changeValue(id, key, subkey, subsubkey, value) {
         console.log("<changeValue()>")
-        
+
         let devices = this.getDevices();
         console.log(devices)
-        if (subkey) {
+
+
+        if (subsubkey) {
+
+            if (!devices[id][key]) {
+                if(typeof subkey === "number") {
+                    devices[id][key] = []
+                } else {
+                devices[id][key] = {}
+                }
+            }
+            if (!devices[id][key][subkey]) {
+                devices[id][key][subkey] = {}
+                console.log(devices[id][key][subkey])
+            }
+            if (!devices[id][key][subkey][subsubkey]) {
+                devices[id][key][subkey][subsubkey] = {}
+            }
+
+
+
+            devices[id][key][subkey][subsubkey] = value;
+        } else if (subkey) {
             devices[id][key][subkey] = value;
         } else {
             devices[id][key] = value;
@@ -342,7 +364,7 @@ class Datastore {
     }
 
     addTo(id, key, subkey, value) {
-        console.log("<addTo()>")        
+        console.log("<addTo()>")
         let devices = this.getDevices();
         console.log(devices)
         if (!devices[id][key]) {
@@ -361,7 +383,7 @@ class Datastore {
     }
 
     addDevice(device) {
-        console.log("<addDevice()>")        
+        console.log("<addDevice()>")
         let devices = this.getDevices();
 
         let devicetype = device.devicetype === "Person" ? "Unbekannt" : device.devicetype;
@@ -372,7 +394,7 @@ class Datastore {
 
     removeDevice(deviceId) {
         console.log("<removeDevice()>")
-        
+
         let devices = this.getDevices();
         // console.log(devices[deviceId])
         //console.log(deviceId)
@@ -424,53 +446,53 @@ class Datastore {
 
             let ipIdMapper = {}
 
-            for(let n in newDevices){
+            for (let n in newDevices) {
                 console.log(newDevices[n])
-                if(newDevices[n].connectionsToMe){
-                    console.log(newDevices[n].connectionsToMe)                    
-                    if(newDevices[n].connectionsToMe[0].length > 3  ){
-                        console.log(newDevices[n].connectionsToMe[0])                                            
+                if (newDevices[n].connectionsToMe) {
+                    console.log(newDevices[n].connectionsToMe)
+                    if (newDevices[n].connectionsToMe[0].length > 3) {
+                        console.log(newDevices[n].connectionsToMe[0])
                         connectionsFromOthers[n] = newDevices[n].connectionsToMe
                         console.log(delete newDevices[n].connectionsToMe)
                         console.log()
                     }
                 }
-                if(newDevices[n].connectedTo){
-                    console.log(newDevices[n].connectedTo)                                        
-                    if(newDevices[n].connectedTo[0].length > 3  ) {
-                        console.log(newDevices[n].connectedTo[0])                                                                
+                if (newDevices[n].connectedTo) {
+                    console.log(newDevices[n].connectedTo)
+                    if (newDevices[n].connectedTo[0].length > 3) {
+                        console.log(newDevices[n].connectedTo[0])
                         connectionsToOthers[n] = newDevices[n].connectedTo
                         console.log(delete newDevices[n].connectedTo)
                     }
                 }
-                if(!ipIdMapper[newDevices[n].ip]){
+                if (!ipIdMapper[newDevices[n].ip]) {
                     ipIdMapper[newDevices[n].ip] = n
                 }
-                console.log(newDevices[n])                
+                console.log(newDevices[n])
             }
-            for(let ip in ipIdMapper){
-                for(let id in connectionsToOthers){
+            for (let ip in ipIdMapper) {
+                for (let id in connectionsToOthers) {
                     connectionsToOthers[id] = connectionsToOthers[id].map(connection => {
-                        if(connection===ip) return ipIdMapper[ip]
+                        if (connection === ip) return ipIdMapper[ip]
                         else return connection
                     })
                 }
-                for(let id in connectionsFromOthers){
+                for (let id in connectionsFromOthers) {
                     connectionsFromOthers[id] = connectionsFromOthers[id].map(connection => {
-                        if(connection===ip) return ipIdMapper[ip]
+                        if (connection === ip) return ipIdMapper[ip]
                         else return connection
                     })
                 }
             }
             console.log(newDevices)
-            for( let id in newDevices){
+            for (let id in newDevices) {
                 console.log(id)
-                if(!newDevices[id].connectedTo){
+                if (!newDevices[id].connectedTo) {
                     console.log(connectionsToOthers[id])
                     newDevices[id].connectedTo = connectionsToOthers[id]
                 }
-                if(!newDevices[id].connectionsToMe){
-                    console.log(connectionsFromOthers[id])                    
+                if (!newDevices[id].connectionsToMe) {
+                    console.log(connectionsFromOthers[id])
                     newDevices[id].connectionsToMe = connectionsFromOthers[id]
                 }
             }
@@ -516,7 +538,7 @@ class Datastore {
                     nextID++;
                 }
                 console.log(newDevices[n])
-                
+
             }
             console.log(idMapper)
             for (let id in idMapper) {
@@ -526,14 +548,14 @@ class Datastore {
                     newDevices[id].connectedTo.forEach((connection) => {
                         console.log(connection)
                         console.log(idMapper[id])
-                        if(!devices[idMapper[id]].connectedTo) devices[idMapper[id]].connectedTo = []
+                        if (!devices[idMapper[id]].connectedTo) devices[idMapper[id]].connectedTo = []
                         devices[idMapper[id]].connectedTo.push(idMapper[connection])
                     })
                 }
                 if (newDevices[id].connectionsToMe) {
-                    console.log(newDevices[id].connectionsToMe)                    
+                    console.log(newDevices[id].connectionsToMe)
                     newDevices[id].connectionsToMe.forEach((connection) => {
-                        console.log(connection)                                                
+                        console.log(connection)
                         if (!devices[idMapper[id]].connectionsToMe) devices[idMapper[id]].connectionsToMe = []
                         devices[idMapper[id]].connectionsToMe.push(idMapper[connection])
                     })
@@ -551,30 +573,83 @@ class Datastore {
     }
 
     checkForRisks() {
-        console.log("<checkForRisks()>")
-        communicator.analyseSecurity();
+        return new Promise(resolve =>{
+            console.log("<checkForRisks()>")
+            sessionStorage.setItem("update", false)        
+            communicator.analyseSecurity().then((risks)=>{
+                console.log("addRisks:")
+                this.addRisks(risks).then(res =>{console.log(res)+resolve(res)})
+            })
+        })
+        
     }
 
     addRisks(risks) {
-        console.log("<addRisk()>")        
-        let devices = this.getDevices()
-        for (let dType in risks) {
-            for (let id in devices) {
-                if (devices[id].devicetype === dType && devices[id].risks) {
-                    devices[id].risks = {}
-                    risks[dType].forEach((risk) => {
-                        let newRisk = {}
-                        newRisk.consequences = risk.Folgen
-                        newRisk.countermeasures = risk.Massnahmen
-                        newRisk.probability = risk.Eintrittswahrscheinlich
-                        newRisk.riskID = risk.riskID
-                        devices[id].risks[risk.Bezeichnung] = newRisk
-                    })
-                }
+        return new Promise(resolve =>{
+            console.log("<addRisk()>")        
+            let devices = this.getDevices()
+            let dTypesPromises = []
+            for(let dType in risks){
+                dTypesPromises.push(new Promise(resolve =>{
+                    let type = dType==="Statisches Gerät"? "stationär": dType==="Mobiles Gerät"? "mobil":dType==="Maschinensteuerung"?"Maschine":dType==="Netzwerkspeicher"?"NAS":dType;
+                    //console.log(type)
+                    let devicePromises = []
+                    for(let id in devices){
+                        //console.log(id)                        
+                        devicePromises.push(new Promise(resolve =>{
+                            let risklist = []
+                            //console.log(devices[id].devicetype+" - "+type+" | "+Object.keys(devices[id].risks).length>0)
+                            if (devices[id].devicetype!=="Unbekannt" && devices[id].devicetype === type && !Object.keys(devices[id].risks).length>0) {
+                                risks[dType].forEach((risk) => {
+                                    let newRisk = {}
+                                    newRisk.consequences = risk.Folgen
+                                    newRisk.countermeasures = risk.Massnahmen
+                                    newRisk.probability = risk.Eintrittswahrscheinlich
+                                    newRisk.riskID = risk.riskID
+                                    risklist.push({"device":id,"name":risk.Bezeichnung,"data":newRisk})
+                                })
+                            }
+                            resolve(risklist)                            
+                        }))
+                    }
+                    Promise.all(devicePromises).then(resp => {
+                        let merged = [].concat.apply([], resp);
+                        resolve(merged)})
+                }))
+                //console.log(dTypesPromises)
             }
-        }
-        sessionStorage.setItem("devices", JSON.stringify(devices))
-        sessionStorage.setItem("update", true)        
+            Promise.all(dTypesPromises).then(res => { 
+                    let merged = [].concat.apply([], res);
+                    this.assignRisks(devices, merged).then(res => {
+                        let deviceString = JSON.stringify(res)
+                        //console.log(deviceString)
+                        sessionStorage.setItem("devices", deviceString)
+                        sessionStorage.setItem("update", true)
+                        resolve(deviceString)
+                    })                      
+                
+            })
+        })        
+    }
+    assignRisks(devices, risks){
+        //console.log(JSON.stringify(risks))
+        // console.log(JSON.stringify(devices))
+        return new Promise(resolve =>{
+            let devWithRisks = devices
+            let riskLength = Object.keys(risks).length
+            if(riskLength===0) resolve(devices)
+            risks.forEach(risk => {
+                //console.log(Object.keys(devWithRisks)+" - "+risk.device)
+                if(!devWithRisks[risk.device].risks || Array.isArray(devWithRisks[risk.device].risks)) devWithRisks[risk.device].risks = {}
+                devWithRisks[risk.device].risks[risk.name] = risk.data
+                //console.log(JSON.stringify(devWithRisks[risk.device]))
+                riskLength--
+                console.log(riskLength)
+                if(riskLength===0){
+                    resolve(devWithRisks)                    
+                }
+            })
+        })
     }
 }
 
@@ -583,10 +658,13 @@ class Communicator {
     }
 
     analyseSecurity() {
-        console.log("<analyseSecurity()>")
-        let risks = ipcRenderer.sendSync('analyse-devices', datastore.getDevices());
-        console.log(risks)
-        datastore.addRisks(risks)
+        return new Promise(resolve => {
+            console.log("<analyseSecurity()>")
+            let dev = datastore.getDevices()
+            let risks = ipcRenderer.sendSync('analyse-devices', dev);
+            console.log(risks)
+            resolve(risks)
+        })        
     }
 
     scanNetwork() {
@@ -606,8 +684,12 @@ class Communicator {
         ipcRenderer.send('print-to-pdf', path);
     }
 
-    callHomepage(){
+    callHomepage() {
         shell.openExternal("https://1524300.wixsite.com/tellmesec")
+    }
+
+    toAnalysis(){
+        ipcRenderer.send('test');
     }
 
 }
