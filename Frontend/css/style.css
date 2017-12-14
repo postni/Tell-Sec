@@ -520,3 +520,10 @@ span.modal-text-line{
         background: rgba(0, 0, 0, 0.2);
         cursor: pointer;
     }
+
+    .fa-undo{
+        font-size: 10px !important;
+        color:#bcbdbc;
+        padding-left: 10px;
+        cursor: pointer;
+    }

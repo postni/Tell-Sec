@@ -177,20 +177,29 @@ function appendEdge(from, to) {
         alert(err);
     }
 }
-function updateContent(key, subkey, subsubkey, element) {
-    console.log(document.getElementById('modal-id'));
-    console.log(document.getElementById('modal-id'))
-    var i = document.getElementById('modal-id').innerText;
-    if(key==='ports'){
-        datastore.changeValue(i, key, subkey, subsubkey, element)
-    } else{
-    datastore.changeValue(i, key, null, null, element.value)
-    }
-    if (key === 'hostname' || key === 'devicetype') {
-        updateMyData()
+function updateContent(element) {
+    let type = element.id.split('-')[1]
+    let id = document.getElementById('modal-id').innerText
+    let value = element.value
+    let promise = datastore.changeValue([id,type],value,type)        
+    
+    if(type === 'hostname' || type === 'devicetype'){
+        promise.then(()=>{updateMyData()})
     }
 
+    // console.log(document.getElementById('modal-id'));
+    // console.log(document.getElementById('modal-id'))
+    // var i = document.getElementById('modal-id').innerText;
+    // if(key==='ports'){
+    //     datastore.changeValue(i, key, subkey, subsubkey, element)
+    // } else{
+    // datastore.changeValue(i, key, null, null, element.value)
+    // }
+    // if (key === 'hostname' || key === 'devicetype') {
+    //     updateMyData()
+    // }
 }
+
 function addNode(label, img, title) {
     let myId = datastore.newID()
     let data = { id: myId, "devicetype": label }
@@ -281,8 +290,6 @@ network.on("click", (params) => {
         ports.innerHTML = "";
 
         let portID = 0;
-        let protocolID = 0;
-        let serviceID = 0;
 
 
         if (devices[myId].ports) {
@@ -297,7 +304,6 @@ network.on("click", (params) => {
                 port.type = "text"
                 port.classList.add("modal-text", "form-control")
                 port.id = "port-" + portID
-                portID++
                 console.log("Port: " + p.port)
                 port.value = p.port
                 let portLabel = document.createElement("label")
@@ -307,7 +313,11 @@ network.on("click", (params) => {
                 p1.appendChild(portLabel)
                 p1.appendChild(port)
                 d1.appendChild(p1)
-
+                port.onchange = (event)=> {
+                    let content = event.target.value
+                    let ids = [document.getElementById("modal-id").innerText,event.target.id.split("-")[1]]
+                    datastore.changeValue(ids, content, 'port')
+                }
                 let d2 = document.createElement("div")
                 d2.classList.add("col-sm-5")
                 let p2 = document.createElement("p")
@@ -315,12 +325,17 @@ network.on("click", (params) => {
                 let protocol = document.createElement("input")
                 protocol.type = "text"
                 protocol.classList.add("modal-text", "form-control")
-                protocol.id = "protocol-" + protocolID
+                protocol.id = "protocol-" + portID
                 protocol.value = p.protocol
                 let protocolLabel = document.createElement("label")
                 protocolLabel.classList.add("active")
                 protocolLabel.htmlFor = protocol.id
                 protocolLabel.innerText = "Protocol"
+                protocol.onchange = (event)=> {
+                    let content = event.target.value
+                    let ids = [document.getElementById("modal-id").innerText,event.target.id.split("-")[1]]
+                    datastore.changeValue(ids, content, 'protocol')
+                }
                 p2.appendChild(protocolLabel)
                 p2.appendChild(protocol)
                 d2.appendChild(p2)
@@ -332,8 +347,13 @@ network.on("click", (params) => {
                 let service = document.createElement("input")
                 service.type = "text"
                 service.classList.add("modal-text", "form-control")
-                service.id = "service-" + serviceID
+                service.id = "service-" + portID
                 service.value = p.service
+                service.onchange = (event)=> {
+                    let content = event.target.value
+                    let ids = [document.getElementById("modal-id").innerText,event.target.id.split("-")[1]]
+                    datastore.changeValue(ids, content, 'service')
+                }
                 let serviceLabel = document.createElement("label")
                 serviceLabel.classList.add("active")
                 serviceLabel.htmlFor = service.id
@@ -346,6 +366,7 @@ network.on("click", (params) => {
                 div.appendChild(d2);
                 div.appendChild(d3)
                 ports.appendChild(div);
+                portID++                
             })
         } else {
             ports.innerHTML = ""
@@ -353,34 +374,7 @@ network.on("click", (params) => {
 
         add.onclick = () => {
             let allPorts = document.querySelectorAll("[id^=port-]")
-            let portID = 0
-    
-            let pLength = allPorts.length
-            for(let i =0; i<pLength;i++){
-                let id = (allPorts[i].id)
-                id=id.split("-")[1]
-                portID=id>portID?id:portID
-            }
-
-            let allProtocols = document.querySelectorAll("[id^=protocol-]")
-            let protocolID = 0
-    
-            let prLength = allProtocols.length
-            for(let i =0; i<prLength;i++){
-                let id = (allProtocols[i].id)
-                id=id.split("-")[1]
-                protocolID=id>protocolID?id:protocolID
-            }
-
-            let allServices = document.querySelectorAll("[id^=service-]")
-            let serviceID = 0
-    
-            let sLength = allServices.length
-            for(let i =0; i<sLength;i++){
-                let id = (allServices[i].id)
-                id=id.split("-")[1]
-                serviceID=id>serviceID?id:serviceID
-            }
+            let portID = allPorts.length
 
 
             let div = document.createElement("div")
@@ -393,7 +387,6 @@ network.on("click", (params) => {
             port.type = "text"
             port.classList.add("modal-text", "form-control")
             port.id = "port-" + portID
-            portID++
             let portLabel = document.createElement("label")
             portLabel.htmlFor = port.id
             portLabel.innerText = "Port"
@@ -403,9 +396,8 @@ network.on("click", (params) => {
 
             port.onchange = (event)=> {
                 let content = event.target.value
-
-                let portid = JSON.parse(event.target.id.split('-')[1])
-                updateContent('ports', portid, 'port', content)
+                let ids = [document.getElementById("modal-id").innerText,event.target.id.split("-")[1]]
+                datastore.changeValue(ids, content, 'port')
             }
             let d2 = document.createElement("div")
             d2.classList.add("col-sm-5")
@@ -414,7 +406,7 @@ network.on("click", (params) => {
             let protocol = document.createElement("input")
             protocol.type = "text"
             protocol.classList.add("modal-text", "form-control")
-            protocol.id = "protocol-" + protocolID
+            protocol.id = "protocol-" + portID
             let protocolLabel = document.createElement("label")
             protocolLabel.htmlFor = protocol.id
             protocolLabel.innerText = "Protocol"
@@ -423,9 +415,8 @@ network.on("click", (params) => {
             d2.appendChild(p2)
             protocol.onchange = (event)=> {
                 let content = event.target.value
-
-                let portid = JSON.parse(event.target.id.split('-')[1])
-                updateContent('ports', portid, 'protocol', content)
+                let ids = [document.getElementById("modal-id").innerText,event.target.id.split("-")[1]]
+                datastore.changeValue(ids, content, 'protocol')
             }
 
             let d3 = document.createElement("div")
@@ -435,7 +426,7 @@ network.on("click", (params) => {
             let service = document.createElement("input")
             service.type = "text"
             service.classList.add("modal-text", "form-control")
-            service.id = "service-" + serviceID
+            service.id = "service-" + portID
             let serviceLabel = document.createElement("label")
             serviceLabel.htmlFor = service.id
             serviceLabel.innerText = "Service"
@@ -444,16 +435,19 @@ network.on("click", (params) => {
             d3.appendChild(p3)
             service.onchange = (event)=> {
                 let content = event.target.value
-
-                let portid = JSON.parse(event.target.id.split('-')[1])
-                updateContent('ports', portid, 'service', content)
+                let ids = [document.getElementById("modal-id").innerText,event.target.id.split("-")[1]]
+                datastore.changeValue(ids, content, 'service')
             }
 
             div.appendChild(d1);
             div.appendChild(d2);
             div.appendChild(d3)
             ports.appendChild(div);
+            portID++
 
+            let id = document.getElementById('modal-id').innerText
+
+            datastore.addTo(id,"ports",null,{"port":"","protocol":"","service":""})
             //ports.appendChild()
         }
 

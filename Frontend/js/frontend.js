@@ -325,43 +325,85 @@ class Datastore {
         return rueckgabe;
     }
 
-    changeValue(id, key, subkey, subsubkey, value) {
-        console.log("<changeValue()>")
 
-        let devices = this.getDevices();
-        console.log(devices)
-
-
-        if (subsubkey) {
-
-            if (!devices[id][key]) {
-                if(typeof subkey === "number") {
-                    devices[id][key] = []
-                } else {
-                devices[id][key] = {}
-                }
+    changeValue(keys, value ,type){
+        return new Promise(resolve =>{
+            let devices = this.getDevices();
+            console.log(keys)
+            switch (type){
+                case "port" :
+                    //if(!devices[keys[0]].ports) devices[keys[0]].ports = []
+                    //let exists = false
+                    // devices[keys[0]].ports.forEach(port => {
+                    //     if(port.port === value.port && port.protocol === value.protocol && port.service === value.service){
+                    //         exists = true;
+                    //     }
+                    // })
+                    // if(!exists){
+                    //     devices[keys[0]].ports.push(value)
+                    // }
+                    devices[keys[0]].ports[keys[1]].port = value               
+                    break;
+                case "protocol" : 
+                    devices[keys[0]].ports[keys[1]].protocol = value               
+                    break;
+                case "service" : 
+                    devices[keys[0]].ports[keys[1]].service = value               
+                    break;
+                case "probability" : 
+                    devices[keys[0]].risks[keys[1]].probability = value               
+                    break;
+                case "damage" : 
+                    devices[keys[0]].risks[keys[1]].consequences[keys[2]].damage = value               
+                    break;
+                default:
+                    devices[keys[0]][keys[1]] = value
+                break;
             }
-            if (!devices[id][key][subkey]) {
-                devices[id][key][subkey] = {}
-                console.log(devices[id][key][subkey])
-            }
-            if (!devices[id][key][subkey][subsubkey]) {
-                devices[id][key][subkey][subsubkey] = {}
-            }
-
-
-
-            devices[id][key][subkey][subsubkey] = value;
-        } else if (subkey) {
-            devices[id][key][subkey] = value;
-        } else {
-            devices[id][key] = value;
-        }
-
-
-
-        sessionStorage.setItem("devices", JSON.stringify(devices));
+    
+            sessionStorage.setItem("devices", JSON.stringify(devices))
+            resolve("done")
+        })
+        
     }
+
+    // changeValue(id, key, subkey, subsubkey, value) {
+    //     console.log("<changeValue()>")
+
+    //     let devices = this.getDevices();
+    //     console.log(devices)
+
+
+    //     if (subsubkey) {
+
+    //         if (!devices[id][key]) {
+    //             if(typeof subkey === "number") {
+    //                 devices[id][key] = []
+    //             } else {
+    //             devices[id][key] = {}
+    //             }
+    //         }
+    //         if (!devices[id][key][subkey]) {
+    //             devices[id][key][subkey] = {}
+    //             console.log(devices[id][key][subkey])
+    //         }
+    //         if (!devices[id][key][subkey][subsubkey]) {
+    //             devices[id][key][subkey][subsubkey] = {}
+    //         }
+
+
+
+    //         devices[id][key][subkey][subsubkey] = value;
+    //     } else if (subkey) {
+    //         devices[id][key][subkey] = value;
+    //     } else {
+    //         devices[id][key] = value;
+    //     }
+
+
+
+    //     sessionStorage.setItem("devices", JSON.stringify(devices));
+    // }
 
     addTo(id, key, subkey, value) {
         console.log("<addTo()>")
@@ -376,6 +418,9 @@ class Datastore {
             }
             devices[id][key][subkey].push(value)
         } else {
+            if (!devices[id][key]) {
+                devices[id][key] = []
+            }
             devices[id][key].push(value)
         }
         console.log(devices)
@@ -415,18 +460,21 @@ class Datastore {
         if (con) {
             con.forEach((connection) => {
                 console.log(connection)
-                devices[connection].connectionsToMe = devices[connection].connectionsToMe.filter((id) => {
-                    return !(id === deviceId);
-                })
-
+                if(connection){
+                    devices[connection].connectionsToMe = devices[connection].connectionsToMe.filter((id) => {
+                        return !(id === deviceId);
+                    })
+                }
             })
         }
         console.log(con2me)
         if (con2me) {
             con2me.forEach((connection) => {
-                devices[connection].connectedTo = devices[connection].connectedTo.filter((id) => {
-                    return !(id === deviceId);
-                })
+                if(connection){
+                    devices[connection].connectedTo = devices[connection].connectedTo.filter((id) => {
+                        return !(id === deviceId);
+                    })
+                }
             })
         }
         console.log(devices)
@@ -578,7 +626,7 @@ class Datastore {
             sessionStorage.setItem("update", false)        
             communicator.analyseSecurity().then((risks)=>{
                 console.log("addRisks:")
-                this.addRisks(risks).then(res =>{console.log(res)+resolve(res)})
+                this.addRisks(risks).then(res =>{resolve(res)})
             })
         })
         
@@ -604,7 +652,8 @@ class Datastore {
                                     let newRisk = {}
                                     newRisk.consequences = risk.Folgen
                                     newRisk.countermeasures = risk.Massnahmen
-                                    newRisk.probability = risk.Eintrittswahrscheinlich
+                                    newRisk.probability = risk.Eintrittswahrscheinlichkeit
+                                    newRisk.defaultProbability = risk.Eintrittswahrscheinlichkeit
                                     newRisk.riskID = risk.riskID
                                     risklist.push({"device":id,"name":risk.Bezeichnung,"data":newRisk})
                                 })

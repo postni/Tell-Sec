@@ -64,10 +64,12 @@ class NWtester {
 
     getDevices(adapter) {
         return new Promise(resolve => {
-            if (adapter.family === 'IPv4' && adapter.internal === false && !(IpSubnetCalculator.toDecimal(adapter.address) <= 2852126719 && IpSubnetCalculator.toDecimal(adapter.address) >= 2835349504) && IpSubnetCalculator.toDecimal(adapter.netmask)>=4294836224) {
+            if (adapter.family === 'IPv4' && adapter.internal === false && !(IpSubnetCalculator.toDecimal(adapter.address) <= 2852126719 && IpSubnetCalculator.toDecimal(adapter.address) >= 2835349504) && !(IpSubnetCalculator.toDecimal(adapter.address)>=419430400 && IpSubnetCalculator.toDecimal(adapter.address)<=436207615)) {
                 let subnet = IpSubnetCalculator.calculateCIDRPrefix(adapter.address, adapter.netmask).ipLowStr + "/" + IpSubnetCalculator.calculateCIDRPrefix(adapter.address, adapter.netmask).prefixSize
 
                 var nmapscan = new nmap.NmapScan(subnet, '-sP');
+
+                nmapscan.scanTimeout = 400000                
                 nmapscan.on('complete', (data) => {
 
                     console.log("complete")

@@ -83,7 +83,7 @@ class Data {
                     Bezeichnung: res.Bezeichnung,
                     Folgen: [],
                     Massnahmen: [],
-                    Eintrittswahrscheinlich: res.Eintrittswahrscheinlich? res.Eintrittswahrscheinlich:0.5
+                    Eintrittswahrscheinlichkeit: res.Eintrittswahrscheinlich? res.Eintrittswahrscheinlich:0.5
                 }
                 this.findIDRinFuehrtZu(idr).then((res)=>{
                     risiko.Folgen = res;
@@ -123,6 +123,7 @@ class Data {
                         d.consequenceID = id
                         d.name = dOld.Name
                         d.damage = dOld.Schadensklasse
+                        d.defaultDamage = dOld.Schadensklasse
                         d.description = dOld.Beschreibung
                         id++
                         return d;
