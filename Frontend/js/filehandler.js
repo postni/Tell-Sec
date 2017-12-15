@@ -21,9 +21,9 @@ class Filehandler {
                 console.log("Du hast die Datei nicht gespeichert");
                 return;
             }
-
+            fileName = fileName.split('.tell')[0]
             // fileName is a string that contains the path and filename created in the save file dialog.  
-            fs.writeFile(fileName +'.tell', content, (err) => {
+            fs.writeFile(fileName+".tell", content, (err) => {
                 if (err) {
                     alert("Ein Fehler tritt während der Erstellung der Datei auf " + err.message)
                 }

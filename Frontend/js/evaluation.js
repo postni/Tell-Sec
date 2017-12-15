@@ -3,9 +3,9 @@ var datastore = require("./js/frontend").datastore
 function loader() {
     toggleLoad()
     datastore.checkForRisks().then(res =>{
-        console.log(res)
+        // console.log(res)
         let dev = JSON.parse(res)
-        console.log(dev)
+        // console.log(dev)
         toggleLoad()
         getRisks(dev)
     })    
@@ -26,16 +26,16 @@ function getRisks(devices) {
         tablehead.appendChild(th)
     })
     for (let id in devices) {
-        console.log(id)
+        // console.log(id)
         // console.log(devices[id])
         // if(!devices[id].risks||typeof devices[id].risks === typeof []){
         //     devices[id].risks = {}
         // }
         
-        console.log(devices[id].risks)
+        // console.log(devices[id].risks)
         
         if (devices[id].devicetype && devices[id].devicetype !=="Unbekannt" && Object.keys(devices[id].risks).length>0) {
-            console.log(devices[id].devicetype)
+            // console.log(devices[id].devicetype)
             if (!this.score[id]) {
                 this.score[id] = {}
             }
@@ -99,21 +99,22 @@ function getRisks(devices) {
 
             let riskTable = document.createElement("table")
             riskTable.setAttribute("style", "display:none")
-            // console.log("=============")
-            // console.log("Risikotabelle")
-            // console.log("=============")
-            // console.log(id+"-risks")
+
             riskTable.id = id + "-risks"
             riskTable.setAttribute("width", "100%")
             
             riskCell.appendChild(riskTable)
-            console.log(device)
+            // console.log(device)
             for (let risk in device.risks) {
-                console.log(risk)
+                // console.log(risk)
+                // console.log(device.risks[risk].defaultProbability)
+                // console.log(device.risks[risk].probability)
                 if (!this.score[id][device.risks[risk].riskID]) {
                     this.score[id][device.risks[risk].riskID] = {
                         "probability": device.risks[risk].probability * 100,
-                        "consequences": {}
+                        "defaultProbability": device.risks[risk].defaultProbability * 100,
+                        "consequences": {},
+                        "name": risk
                     }
                     //console.log(this.score[id][device.risks[risk].riskID])
                 }
@@ -135,11 +136,16 @@ function getRisks(devices) {
                 cellRiskRight.appendChild(consequencesTable)
                 consequencesTable.classList.add("col-sm-12")
                 consequencesTable.id = id + "-" + device.risks[risk].riskID + "-consequences"
+                device.risks[risk].consequences.sort((a,b)=>{
+                    return (a.damage < b.damage)
+                })
                 device.risks[risk].consequences.forEach((consequence) => {
                     if (!this.score[id][device.risks[risk].riskID].consequences[consequence.consequenceID]) {
                         this.score[id][device.risks[risk].riskID].consequences[consequence.consequenceID] = {
-                            "damage": consequence.damage
+                            "damage": consequence.damage,
+                            "defaultDamage": consequence.defaultDamage
                         }
+                        // console.log(this.score[id][device.risks[risk].riskID])
                     }
                     let consequenceRow = consequencesTable.insertRow()
                     consequenceRow.classList.add("justify-content-between")
@@ -153,6 +159,7 @@ function getRisks(devices) {
                     consequenceText.appendChild(consequenceDescription)
 
                     insertDamageSlider(consequenceRow.insertCell(), id + "-" + device.risks[risk].riskID, consequence.consequenceID)
+                    checkRiskLevelFor([id, device.risks[risk].riskID])                    
                 })
 
 
@@ -168,7 +175,6 @@ function getRisks(devices) {
 
 
 
-                checkRiskLevelFor([id, device.risks[risk].riskID])
 
 
                 let space1 = document.createElement("br")
@@ -216,25 +222,25 @@ function getRisks(devices) {
     
                         $(consequencesTable).hide();
                         $(countermeasuresTable).show();
-    
                     }
                 }
-            }
+            }//for device.risks
         }
     }
-
 }
 
 
 function insertprobabilitySlider(table, id) {
     let container = document.createElement("div")
-    container.setAttribute("style", "width:175px")
+    container.setAttribute("style", "width:175px")    
+
     let ids = id.split("-")
     let slider = document.createElement("input")
     slider.setAttribute("type", "range")
     slider.min = 0
     slider.max = 100
     slider.value = this.score[ids[0]][ids[1]].probability
+    slider.setAttribute("style", "width:155px")
     slider.classList.add("slider")
     // console.log("=================")
     // console.log("Warscheinlichkeit")
@@ -257,11 +263,14 @@ function insertprobabilitySlider(table, id) {
         let value = event.target.value
         let id = event.target.id.split('-')
         this.score[id[0]][id[1]].probability = value
+        let riskName = this.score[id[0]][id[1]].name
+        datastore.changeValue([id[0],riskName],(value/100),"probability")
+        
         let consTable = document.getElementById(id[0] + "-" + id[1] + "-consequences")
         let countermTable = document.getElementById(id[0] + "-" + id[1] + "-countermeasures")
         let sp = document.getElementById(id[0] +"-"+ id[1] + "-space1")
         let toggleT = document.getElementById(id[0] +"-"+ id[1] + "-toggleText")
-        console.log(toggleT)
+        // console.log(toggleT)
         if (value <= 0) {
             consTable.classList.add("hidden")
             countermTable.classList.add("hidden")
@@ -279,6 +288,26 @@ function insertprobabilitySlider(table, id) {
     }
     container.appendChild(slider)
 
+    let resetButton = document.createElement("i")
+    resetButton.classList.add("fa","fa-undo","align-text-top")
+    resetButton.id = id + "-probability-undo"
+    resetButton.title = "reset"
+    resetButton.onclick = (event)=>{
+        let id = event.target.id.split('-')
+        let value = this.score[id[0]][id[1]].defaultProbability
+        let riskName =this.score[id[0]][id[1]].name
+        datastore.changeValue([id[0],riskName],(value/100),"probability")
+        this.score[id[0]][id[1]].probability = value
+        //alert("works - "+value)
+
+        slider.value = value
+        let label = document.getElementById((id[0] + "-" + id[1] + "-probability"))
+        label.innerText = value
+
+        checkRiskLevelFor(id)
+    }
+    container.appendChild(resetButton)
+
     let label = document.createElement("label")
     label.setAttribute("id", id + "-probability-label")
     label.innerText = "test"
@@ -294,7 +323,7 @@ function insertDamageSlider(cell, riskId, consequenceID) {
     //container.id=riskId+"-"+consequenceID+"-consequence"
     let slider = document.createElement("input")
     slider.setAttribute("type", "range")
-    slider.setAttribute("style", "width:100px; margin-top:7px")
+    slider.setAttribute("style", "width:85px; margin-top:7px")
     slider.min = 1
     slider.max = 5
     slider.value = this.score[ids[0]][ids[1]].consequences[consequenceID].damage
@@ -328,14 +357,41 @@ function insertDamageSlider(cell, riskId, consequenceID) {
     slider.onchange = (event) => {
         let value = event.target.value
         let id = event.target.id.split('-')
-        //console.log(id)
+        let riskName = this.score[id[0]][id[1]].name        
         this.score[id[0]][id[1]].consequences[id[2]].damage = value
-
+        datastore.changeValue([id[0],riskName,id[2]],value,"damage")        
         checkRiskLevelFor(id);
-        //TODO:
-        //Change Value in SessionStorage
     }
     container.appendChild(slider)
+
+    let resetButton = document.createElement("i")
+    resetButton.classList.add("fa","fa-undo","align-text-top")
+    resetButton.id = riskId + "-" + consequenceID + "-damage-undo"
+    resetButton.title = "reset"
+    resetButton.onclick = (event)=>{
+        let id = event.target.id.split('-')
+        let value = this.score[id[0]][id[1]].consequences[id[2]].defaultDamage
+        let riskName =this.score[id[0]][id[1]].name
+        datastore.changeValue([id[0],riskName,id[2]],100,"damage")
+        this.score[id[0]][id[1]].probability = value
+        slider.value = value
+        let label = document.getElementById(id.slice(0, 3).join("-") + "-damage")
+        let valueshow
+        if (value === 1) {
+            valueshow = 'sehr gering'
+        } else if (value === 2) {
+            valueshow = 'gering'
+        } else if (value === 3) {
+            valueshow = 'mittel'
+        } else if (value === 4) {
+            valueshow = 'hoch'
+        } else if (value === 5) {
+            valueshow = 'sehr hoch'
+        }
+        label.innerText = valueshow
+        checkRiskLevelFor(id)
+    }
+    container.appendChild(resetButton)
 
     let label = document.createElement("label")
     label.setAttribute("style", "margin-top:0px")
@@ -422,7 +478,7 @@ function checkOverallRisk() {
     }
     
     sumAllRiskLevels /= deviceCount
-    console.log(riskLevelChanged)
+    // console.log(riskLevelChanged)
     if (sessionStorage.getItem('devices')==='{}' || riskLevelChanged === false) {
         good.style.display = "none";
         stop.style.display = "none";

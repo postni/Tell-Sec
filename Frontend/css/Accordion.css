@@ -1,4 +1,4 @@
-body{background-color:#6a1b9a}
+body{background-color:white;}
 
 button.accordion{
   cursor:pointer;
@@ -7,7 +7,7 @@ button.accordion{
   width:100%;
   text-align:left;
   background-color:transparent;
-  color:#fff;
+  color:black;
   padding:8px;
   margin:4px 0;
   border-radius:4px;
@@ -15,12 +15,12 @@ button.accordion{
 }
 
 button.accordion:hover{
-  background-color:rgba(255,255,255,0.3);
+  background-color:#808080;
 }
 
 button.accordion.active{
-  background-color:#fff;
-  color:#000;
+  background-color:#808080;
+  color:black;
   border-radius:4px 4px 0 0;
   margin:4px 0 0;
 }
