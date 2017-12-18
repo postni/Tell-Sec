@@ -57,7 +57,21 @@ function updateMyData() {
             (d["mac"] === null) ? "unbekannt" : d["mac"]
         ));
         let col7 = document.createElement("td");
-        col7.appendChild(document.createTextNode(JSON.stringify(d["ports"])));
+        let ul = document.createElement("ul")
+        ul.classList.add("no-margin")
+        let ports = d["ports"]
+
+        if(typeof ports === "object"){
+            ports.forEach((port)=>{
+                let li = document.createElement("li")
+                li.innerText = port.port + ": "+port.protocol+" / "+port.service
+                ul.appendChild(li)
+            })
+            col7.appendChild(ul)
+        }else{
+            col7.appendChild(document.createTextNode(JSON.stringify(d["ports"])));
+        }
+
         row.appendChild(col1);
         row.appendChild(col2);
         row.appendChild(col3);
