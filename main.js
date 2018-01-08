@@ -2,6 +2,9 @@ const electron = require('electron')
 const networkScanner = require('./backend/scanner');
 const datastore = require('./backend/data').datastore
 const os = require("os")
+const fs = require('fs');
+const ipc = electron.ipcMain;
+const shell = electron.shell;
 
 // Module to control application life.
 const app = electron.app
@@ -9,34 +12,9 @@ const app = electron.app
 //Desktop-Anwendung
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent(app)) {
-    // squirrel event handled and app will exit in 1000ms, so don't do anything else
-    return;
+  // squirrel event handled and app will exit in 1000ms, so don't do anything else
+  return;
 }
-
-
-///////////////////////////////////
-
-const fs = require('fs');
-const ipc = electron.ipcMain;
-const shell = electron.shell;
-
-ipc.on('print-to-pdf', function(event, path){
-  const win = BrowserWindow.fromWebContents(event.sender);
-
-  win.webContents.printToPDF({}, function(error, data){
-    if(error) return console.log(error.message);
-
-    fs.writeFile(path, data, function(err) {
-      if(err) return console.log(err.message);
-      shell.openExternal('file://' + path);
-    })
-  })
-});
-
-
-
-
-
 
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
@@ -48,26 +26,19 @@ let mainWindow
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width:900,
-    height:600,
-    resizable: false,
-    icon: 'Frontend/img/LogoS.png',
-    autoHideMenuBar: true
-  }
-
+      width: 900,
+      height: 600,
+      resizable: false,
+      icon: 'Frontend/img/LogoS.png',
+      autoHideMenuBar: true
+    }
   )
-  
-  //mainWindow.webContents.openDevTools()
-  //mainWindow.setMenu(null);
+
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/Frontend/index.html`)
 
-  // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
- // 
 
-  //startScan();
-
+  
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
@@ -107,9 +78,10 @@ app.on('activate', function () {
 //      Win-Install   ///
 /////////////////////////
 
+//Benötigt für das Deployen der Applikation zur Ausführung als Windows Applikation
 function handleSquirrelEvent(application) {
   if (process.argv.length === 1) {
-      return false;
+    return false;
   }
 
   const ChildProcess = require('child_process');
@@ -120,119 +92,133 @@ function handleSquirrelEvent(application) {
   const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
   const exeName = path.basename(process.execPath);
 
-  const spawn = function(command, args) {
-      let spawnedProcess, error;
+  const spawn = function (command, args) {
+    let spawnedProcess, error;
 
-      try {
-          spawnedProcess = ChildProcess.spawn(command, args, {
-              detached: true
-          });
-      } catch (error) {}
+    try {
+      spawnedProcess = ChildProcess.spawn(command, args, {
+        detached: true
+      });
+    } catch (error) { }
 
-      return spawnedProcess;
+    return spawnedProcess;
   };
 
-  const spawnUpdate = function(args) {
-      return spawn(updateDotExe, args);
+  const spawnUpdate = function (args) {
+    return spawn(updateDotExe, args);
   };
 
   const squirrelEvent = process.argv[1];
   switch (squirrelEvent) {
-      case '--squirrel-install':
-      case '--squirrel-updated':
-          // Optionally do things such as:
-          // - Add your .exe to the PATH
-          // - Write to the registry for things like file associations and
-          //   explorer context menus
+    case '--squirrel-install':
+    case '--squirrel-updated':
+      // Optionally do things such as:
+      // - Add your .exe to the PATH
+      // - Write to the registry for things like file associations and
+      //   explorer context menus
 
-          // Install desktop and start menu shortcuts
-          spawnUpdate(['--createShortcut', exeName]);
+      // Install desktop and start menu shortcuts
+      spawnUpdate(['--createShortcut', exeName]);
 
-          setTimeout(application.quit, 1000);
-          return true;
+      setTimeout(application.quit, 1000);
+      return true;
 
-      case '--squirrel-uninstall':
-          // Undo anything you did in the --squirrel-install and
-          // --squirrel-updated handlers
+    case '--squirrel-uninstall':
+      // Undo anything you did in the --squirrel-install and
+      // --squirrel-updated handlers
 
-          // Remove desktop and start menu shortcuts
-          spawnUpdate(['--removeShortcut', exeName]);
+      // Remove desktop and start menu shortcuts
+      spawnUpdate(['--removeShortcut', exeName]);
 
-          setTimeout(application.quit, 1000);
-          return true;
+      setTimeout(application.quit, 1000);
+      return true;
 
-      case '--squirrel-obsolete':
-          // This is called on the outgoing version of your app before
-          // we update to the new version - it's the opposite of
-          // --squirrel-updated
+    case '--squirrel-obsolete':
+      // This is called on the outgoing version of your app before
+      // we update to the new version - it's the opposite of
+      // --squirrel-updated
 
-          application.quit();
-          return true;
+      application.quit();
+      return true;
   }
 };
 
-
-
-  /////////////////
- //  Datenbank  //
-/////////////////
-
-
-electron.ipcMain.on('analyse-devices', ( event, devices )=>{
-  console.log("analyse devices");
-  datastore.analyse(event ,devices, analysisComplete);
-})
-
-function analysisComplete( event, risks ){
-
-  let riskObject = {}
-  risks.forEach(element => {
-    console.log("element: "+element.Bezeichnung)
-    //console.log(element)
-    riskObject[element.Bezeichnung] = element.Risiken
-  });
-
-  console.log("-#################################################-")
-  console.log("|.......................DONE......................|")
-  console.log("+#################################################+")
-  event.returnValue = riskObject  
-  //console.log(event.returnValue)
-
-}
-
-
-  /////////////////////
- //  Netzwerk-Scan  //
+/////////////////////
+//  Netzwerk-Scan  //
 /////////////////////
 
-electron.ipcMain.on('scan-network', (event) => {
-  console.log("scan network")  
+//Warten auf "scan-network" Anfrage aus dem Frontend
+ipc.on('scan-network', (event) => {
+  //Weiterleiten des Aufrufs an die Netzwerkscanner Komponente
   networkScanner.scanNetwork(event, scanComplete)
 })
 
-function scanComplete(event, data){
-  console.log("#################################################")
-  console.log("/////////////////////DONE////////////////////////")
-  console.log("#################################################")
-  console.log(data)
-  event.sender.send('scan-complete', data);  
+//Zurückmelden der durch den Netzwerkscan erhaltenen Daten
+function scanComplete(event, data) {
+  //Asynchrone Antwort an ipcRenderer senden
+  event.sender.send('scan-complete', data);
 }
 
-  /////////////////
- //  Sonstiges  //
+
+/////////////////
+//  Datenbank  //
 /////////////////
 
-electron.ipcMain.on('maximize',()=>{
+//Warten auf "analyse-devices" Anfrage Aus dem Frontend
+ipc.on('analyse-devices', (event, devices) => {
+  //Weiterleiten der Anfrage an Datenbank Komponente
+  datastore.analyse(event, devices, analysisComplete);
+})
+
+//Zurückmelden der durch die Sicherheitsanalyse erhaltenen Daten
+function analysisComplete(event, risks) {
+  let riskObject = {}
+  //Umwandeln von Array zu key-Value Liste
+  risks.forEach(element => {
+    riskObject[element.Bezeichnung] = element.Risiken
+  });
+  //Synchrone Antwort an ipcRenderer senden
+  event.returnValue = riskObject
+
+}
+
+/////////////////
+//  Sonstiges  //
+/////////////////
+
+//Warten auf "maximize" Anfrage Aus dem Frontend
+ipc.on('maximize', () => {
   let operatingSystem = os.type()
-  console.log(operatingSystem)
-  if(operatingSystem.toLowerCase().includes("mac")||operatingSystem.toLowerCase().includes("darwin")){
-    console.log("mac")
+  //Betriebssystem Prüfen
+  if (operatingSystem.toLowerCase().includes("mac") || operatingSystem.toLowerCase().includes("darwin")) {
+    //Bei Mac Systemen zuerst die Bildschirmmaße auslesen und anschließen auf Fullscreen umschalten
     mainWindow.setBounds(electron.screen.getPrimaryDisplay().bounds)
     mainWindow.setFullScreen(true)
-  }else{
-    mainWindow.maximize();    
+  } else {
+    //Bei anderen Systemen (Windows/Linux) das Fenster maximieren
+    mainWindow.maximize();
   }
-}) 
-electron.ipcMain.on("test",()=>{
+})
+
+//Warten auf "go-to-evaluation" Anfrage Aus dem Frontend
+ipc.on('go-to-evaluation', () => {
+  //Auf "Evaluation" Seite weiterleiten
   mainWindow.loadURL(`file://${__dirname}/frontend/evaluation.html`)
 })
+
+
+
+//Warten auf "print-to-pdf" Anfrage Aus dem Frontend
+ipc.on('print-to-pdf', function (event, path) {
+
+  const win = BrowserWindow.fromWebContents(event.sender);
+  //Inhalt des Fensters zu PDF umwandeln
+  win.webContents.printToPDF({}, function (error, data) {
+    if (error) return console.log(error.message);
+    //Speichern des PDFs als Datei
+    fs.writeFile(path, data, function (err) {
+      if (err) return console.log(err.message);
+      shell.openExternal('file://' + path);
+    })
+  })
+});

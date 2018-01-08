@@ -1,7 +1,9 @@
-var fs = require('fs');
 var Datastore = require('nedb')
 
 class Data {
+
+    //Konstruktor der "Data" Klasse:
+    //Laden der einzelnen Dateien aus der Datenbank
     constructor() {
         this.db = {}
         this.db.enthaelt = new Datastore({ filename: "db/enthaelt.db", autoload: true })
@@ -13,113 +15,176 @@ class Data {
         this.db.gehoert_zu = new Datastore({ filename: "db/gehoert_zu.db", autoload: true })
     }
 
-    findIDRQinEnthaelt(idrq){
-        return new Promise(resolve =>{
+    //Eingabe: event (Parameter 1)              || IPC event (zum zurück senden der Daten an Frontend)
+    //         devices (Parameter 2)            || Liste aller im Netzwerk befindlicher Geräte
+    //         _callback (Parameter 3)          || Rückruffunktion die mit den Daten aufgerufen wird
+    analyse(event, devices, _callback) {
+        let exists = false;
+        var types = []
+        //hinzufügen von gerätetypen zu "types" Array
+        for (let id in devices) {
+            exists = false;
+            let devicetype = ""
+
+            //Abändern von Bezeichnungen die sich im Frontend und im Backend unterscheiden
+            if (devices[id]["devicetype"] === "stationär") {
+                devicetype = "Statisches Gerät"
+            } else if (devices[id]["devicetype"] === "mobil") {
+                devicetype = "Mobiles Gerät"
+            } else if (devices[id]["devicetype"] === "Maschine") {
+                devicetype = "Maschinensteuerung"
+            } else if (devices[id]["devicetype"] === "NAS") {
+                devicetype = "Netzwerkspeicher"
+            } else if (devices[id]["devicetype"]) {
+                devicetype = devices[id]["devicetype"]
+            }
+
+
+            //sicherstellen das Jeder Gerätetyp nur einmal im "types" Array steht
+            if (!devicetype || devicetype === "" || devicetype === "Unbekannt") {
+                exists = true;
+            }
+            types.forEach((typ) => {
+                if (typ === devicetype) {
+                    exists = true;
+                }
+            })
+            if (!exists) {
+                types.push(devicetype);
+            }
+
+        }
+
+        //Einholen aller Risikoinformationen für jeden bekannten Gerätetyp
+        Promise.all(types.map((bezeichnung) => { 
+            return this.findBezeichnunginRisikoquelle(bezeichnung).then(r => { return r }) 
+            })).then((res) => {
+                //Callback Funktion mit dem IPC Event und den Risikoinformationen der Geräte aufrufen
+                _callback(event, res);
+            })
+    }
+
+    // Eingabe: bezeichnung (Parameter 1)               || entspricht dem Gerätetyp
+    // Rückgabewert: Promise mit "risiken"-Objekt für einen Gerätetyp
+    findBezeichnunginRisikoquelle(bezeichnung) {
+        return new Promise(resolve => {
+            //erstellen der Variable "ergebnis" die als Rückgabe wert dient
+            var ergebnis = {
+                Bezeichnung: "",
+                Risiken: []
+            }
+            //Suchen nach "bezeichnung" in Datenbank
+            this.db.risikoquelle.findOne({ Bezeichnung: bezeichnung }, (err, res) => {
+                if (err) console.log("err: " + err);
+                // übergeben des "Bezeichnung"-Werts an die "ergebnis"-Variable
+                ergebnis.Bezeichnung = res.Bezeichnung ? res.Bezeichnung : "unbekannt";
+                if (ergebnis.Bezeichnung === "Mobiles Gerät") ergebnis.Bezeichnung = "mobil"
+                else if (ergebnis.Bezeichnung === "Statisches Gerät") ergebnis.Bezeichnung = "stationär"
+                else if (ergebnis.Bezeichnung === "Netzwerkspeicher") ergebnis.Bezeichnung = "NAS"
+                else if (ergebnis.Bezeichnung === "Maschinensteuerung") ergebnis.Bezeichnung = "Maschine"
+
+                //Einholen von Risko informationen (Parameter )
+                this.findIDRQinEnthaelt(res.IDRQ).then(res => {
+                    //speichern von Risiko Informationen in "ergebnis"-Variable
+                    ergebnis.Risiken = res;
+                    //auflösen des Promises mit "ergebnis" Variable
+                    resolve(ergebnis);
+                })
+            })
+
+        })
+    }
+
+    //Eingabe: idrq (Parameter 1)           || entspricht der Risikoquellen ID in Datenbank
+    //Rückgabe: Promise mit Array aller Risiken und den damit verbundenen Folgen/Maßnahmen für einen Gerätetyp
+    findIDRQinEnthaelt(idrq) {
+        return new Promise(resolve => {
+            //Suchen nach allen Risiko IDs (IDR) für die Riskoquelle (IDRQ)
             this.db.enthaelt.find({ IDRQ: idrq }, (err, res) => {
                 let risiken = []
+
+                //Anfragen der Risikoinformationen für alle Risiko ID's (IDR) uns schreiben der Promises in "risiken"-Array
                 res.forEach((element) => {
                     risiken.push(this.findIDRinRisiko(element.IDR))
                 })
                 let id = 0
+                //Wenn alle Promises in "risiken" aufgelöst wurden, werden die Rückgabedaten aktualisiert und anschließend der übergeordnete Promise aufgelöst
                 Promise.all(risiken).then(data => {
                     let existing = []
-                    let updatedData = data.filter(d =>{
-                        if(!existing.includes(d.Bezeichnung)){
+                    //Duplikate ausflitern und risikoID hinzugefügt
+                    let updatedData = data.filter(d => {
+                        if (!existing.includes(d.Bezeichnung)) {
                             existing.push(d.Bezeichnung)
                             return true
-                        }else{
+                        } else {
                             console.log("!")
                             return false
                         }
-                    }).map(d =>{
-                        //console.log(d.Bezeichnung)
-                        //console.log(bezeichnungen)
-                            d.riskID = id
-                            id++
-                            return d;
-                    })
-                    //console.log("updated Data")
-                    //console.log(updatedData)
-                    resolve(updatedData)})
-    
-            })
-        })
-        
-    }
-
-    findIDRinGehoertZu(idr){
-        return new Promise(resolve => {
-            this.db.gehoert_zu.find({ IDR: idr }, (err, res) => {
-                let massnahmen = []                
-                res.forEach((element) => {
-                  massnahmen.push(this.findIDMinMassnahme(element.IDM))  
-                })
-                let id = 0                
-                Promise.all(massnahmen).then(data => {
-                    let updatedData = data.map(dOld =>{
-                        let d ={}                        
-                        d.countermeasuresID = id
-                        d.name = dOld
+                    }).map(d => {
+                        d.riskID = id
                         id++
                         return d;
                     })
-                    resolve(updatedData)})
+                    resolve(updatedData)
+                })
             })
         })
     }
 
-    findIDMinMassnahme(idm){
-        return new Promise(resolve =>{
-            this.db.massnahme.findOne({ IDM: idm }, (err, res) => {    
-                resolve(res.Bezeichnung)
-            })
-        })
-    }
-
-    findIDRinRisiko(idr){
+    //Eingabe: idr (Parameter 1)           || entspricht der Risiko ID in Datenbank
+    //Rückgabe: Promise mit Risiko Objekt
+    findIDRinRisiko(idr) {
         return new Promise(resolve => {
             this.db.risiko.findOne({ IDR: idr }, (err, res) => {
+                //Anlegen des Risiko Objekts
                 var risiko = {
                     Bezeichnung: res.Bezeichnung,
                     Folgen: [],
                     Massnahmen: [],
-                    Eintrittswahrscheinlichkeit: res.Eintrittswahrscheinlich? res.Eintrittswahrscheinlich:0.5
+                    Eintrittswahrscheinlichkeit: res.Eintrittswahrscheinlich ? res.Eintrittswahrscheinlich : 0.5
                 }
-                this.findIDRinFuehrtZu(idr).then((res)=>{
+                //Suchen nach Folgen anhand der Risiko ID (idr)
+                this.findIDRinFuehrtZu(idr).then((res) => {
+                    // hinzufügen von Folgen zu Risiko Objekt
                     risiko.Folgen = res;
+                    //Suchen nach Massnahmen anhand der Risiko ID (idr)
                     return this.findIDRinGehoertZu(idr)
-                }).then(res=>{
+                }).then(res => {
+                    // hinzufügen von Massnahmen zu Risiko Objekt
                     risiko.Massnahmen = res;
                     resolve(risiko)
                 })
-        })
+            })
         })
     }
 
-    findIDRinFuehrtZu(idr){
-        return new Promise(resolve =>{
+    //Eingabe: idr (Parameter 1)           || entspricht der Risiko ID in Datenbank
+    //Rückgabe: Promise mit Folgen Objekt
+    findIDRinFuehrtZu(idr) {
+        return new Promise(resolve => {
+            //Suchen nach Folgen anhand der Risiko ID (idr)
             this.db.fuehrt_zu.find({ IDR: idr }, (err, res) => {
                 let folgen = []
                 let existing = []
+
+                //Anfragen der Informationen zu Folgen für alle Folgen ID's (IDF) und schreiben der Promises in "folgen"-Array
                 res.forEach((element) => {
                     folgen.push(this.findIDFinFolge(element.IDF))
                 })
-                let id = 0                
+                let id = 0
+                //Wenn alle Promises in "folgen" aufgelöst wurden, werden die Rückgabedaten aktualisiert und anschließend der übergeordnete Promise aufgelöst
                 Promise.all(folgen).then(data => {
-                    //console.log("data: "+ data)
                     let existing = []
+                    //Herausfiltern von Duplikaten und hinzufügen von id
                     let updatedData = data.filter(d => {
-                        //console.log(existing)
-                        if(!existing.includes(d.Name)){
+                        if (!existing.includes(d.Name)) {
                             existing.push(d.Name)
-                            //console.log(d.Name)
                             return true
-                        }else{
-                            console.log("!")
+                        } else {
                             return false
                         }
-                    }).map(dOld =>{
-                        let d ={}
+                    }).map(dOld => {
+                        let d = {}
                         d.consequenceID = id
                         d.name = dOld.Name
                         d.damage = dOld.Schadensklasse
@@ -128,14 +193,18 @@ class Data {
                         id++
                         return d;
                     })
-                    resolve(updatedData)})
+                    resolve(updatedData)
+                })
             })
         })
     }
 
-    findIDFinFolge(id){
-        return new Promise(resolve =>{
-            this.db.folge.findOne({ IDF: id }, (err, res) => {
+    //Eingabe: idf (Parameter 1)           || entspricht der Folgen ID in Datenbank
+    //Rückgabe: Promise mit Folge
+    findIDFinFolge(idf) {
+        return new Promise(resolve => {
+            //Suche nach Folge anhand der Folge ID (idf) und auflösen des übergeordneten Promises
+            this.db.folge.findOne({ IDF: idf }, (err, res) => {
                 let folge = {
                     Name: res.Bezeichnung,
                     Beschreibung: res.Beschreibung,
@@ -146,85 +215,45 @@ class Data {
         })
     }
 
-    findBezeichnunginRisikoquelle(bezeichnung) {
+    //Eingabe: idr (Parameter 1)           || entspricht der Risiko ID in Datenbank
+    //Rückgabe: Promise mit Massnahmen Objekt
+    findIDRinGehoertZu(idr) {
         return new Promise(resolve => {
-            var laengeEnthaelt = 999;
-            var laengeRisiko = 999
-            var laengeGehoert_zu = 999
-            var laengeMassnahmen = 999
-            var laengeFuehrt_zu = 999
-            var laengeFolge = 999
+            //Suchen nach Massnahmen anhand der Risiko ID (idr)
+            this.db.gehoert_zu.find({ IDR: idr }, (err, res) => {
+                let massnahmen = []
 
-            var ergebnis = {
-                Bezeichnung: "",
-                Risiken: []
-            }
-            this.db.risikoquelle.findOne({ Bezeichnung: bezeichnung }, (err, res) => {
-                if (err) console.log("err: " + err);
-                //console.log(res)
-                ergebnis.Bezeichnung = res.Bezeichnung?res.Bezeichnung:"unbekannt";
-                if(ergebnis.Bezeichnung === "Mobiles Gerät") ergebnis.Bezeichnung = "mobil"
-                else if(ergebnis.Bezeichnung === "Statisches Gerät") ergebnis.Bezeichnung = "stationär"
-                else if(ergebnis.Bezeichnung === "Netzwerkspeicher") ergebnis.Bezeichnung = "NAS"
-                else if(ergebnis.Bezeichnung === "Maschinensteuerung") ergebnis.Bezeichnung = "Maschine"
-                
-                this.findIDRQinEnthaelt(res.IDRQ).then(res =>{
-                    ergebnis.Risiken = res;
-                    resolve(ergebnis);
+                //Anfragen der Informationen zu Massnahmen für alle Massnahmen ID's (IDM) und schreiben der Promises in "massnahmen"-Array
+                res.forEach((element) => {
+                    massnahmen.push(this.findIDMinMassnahme(element.IDM))
+                })
+                let id = 0
+                    //Wenn alle Promises in "massnahmen" aufgelöst wurden, werden die Rückgabedaten aktualisiert und anschließend der übergeordnete Promise aufgelöst
+                    Promise.all(massnahmen).then(data => {
+                    //hinzufügen einer Massnahmen ID und auflösen des übergeordneten Promises 
+                    let updatedData = data.map(dOld => {
+                        let d = {}
+                        d.countermeasuresID = id
+                        d.name = dOld
+                        id++
+                        return d;
+                    })
+                    resolve(updatedData)
                 })
             })
-
         })
     }
 
-
-    analyse(event, devices, _callback) {
-        let exists = false;        
-        var types = []
-        for (let id in devices) {
-            exists = false;
-            //console.log(devices[id]["devicetype"])
-            let devicetype = ""
-            if(devices[id]["devicetype"]==="stationär"){
-                devicetype = "Statisches Gerät"
-            } else if(devices[id]["devicetype"]==="mobil"){
-                devicetype = "Mobiles Gerät"                
-            }else if( devices[id]["devicetype"]==="Maschine"){
-                devicetype = "Maschinensteuerung"
-            }else if( devices[id]["devicetype"]==="NAS"){
-                devicetype = "Netzwerkspeicher"
-            }else if(devices[id]["devicetype"]){       
-                devicetype = devices[id]["devicetype"]
-            }
-            //console.log(devicetype)
-            if(!devicetype ||devicetype===""||devicetype==="Unbekannt"){
-                console.log("true")
-                exists = true;
-            }
-
-            types.forEach((typ) => {
-                //console.log("->"+typ)
-                if (typ === devicetype) {
-                    exists = true;
-                }
+    //Eingabe: idm (Parameter 1)           || entspricht der Massnahmen ID in Datenbank
+    //Rückgabe: Promise mit Massnahme
+    findIDMinMassnahme(idm) {
+        return new Promise(resolve => {
+            //holen aller Informationen über die Massnahme mit der ID "idm" aus der Datenbank
+            this.db.massnahme.findOne({ IDM: idm }, (err, res) => {
+                resolve(res.Bezeichnung)
             })
-            console.log("exists: "+exists+" |devicetype: "+devicetype+" |types: "+types)
-            if (!exists) {
-                types.push(devicetype);
-            }
-
-        }
-        //console.log(types)
-        Promise.all(types.map((bezeichnung) => { return this.findBezeichnunginRisikoquelle(bezeichnung).then(r => {return r }) })).then((res) => {
-            console.log("!!done!!");
-            //console.log("|||||||||||||||||||||||||||||||");
-            //console.log("||||||----promise-all----||||||");
-            //console.log("|||||||||||||||||||||||||||||||") ;           
-            //console.log(res);
-            _callback(event,res);
         })
     }
-
 }
 
 var dataManager = new Data()
