@@ -1,18 +1,17 @@
-var fs = require('fs'); // Load the File System to execute our common tasks (CRUD)
+var fs = require('fs'); 
 var app = require('electron').remote;
 var datastore = require('./frontend').datastore;
 var dialog = app.dialog;
 
 let content = "Text, der in die Datei gespeichert werden soll";
 
-
+//Klasse die sich um Speichern/ Löschen/ Öffnen kümmert incl. aller Dialoge
 class Filehandler {
     constructor() {
-
     }
 
+    /*Das Dialogfenster zum Speichern eines Tell!-Dokuments */
     saveDialog() {
-        // You can obviously give a direct path without use the dialog (C:/Program Files/path/myfileexample.txt)
         content = JSON.stringify(datastore.getDevices());
         dialog.showSaveDialog({ filters: [
             { name: 'TellSec-Dokument', extensions: ['tell'] }
@@ -21,19 +20,16 @@ class Filehandler {
                 console.log("Du hast die Datei nicht gespeichert");
                 return;
             }
-            fileName = fileName.split('.tell')[0]
-            // fileName is a string that contains the path and filename created in the save file dialog.  
+            fileName = fileName.split('.tell')[0] 
             fs.writeFile(fileName+".tell", content, (err) => {
                 if (err) {
                     alert("Ein Fehler tritt während der Erstellung der Datei auf " + err.message)
                 }
-                
-
                 alert("Die Datei wurde erfolgreich gespeichert");
             });
         });
     }
-
+    /*Das Dialogfenster zum Speichern eines PDF-Dokuments */
     savePDFDialog() {
         dialog.showSaveDialog({ filters: [
             { name: 'PDF-Dokument', extensions: ['pdf'] }
@@ -47,33 +43,27 @@ class Filehandler {
         });
     }
     
-
+    /*Das Dialogfenster zum Öffnen eines Tell!-Dokuments */
     openDialog() {
-
-        //Muss rein
         dialog.showOpenDialog({ filters: [
                { name: 'TellSec-Dokument', extensions: ['tell'] }
               ]},(fileNames) => {
-            // fileNames is an array that contains all the selected
             if (fileNames === undefined) {
-                console.log("Keine Datei ausgewält");
                 return;
             }
-            console.log(fileNames)
             fs.readFile(fileNames[0], 'utf-8', (err, data) => {
                 if (err) {
                     alert("Ein Fehler ist aufgetreten, während die Datei gelesen wurde :" + err.message);
                     return;
                 }
-
                 var i = JSON.parse(data)
-                
-                console.log(i)
                 datastore.setDevices(i)
             });
         });
 
     }
+
+    /*Das Dialogfenster zum Löschen des Netzwerkplans */
     showAlertDialog(_callback) {
         var buttons = ['OK', 'Cancel'];
         
@@ -93,6 +83,8 @@ class Filehandler {
         });
         
     }
+
+    /*Das Dialog-Hinweisfenster bei 'Neu'-Funktion, sofern der Plan bereits leer ist.*/
     showAlertDialogFalse(){
         dialog.showMessageBox({ 
             title: 'Neue Map',
@@ -101,6 +93,8 @@ class Filehandler {
             message: 'Ihr Netzwerkplan ist bereits leer.'
         });
     }
+
+    /*Das Dialog-Hinweisfenster bei Analyse-Funktion, sofern Geräte unbekannt sind. */
     showAlertUnknownDevices(_callback) {
         dialog.showMessageBox({ 
             title: 'Auswertung',
@@ -115,6 +109,8 @@ class Filehandler {
             }
         });
     }
+
+    /*Das Dialogfenster zum Schließen der Software. */
     showCloseDialog(_callback) {
         var buttons = ['OK', 'Cancel'];
         
@@ -135,11 +131,6 @@ class Filehandler {
         
     }
 }
-
-
-
-
-
 
 module.exports = new Filehandler();
 datastore.getDevices();

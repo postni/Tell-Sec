@@ -5,22 +5,19 @@ var expertBtn = document.getElementById("expert")
 var defaultBtn = document.getElementById("default")
 var clicked = ""
 
-
-//filehandler.saveDialog()
-
-
-
+/*Bei Klick auf Start-Button */
 defaultBtn.onclick = ()=>{
-    
     if(clicked==""){
         clicked = "default"
         btnClicked()
     }
 }
-
+/*loader-Funktion: wird beim öffnen der Willkommens-Seite ausgeführt
+Wird die Software zum ersten Mal gestartet, so wird 'checked' gesetzt und 
+die Auswahl 'Video anzeigen' ist künftig standardmäßig deaktiviert */
 function loader() {
     let checked = JSON.parse(localStorage.getItem('showVideo'))
-    console.log(checked)
+    
     checked = checked === undefined || checked === null? true : checked
     let checkbox = document.getElementById('startvid')
     if(checked) {
@@ -30,17 +27,14 @@ function loader() {
     }
     localStorage.setItem('showVideo', checked)
     checkbox.onchange = (event => {
-        localStorage.setItem('showVideo', event.target.checked)
-
-        
-
+        localStorage.setItem('showVideo', event.target.checked)   
     })
 }
 
-
+/*'btnClicked' wird mit dem Start der Software ausgeführt. Abhängig davon ob
+die Funktion Netzwerkscan ausgewählt wurde, wird entsprechend weitergeleitet. */
 function btnClicked(){
     let nwScan = document.getElementById("nwScan").checked
-    console.log(JSON.stringify(nwScan))
     if(nwScan){
         startWithNwScan()
     }else{
@@ -48,9 +42,10 @@ function btnClicked(){
     }
 }
 
+/*Ist ein Netzwerkscan gewünscht, so wird an dieser Stelle ein Funktionsaufruf
+für entsprechendes getätigt. Weiterhin wird das Fenster maximiert und die
+Seite "main_map.html" aufgerufen. */
 function startWithNwScan(){
-    console.log("Netzwerk wird gescannt");
-    console.log(clicked)
     if(clicked ==="expert"){
         communicator.scanNetwork();
     } else{
@@ -61,9 +56,9 @@ function startWithNwScan(){
     window.location.href = 'main_map.html';
 }
 
+/*Ist kein Netzwerkscan gewünscht, so wird an dieser Stelle lediglich das Fenster 
+maximiert und die Seite "main_map.html" aufgerufen. */
 function startNoNwScan(){
-    console.log("Netzwerk wird nicht gescannt");
-    
     communicator.maximize();
     window.location.href = 'main_map.html';
     

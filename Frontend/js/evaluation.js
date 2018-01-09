@@ -1,22 +1,22 @@
 var datastore = require("./js/frontend").datastore
 
+/*loader-Funktion: wird beim öffnen der Auswertungsseite ausgeführt*/
 function loader() {
     toggleLoad()
     datastore.checkForRisks().then(res =>{
-        // console.log(res)
         let dev = JSON.parse(res)
-        // console.log(dev)
         toggleLoad()
         getRisks(dev)
     })    
 }
 
+/*'getRisks' erzeugt aus den übermittelten Informationen die Auswertungsseite */
 function getRisks(devices) {
-    checkOverallRisk()
+    checkOverallRisk()  // erzeugt Statusanzeige, s.u.
     if (!this.score) {
         this.score = {}
     }
-    //console.log(devices)
+    // holen der Tabelle aus HTML-file, definieren der Überschriften
     let table = document.getElementById("risk-table")
     let tablehead = table.insertRow()
     let headerText = ["Gerät", "Risiken &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Folgen/ Maßnahmen &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  Schaden"]
@@ -25,27 +25,19 @@ function getRisks(devices) {
         th.innerHTML = text
         tablehead.appendChild(th)
     })
+
     for (let id in devices) {
-        // console.log(id)
-        // console.log(devices[id])
-        // if(!devices[id].risks||typeof devices[id].risks === typeof []){
-        //     devices[id].risks = {}
-        // }
-        
-        // console.log(devices[id].risks)
-        
         if (devices[id].devicetype && devices[id].devicetype !=="Unbekannt" && Object.keys(devices[id].risks).length>0) {
-            // console.log(devices[id].devicetype)
             if (!this.score[id]) {
                 this.score[id] = {}
             }
+            // Definieren einer Zeile je Gerät
             let device = devices[id];
-            //console.log(device)
             let row = table.insertRow()
             let nameCell = row.insertCell()
             nameCell.setAttribute("style", "width:180px")
-
-            let statusIndicator = document.createElement("status-indicator")
+            // Statusleuchte für jedes Gerät
+            let statusIndicator = document.createElement("status-indicator") 
             statusIndicator.id = id + "-status"
             nameCell.appendChild(statusIndicator)
 
@@ -55,60 +47,42 @@ function getRisks(devices) {
             } else {
                 devicet = device.devicetype
             }
-
+            // Anzeige Gerätename und Gerätetyp
             nameCell.appendChild(document.createTextNode("  " + device.hostname + " (" + devicet + ")"))
-
 
             let nameDiv = document.createElement("div")
             nameCell.appendChild(nameDiv)
-
             let space = document.createElement("br")
             nameDiv.appendChild(space)
-
+            // Schalter zum ein- und ausblenden der Risiken des Gerätes
             let toggleInput = document.createElement("input")
             toggleInput.setAttribute("type", "checkbox")
             toggleInput.setAttribute("id", id + "-toggle")
             toggleInput.setAttribute("class", "cbx hidden")
             nameDiv.appendChild(toggleInput)
-
             let toggleBtn = document.createElement("label")
             toggleBtn.setAttribute("for", id + "-toggle")
             toggleBtn.setAttribute("class", "lbl")
             nameDiv.appendChild(toggleBtn)
 
-            //console.log(toggleInput.checked)
-
+            // onclick-Event für Klick auf den Schalter
             toggleInput.onclick = (event) => {
-
-                //console.log(event)
                 if (event.target.checked === false) {
-                    //console.log(riskTable)
                     $(riskTable).hide();
-
-                } else if (event.target.checked === true) {
-                    //console.log(riskTable)                    
+                } else if (event.target.checked === true) {                  
                     $(riskTable).show();
-
                 }
             }
-
-
+            // Risiken-Anzeige
             let riskCell = row.insertCell()
-
             riskCell.classList.add("py-0")
-
             let riskTable = document.createElement("table")
-            riskTable.setAttribute("style", "display:none")
-
+            riskTable.setAttribute("style", "display:none") //standardmäßig ausgeblendet
             riskTable.id = id + "-risks"
             riskTable.setAttribute("width", "100%")
-            
             riskCell.appendChild(riskTable)
-            // console.log(device)
+            // Zuordnen der Wahrscheinlichkeit und Schadenshöhen
             for (let risk in device.risks) {
-                // console.log(risk)
-                // console.log(device.risks[risk].defaultProbability)
-                // console.log(device.risks[risk].probability)
                 if (!this.score[id][device.risks[risk].riskID]) {
                     this.score[id][device.risks[risk].riskID] = {
                         "probability": device.risks[risk].probability * 100,
@@ -116,21 +90,18 @@ function getRisks(devices) {
                         "consequences": {},
                         "name": risk
                     }
-                    //console.log(this.score[id][device.risks[risk].riskID])
                 }
+                // Definition Tabellenstruktur/- aufbau
                 let riskRow = riskTable.insertRow()
-                let cellRiskLeft = riskRow.insertCell()
-                let cellRiskRight = riskRow.insertCell()
+                let cellRiskLeft = riskRow.insertCell()     // Anzeige Risiken
+                let cellRiskRight = riskRow.insertCell()    // Anzeige Folgen/Maßnahmen
                 let riskNameTable = document.createElement("table")
                 cellRiskLeft.appendChild(riskNameTable)
-
+                // Wahtscheinlichkeitsregler für Risiko
                 insertprobabilitySlider(cellRiskLeft, id + "-" + device.risks[risk].riskID)
-
-
-
-                
+                // Einfügen der einzelnen Risiken je in eine eigene Zeile
                 riskNameTable.insertRow().innerText = risk
-
+                // Folgentabelle 
                 let consequencesTable = document.createElement("table")
                 cellRiskRight.classList.add("py-0")                
                 cellRiskRight.appendChild(consequencesTable)
@@ -145,86 +116,72 @@ function getRisks(devices) {
                             "damage": consequence.damage,
                             "defaultDamage": consequence.defaultDamage
                         }
-                        // console.log(this.score[id][device.risks[risk].riskID])
                     }
+                    // Anlegen von Zeile für einzelen Folgen
                     let consequenceRow = consequencesTable.insertRow()
                     consequenceRow.classList.add("justify-content-between")
                     let consequenceText = consequenceRow.insertCell()
                     let consequenceTitle = document.createElement("div")
                     let consequenceDescription = document.createElement("div")
+                    // Anzeige Folge incl. Beschreibung
                     consequenceTitle.innerText = consequence.name+":"
                     consequenceDescription.innerText = consequence.description
 
                     consequenceText.appendChild(consequenceTitle)
                     consequenceText.appendChild(consequenceDescription)
-
+                    // Slider für Schadenshöhe je Folge
                     insertDamageSlider(consequenceRow.insertCell(), id + "-" + device.risks[risk].riskID, consequence.consequenceID)
                     checkRiskLevelFor([id, device.risks[risk].riskID])                    
                 })
 
-
+                // Maßnahmen-Tabelle (kann alternativ zu Folgen angezeigt werden)
                 let countermeasuresTable = document.createElement("table")
-                countermeasuresTable.setAttribute("style","display:none")
+                countermeasuresTable.setAttribute("style","display:none") //standardmäßig ausgeblendet
                 cellRiskRight.appendChild(countermeasuresTable)
                 countermeasuresTable.classList.add("col-sm-12")
                 countermeasuresTable.id = id + "-" + device.risks[risk].riskID + "-countermeasures"
                 device.risks[risk].countermeasures.forEach((countermeasure) => {
+                    // Einfügen und Befüllen einzelner Zeilen für Maßnahmen
                     let countermeasureRow = countermeasuresTable.insertRow()
                     countermeasureRow.innerText = countermeasure.name
                 })
 
-
-
-
-
                 let space1 = document.createElement("br")
                 cellRiskLeft.appendChild(space1)
                 space1.setAttribute("id", id +"-"+ device.risks[risk].riskID + "-space1")
-
+                //Folgen/Maßnahmen-Anzeige-Schalter
                 let toggleText = document.createElement("a")
                 cellRiskLeft.appendChild(toggleText)
                 toggleText.setAttribute("id", id +"-"+ device.risks[risk].riskID + "-toggleText")
-                
-
-
+                //Schalter Option 1: Folgen 
                 let toggleTextLeft = document.createElement("a")
                 toggleText.appendChild(toggleTextLeft)
                 toggleTextLeft.innerText = 'Folgen ';
-
+                // Schalter-Definition
                 let toggleInputSw = document.createElement("input")
                 toggleInputSw.setAttribute("type", "checkbox")
                 toggleInputSw.setAttribute("id", id +"-"+ device.risks[risk].riskID + "-toggleSw")
                 toggleInputSw.setAttribute("class", "cbx1 hidden")
                 toggleText.appendChild(toggleInputSw)
-    
                 let toggleBtnSw = document.createElement("label")
                 toggleBtnSw.setAttribute("for", id +"-"+ device.risks[risk].riskID + "-toggleSw")
                 toggleBtnSw.setAttribute("class", "lbl1 mb-0")
                 toggleText.appendChild(toggleBtnSw)
-                
+                // Schalter Option 2: Maßnahmen
                 let toggleTextRight = document.createElement("a")
                 toggleText.appendChild(toggleTextRight)
                 toggleTextRight.innerText = ' Maßnahmen';
-                //console.log(toggleInput.checked)
-    
-           
-           
+                //onclick-Event Schalter um Anzeige zu ändern
                 toggleInputSw.onclick = (event) => {
-    
-    
                     if (event.target.checked === false) {
-    
                         $(consequencesTable).show();
                         $(countermeasuresTable).hide();
-
-    
                     } else if (event.target.checked === true) {
-    
                         $(consequencesTable).hide();
                         $(countermeasuresTable).show();
                     }
                 }
-            }//for device.risks
+            }
         }
     }
 }
@@ -242,10 +199,7 @@ function insertprobabilitySlider(table, id) {
     slider.value = this.score[ids[0]][ids[1]].probability
     slider.setAttribute("style", "width:155px")
     slider.classList.add("slider")
-    // console.log("=================")
-    // console.log("Warscheinlichkeit")
-    // console.log("=================")
-    // console.log(id+"-probability-slider")
+
     slider.id = id + "-probability-slider"
     //slider.classList.add("slider")
     slider.onclick = (event) => {
