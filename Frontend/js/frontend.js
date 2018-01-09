@@ -3,7 +3,7 @@ var ipcRenderer = require('electron').ipcRenderer;
 var shell = require("electron").shell;
 var testdata = require("../../testdata");
 
-//Klasse die sich um die Organisation der vom Nutzer erstellten und vom Netzwerkscan ausgelesenen Daten
+//Klasse die sich um die Organisation der vom Nutzer erstellten und vom Netzwerkscan ausgelesenen Daten kümmert
 class Datastore {
 
     //Anlegen von sessionStorage Keys zur späteren Verwendung
@@ -16,9 +16,8 @@ class Datastore {
         }
     }
 
-    //Generieren von neuen IDs für Geräte
+    //Generieren von neuen IDs für Geräte (inkl. sicherstellen der Eindeutigkeit)
     newID() {
-        console.log("<newID()>")
         let devices = this.getDevices()
         let ids = []
         for (let i in devices) {
@@ -33,25 +32,27 @@ class Datastore {
         return ("" + largest)
     }
 
+    //Einholen von Testdaten für Demozwecke. Später irrelevant
     getTestdata() {
-        console.log("<getTestdata()>") 
         sessionStorage.setItem("devices", JSON.stringify(testdata));
         sessionStorage.setItem("update", true)
-        console.log("</getTestdata()>")
     }
 
-
+    //Daten aus Session Storage holen und zurückgeben
     getDevices() {
-        console.log("<getDevices()>")
         let rueckgabe = JSON.parse(sessionStorage.getItem("devices")) ? JSON.parse(sessionStorage.getItem("devices")) : {};
         return rueckgabe;
     }
 
-
+    //Wert von Objekteigenscht ändern
+    //Eingabe: keys (Parameter 1)       || Array aus benötigten keys (z.B. Geräte oder Port IDs)
+    //         value (Parameter 2)      || Neuer Wert
+    //         type (Parameter 3)       || Art von Attribut welches geändert werden soll
     changeValue(keys, value ,type){
         return new Promise(resolve =>{
             let devices = this.getDevices();
             console.log(keys)
+            //Je nach typ werden die Keys an unterschiedlichen Stellen aufgerufen.
             switch (type){
                 case "port" :
                     devices[keys[0]].ports[keys[1]].port = value               
@@ -69,6 +70,7 @@ class Datastore {
                     devices[keys[0]].risks[keys[1]].consequences[keys[2]].damage = value               
                     break;
                 default:
+                    //Standardmäßig werden die Werte direkt unter dem entsprechenden Gerät geändert
                     devices[keys[0]][keys[1]] = value
                 break;
             }
@@ -79,10 +81,13 @@ class Datastore {
         
     }
 
+    //Neuen Wert zu Array hinzufügen
+    //Eingabe: id (Parameter 1)                 || ID des entsprechenden Geräts
+    //         key (Parameter 2)                || key auf dem sich das betreffende Array befindet
+    //         subkey (Parameter 3)<optional>   ||  "
+    //         value (Parameter 4)              || Hinzuzufügender Wert
     addTo(id, key, subkey, value) {
-        console.log("<addTo()>")
         let devices = this.getDevices();
-        console.log(devices)
         if (!devices[id][key]) {
             devices[id][key] = []
         }
@@ -97,26 +102,23 @@ class Datastore {
             }
             devices[id][key].push(value)
         }
-        console.log(devices)
         sessionStorage.setItem("devices", JSON.stringify(devices));
     }
 
+    //Hinzufügen von Gerät zu temporären Daten (devices im Session Storage)
+    //Eingabe: devices (Parameter 1)        || Informationen zum neuen Gerät
     addDevice(device) {
-        console.log("<addDevice()>")
         let devices = this.getDevices();
-
         let devicetype = device.devicetype === "Person" ? "Unbekannt" : device.devicetype;
         devices[device.id] = { "devicetype": devicetype };
-
         sessionStorage.setItem("devices", JSON.stringify(devices))
     }
 
+    //Gerät aus den Temporären Daten löschen Inkl. löschen der Verbindungen aus den Gerätedaten anderer Geräte
+    //Eingabe: deviceId (Parameter 1)        || ID des zu löschenden Geräts
     removeDevice(deviceId) {
-        console.log("<removeDevice()>")
-
         let devices = this.getDevices();
-        // console.log(devices[deviceId])
-        //console.log(deviceId)
+
         var con = undefined
         if (devices[deviceId].connectedTo) {
             con = devices[deviceId].connectedTo
@@ -128,12 +130,8 @@ class Datastore {
         }
 
         delete devices[deviceId];
-        //console.log(devices)
-        //console.log(devices)
-        console.log(con)
         if (con) {
             con.forEach((connection) => {
-                console.log(connection)
                 if(connection){
                     devices[connection].connectionsToMe = devices[connection].connectionsToMe.filter((id) => {
                         return !(id === deviceId);
@@ -141,7 +139,6 @@ class Datastore {
                 }
             })
         }
-        console.log(con2me)
         if (con2me) {
             con2me.forEach((connection) => {
                 if(connection){
@@ -151,16 +148,13 @@ class Datastore {
                 }
             })
         }
-        console.log(devices)
         var d = JSON.stringify(devices)
         sessionStorage.setItem('devices', d);
-
     }
 
+    //Hinzufügen bzw. ersetzen von Geräten zu den Temporären Daten (Bei netzwerkscan oder laden von Daten)
     setDevices(newDevices) {
-        console.log("<setDevice()>")
         if (!newDevices) {
-            console.log("keine neuen Geräte")
             sessionStorage.setItem("update", true)
         } else {
             let connectionsToOthers = {}
@@ -169,20 +163,14 @@ class Datastore {
             let ipIdMapper = {}
 
             for (let n in newDevices) {
-                console.log(newDevices[n])
                 if (newDevices[n].connectionsToMe) {
-                    console.log(newDevices[n].connectionsToMe)
                     if (newDevices[n].connectionsToMe[0].length > 3) {
-                        console.log(newDevices[n].connectionsToMe[0])
                         connectionsFromOthers[n] = newDevices[n].connectionsToMe
                         console.log(delete newDevices[n].connectionsToMe)
-                        console.log()
                     }
                 }
                 if (newDevices[n].connectedTo) {
-                    console.log(newDevices[n].connectedTo)
                     if (newDevices[n].connectedTo[0].length > 3) {
-                        console.log(newDevices[n].connectedTo[0])
                         connectionsToOthers[n] = newDevices[n].connectedTo
                         console.log(delete newDevices[n].connectedTo)
                     }
@@ -190,7 +178,6 @@ class Datastore {
                 if (!ipIdMapper[newDevices[n].ip]) {
                     ipIdMapper[newDevices[n].ip] = n
                 }
-                console.log(newDevices[n])
             }
             for (let ip in ipIdMapper) {
                 for (let id in connectionsToOthers) {
@@ -206,31 +193,23 @@ class Datastore {
                     })
                 }
             }
-            console.log(newDevices)
             for (let id in newDevices) {
-                console.log(id)
                 if (!newDevices[id].connectedTo) {
-                    console.log(connectionsToOthers[id])
                     newDevices[id].connectedTo = connectionsToOthers[id]
                 }
                 if (!newDevices[id].connectionsToMe) {
-                    console.log(connectionsFromOthers[id])
                     newDevices[id].connectionsToMe = connectionsFromOthers[id]
                 }
             }
-            //console.log(connectionsToOthers)
-            //console.log(connectionsFromOthers)
-            //console.log(ipIdMapper)
             let devices = this.getDevices()
 
             let newItems = Object.keys(newDevices).length
             let items = Object.keys(devices).length
             let nextID = JSON.parse(this.newID());
             let idMapper = {}
+
             for (let n in newDevices) {
                 let exists = false;
-                console.log(n)
-
                 for (let o in devices) {
                     if ((newDevices[n].ip === devices[o].ip && newDevices[n].ip) || (newDevices[n].mac === devices[o].mac && newDevices[n].mac) || (newDevices[n].hostname === devices[o].hostname && newDevices[n].hostname && newDevices[n].hostname !== "Unbekannt")) {
                         devices[o].hostname = devices[o].hostname ? devices[o].hostname : newDevices[n].hostname ? newDevices[n].hostname : devices[o].devicetype ? devices[o].devicetype : newDevices[n].devicetype;
@@ -242,7 +221,6 @@ class Datastore {
                         idMapper[n] = o;
                         exists = true
                     }
-                    //itemsInner--
                 }
                 if (!exists) {
                     devices[nextID] = {
@@ -255,73 +233,58 @@ class Datastore {
                     devices[nextID]["vendor"] = newDevices[n].vendor ? newDevices[n].vendor : "Unbekannt"
                     devices[nextID]["devicetype"] = newDevices[n].devicetype ? newDevices[n].devicetype : "Unbekannt"
                     idMapper[n] = JSON.stringify(nextID);
-                    // devices[nextID]["connetedTo"] = newDevices[n].connetedTo ? newDevices[n].connetedTo : []
-                    // devices[nextID]["connectionsToMe"] = newDevices[n].connectionsToMe ? newDevices[n].connectionsToMe : []
                     nextID++;
                 }
-                console.log(newDevices[n])
-
             }
-            console.log(idMapper)
+            //Ändern von ID's für neue Geräte (Redundanten IDs vorbeugen)
             for (let id in idMapper) {
-                console.log(id)
                 if (newDevices[id].connectedTo) {
-                    console.log(newDevices[id].connectedTo) //is array of ips
                     newDevices[id].connectedTo.forEach((connection) => {
-                        console.log(connection)
-                        console.log(idMapper[id])
                         if (!devices[idMapper[id]].connectedTo) devices[idMapper[id]].connectedTo = []
                         devices[idMapper[id]].connectedTo.push(idMapper[connection])
                     })
                 }
                 if (newDevices[id].connectionsToMe) {
-                    console.log(newDevices[id].connectionsToMe)
                     newDevices[id].connectionsToMe.forEach((connection) => {
-                        console.log(connection)
                         if (!devices[idMapper[id]].connectionsToMe) devices[idMapper[id]].connectionsToMe = []
                         devices[idMapper[id]].connectionsToMe.push(idMapper[connection])
                     })
                 }
             }
 
-            console.log("devices - after")
-            console.log(devices)
-
             sessionStorage.setItem("devices", JSON.stringify(devices))
-
-            console.log("==========================================")
         }
         sessionStorage.setItem("update", true)
     }
 
+    //Einholen der Risikoinformation (Weiterleiten der Anfrage an Communicatior und von dort aus ans Backend)
+    //Ergebnisse über addRisks Funktion in Datensatz einpflegen lassen und abschließend zurückgeben
     checkForRisks() {
         return new Promise(resolve =>{
-            console.log("<checkForRisks()>")
             sessionStorage.setItem("update", false)        
             communicator.analyseSecurity().then((risks)=>{
-                console.log("addRisks:")
                 this.addRisks(risks).then(res =>{resolve(res)})
             })
         })
         
     }
 
+    //Einpflegen von Risiken in Datensatz
+    //Eingabe: risks (Parameter 1)      || Objekt mit Risikoinformationen für einzelne Gerätetypen
     addRisks(risks) {
         return new Promise(resolve =>{
-            console.log("<addRisk()>")        
             let devices = this.getDevices()
             let dTypesPromises = []
+            //Durchlaufen aller Gerätetypen in risks
             for(let dType in risks){
                 dTypesPromises.push(new Promise(resolve =>{
                     let type = dType==="Statisches Gerät"? "stationär": dType==="Mobiles Gerät"? "mobil":dType==="Maschinensteuerung"?"Maschine":dType==="Netzwerkspeicher"?"NAS":dType;
-                    //console.log(type)
                     let devicePromises = []
+                    //durchlaufen aller Geräte und einpflegen der Risiken für den jeweiligen Gerätetyp
                     for(let id in devices){
-                        //console.log(id)                        
                         devicePromises.push(new Promise(resolve =>{
                             let risklist = []
-                            //console.log(devices[id].devicetype+" - "+type+" | "+Object.keys(devices[id].risks).length>0)
-                            if (devices[id].devicetype!=="Unbekannt" && devices[id].devicetype === type && !Object.keys(devices[id].risks).length>0) {
+                            if (devices[id].devicetype!=="Unbekannt" && devices[id].devicetype === type && (!devices[id].risks || (devices[id].risks&&!Object.keys(devices[id].risks).length>0))) {
                                 risks[dType].forEach((risk) => {
                                     let newRisk = {}
                                     newRisk.consequences = risk.Folgen
@@ -339,13 +302,12 @@ class Datastore {
                         let merged = [].concat.apply([], resp);
                         resolve(merged)})
                 }))
-                //console.log(dTypesPromises)
             }
+            //Aktuallisierte, temporäre Daten einpflegen und an übergeordnete Information zurückgeben
             Promise.all(dTypesPromises).then(res => { 
                     let merged = [].concat.apply([], res);
                     this.assignRisks(devices, merged).then(res => {
                         let deviceString = JSON.stringify(res)
-                        //console.log(deviceString)
                         sessionStorage.setItem("devices", deviceString)
                         sessionStorage.setItem("update", true)
                         resolve(deviceString)
@@ -355,17 +317,13 @@ class Datastore {
         })        
     }
     assignRisks(devices, risks){
-        //console.log(JSON.stringify(risks))
-        // console.log(JSON.stringify(devices))
         return new Promise(resolve =>{
             let devWithRisks = devices
             let riskLength = Object.keys(risks).length
             if(riskLength===0) resolve(devices)
             risks.forEach(risk => {
-                //console.log(Object.keys(devWithRisks)+" - "+risk.device)
                 if(!devWithRisks[risk.device].risks || Array.isArray(devWithRisks[risk.device].risks)) devWithRisks[risk.device].risks = {}
                 devWithRisks[risk.device].risks[risk.name] = risk.data
-                //console.log(JSON.stringify(devWithRisks[risk.device]))
                 riskLength--
                 console.log(riskLength)
                 if(riskLength===0){
@@ -376,56 +334,59 @@ class Datastore {
     }
 }
 
+
+//Klasse für dei Komminukation zwischen front und Backend
 class Communicator {
     constructor() {
     }
 
+    //Risikoanalyse in Backend starten
     analyseSecurity() {
         return new Promise(resolve => {
-            console.log("<analyseSecurity()>")
             let dev = datastore.getDevices()
             let risks = ipcRenderer.sendSync('analyse-devices', dev);
-            console.log(risks)
             resolve(risks)
         })        
     }
 
+    //Netzwerkscan in Backend starten
     scanNetwork() {
-        console.log("<scanNetwork()>")
         sessionStorage.setItem("update", false)
         ipcRenderer.send('scan-network');
     }
 
+    //Backend beauftragen das Electron Fenster zu maximieren
     maximize() {
-        console.log("<maximize()>")
-
         ipcRenderer.send('maximize');
     }
 
+    //Druck der aktuellen Seite als PDF beauftragen
     pdfPrint(path) {
-        console.log("<pdfPrint()>")
         ipcRenderer.send('print-to-pdf', path);
     }
 
+    //Aufrufen der Tell Homepage in Browser
     callHomepage() {
         shell.openExternal("https://1524300.wixsite.com/tellmesec")
     }
 
+    //Auf Auswertungsseite weiterleiten
     toAnalysis(){
         ipcRenderer.send('go-to-evaluation');
     }
 
 }
 
+//Entgegennehmen der Antwort zum abgeschlossen Netzwerkscan aus dem Backend
+//Einpflegen der Daten über setDevices
 ipcRenderer.on('scan-complete', (event, data) => {
     console.log("scan complete")
     datastore.setDevices(data);
 });
 
 
-
+//Exportieren der datastore und communicator klassen zur Verwendung in anderen Frontend Komponenten
 datastore = new Datastore()
 communicator = new Communicator()
-
 module.exports.datastore = datastore
 module.exports.communicator = communicator

@@ -527,13 +527,12 @@ span.modal-text-line{
         background: rgba(0, 0, 0, 0.2);
         cursor: pointer;
     }
-<<<<<<< HEAD
-=======
 
-    .fa-undo{
-        font-size: 10px !important;
-        color:#bcbdbc;
-        padding-left: 10px;
-        cursor: pointer;
+    div.vis-network div.vis-manipulation{
+        background: transparent !important;
+        border-color: transparent !important;  
     }
->>>>>>> 8d181c2e9e8ddeef172abaac4cbf7b152c47618e
+
+    .vis-close{
+        display: none !important;
+    }
