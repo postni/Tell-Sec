@@ -186,26 +186,27 @@ function getRisks(devices) {
     }
 }
 
-
+//Einfügen von Eintrittswahrscheinlichkeits-Slider
+//Eingabe: table (Parameter 1)          || Tabelle zu welcher der Slider hinzugefügt werden soll
+//         id (Parameter 2)             || ID's von Gerät und Risiko (Zum Identiffizieren des Sliders)
 function insertprobabilitySlider(table, id) {
     let container = document.createElement("div")
     container.setAttribute("style", "width:175px")    
-
     let ids = id.split("-")
     let slider = document.createElement("input")
+
+    //Anfügen von Sliderinformationen wie range und aussehen
     slider.setAttribute("type", "range")
     slider.min = 0
     slider.max = 100
     slider.value = this.score[ids[0]][ids[1]].probability
     slider.setAttribute("style", "width:155px")
     slider.classList.add("slider")
-
     slider.id = id + "-probability-slider"
-    //slider.classList.add("slider")
     slider.onclick = (event) => {
         event.stopPropagation()
     }
-
+    //Funktion die bei Verschieben des Sliders aufgerufen werden soll (Ändern des Werts im Text)
     slider.oninput = (event) => {
         event.stopPropagation()
         let value = event.target.value
@@ -213,18 +214,19 @@ function insertprobabilitySlider(table, id) {
         let label = document.getElementById((id[0] + "-" + id[1] + "-probability"))
         label.innerText = value
     }
+
+    //Funktion die bei Ändern des Werts aufgerufen werden soll (Ändern des Wahrscheinlichkeitswerts in Temporären Daten)
     slider.onchange = (event) => {
         let value = event.target.value
         let id = event.target.id.split('-')
         this.score[id[0]][id[1]].probability = value
         let riskName = this.score[id[0]][id[1]].name
         datastore.changeValue([id[0],riskName],(value/100),"probability")
-        
         let consTable = document.getElementById(id[0] + "-" + id[1] + "-consequences")
         let countermTable = document.getElementById(id[0] + "-" + id[1] + "-countermeasures")
         let sp = document.getElementById(id[0] +"-"+ id[1] + "-space1")
         let toggleT = document.getElementById(id[0] +"-"+ id[1] + "-toggleText")
-        // console.log(toggleT)
+        //Verstecken der Informationen über Folgen und Gegenmaßnahmen falls die Wahrscheinlcihkeit auf 0 gesetzt wird
         if (value <= 0) {
             consTable.classList.add("hidden")
             countermTable.classList.add("hidden")
@@ -237,11 +239,12 @@ function insertprobabilitySlider(table, id) {
             sp.style.display='block';
             toggleT.style.display='block';
         }
+        //neu Berechnen des Risikowerts
         checkRiskLevelFor(id);
-        //console.log(this.score[id[0]][id[1]])
     }
     container.appendChild(slider)
 
+    //Hinzufügen eines Resetbuttons der die Wahrscheinlichkeit auf den Standardwert zurücksetzt
     let resetButton = document.createElement("i")
     resetButton.classList.add("fa","fa-undo","align-text-top")
     resetButton.id = id + "-probability-undo"
@@ -252,12 +255,10 @@ function insertprobabilitySlider(table, id) {
         let riskName =this.score[id[0]][id[1]].name
         datastore.changeValue([id[0],riskName],(value/100),"probability")
         this.score[id[0]][id[1]].probability = value
-        //alert("works - "+value)
-
         slider.value = value
         let label = document.getElementById((id[0] + "-" + id[1] + "-probability"))
         label.innerText = value
-
+        //neu Berechnen des Risikowerts
         checkRiskLevelFor(id)
     }
     container.appendChild(resetButton)
@@ -270,29 +271,28 @@ function insertprobabilitySlider(table, id) {
     table.appendChild(container)
 }
 
+//Einfügen von Schadensklassen-Slider
+//Eingabe: cell (Parameter 1)           || Tabellen Zelle zu welcher der Slider hinzugefügt werden soll
+//         riskID (Parameter 2)         || IDs von Gerät und Risiko zur Identifizierung des Sliders
+//         consequenceID (Parameter 3)  || ID der Folge zur Identifizierung des Sliders
 function insertDamageSlider(cell, riskId, consequenceID) {
     cell.setAttribute("width", "200px")
     let container = document.createElement("div")
     let ids = riskId.split("-")
-    //container.id=riskId+"-"+consequenceID+"-consequence"
     let slider = document.createElement("input")
+    //Hinzufügen von Slider Eigenschaften wie range und aussehen
     slider.setAttribute("type", "range")
     slider.setAttribute("style", "width:85px; margin-top:7px")
     slider.min = 1
     slider.max = 5
     slider.value = this.score[ids[0]][ids[1]].consequences[consequenceID].damage
-    //console.log("==============")
-    //console.log("Schaden-Slider")
-    //console.log("==============")
-    //console.log(riskId+"-"+consequenceID+"-damage-slider")
     slider.id = riskId + "-" + consequenceID + "-damage-slider"
     slider.classList.add("slider")
+    //Funktion die bei Verschieben des Sliders aufgerufen werden soll (Ändern des Werts im Label)
     slider.oninput = (event) => {
         let value = parseInt(event.target.value)
         let id = event.target.id.split("-")
-        //console.log(id.slice(0, 3).join("-") + "damage")
         let label = document.getElementById(id.slice(0, 3).join("-") + "-damage")
-        //console.log(value)
         let valueshow
         if (value === 1) {
             valueshow = 'sehr gering'
@@ -307,17 +307,19 @@ function insertDamageSlider(cell, riskId, consequenceID) {
         }
         label.innerText = valueshow
     }
-
+    //Funktion die bei Ändern des Werts aufgerufen werden soll (Anpassen der Schadensklasse in den temporären Daten)
     slider.onchange = (event) => {
         let value = event.target.value
         let id = event.target.id.split('-')
         let riskName = this.score[id[0]][id[1]].name        
         this.score[id[0]][id[1]].consequences[id[2]].damage = value
-        datastore.changeValue([id[0],riskName,id[2]],value,"damage")        
+        datastore.changeValue([id[0],riskName,id[2]],value,"damage")
+        //neu berechnen des Risiko Levels       
         checkRiskLevelFor(id);
     }
     container.appendChild(slider)
 
+    //Hinzufügen von Reset Button der die Schadensklasse auf den Standardwert zurück setzt
     let resetButton = document.createElement("i")
     resetButton.classList.add("fa","fa-undo","align-text-top")
     resetButton.id = riskId + "-" + consequenceID + "-damage-undo"
@@ -343,13 +345,13 @@ function insertDamageSlider(cell, riskId, consequenceID) {
             valueshow = 'sehr hoch'
         }
         label.innerText = valueshow
+        //neu berechen den Risikolevels
         checkRiskLevelFor(id)
     }
     container.appendChild(resetButton)
 
     let label = document.createElement("label")
     label.setAttribute("style", "margin-top:0px")
-    //label.setAttribute("id",id+"-damage-label")
     let hoehe
     if (parseInt(slider.value) === 1) {
         hoehe = 'sehr gering'
@@ -367,6 +369,7 @@ function insertDamageSlider(cell, riskId, consequenceID) {
     cell.appendChild(container)
 }
 
+//Berechnen eines Risikolevels für einzelnes Risiko anhand der Werte der Slider
 function checkRiskLevelFor(elementID) {
     risk = 0.0;
     let allDamageElements = document.querySelectorAll("[id^='" + elementID[0] + "-" + elementID[1] + "'][id$='-damage-slider']")
@@ -374,16 +377,17 @@ function checkRiskLevelFor(elementID) {
     let riskDamage = 0;
     for (damageElement in allDamageElements) {
         if (parseInt(damageElement)) {
-            //console.log(allDamageElements[damageElement].value)
             riskDamage += parseInt(allDamageElements[damageElement].value)
         }
     }
     risk = (riskDamage * parseFloat(probabilityElement.value)) / 100
 
     this.score[elementID[0]][elementID[1]].riskLevel = risk
+    //Neu berechnen des gesammt Risikos für das entsprechende Gerät
     checkRiskForDevice(elementID[0])
 }
 
+//Berechnen eines Risikolevels für ein einzelnes Gerät anhand der zuvor berechneten Werte in der score variable
 function checkRiskForDevice(deviceID) {
     let sumAllRiskLevels = 0.0
     for (risk in this.score[deviceID]) {
@@ -391,10 +395,9 @@ function checkRiskForDevice(deviceID) {
             sumAllRiskLevels += this.score[deviceID][risk].riskLevel
         }
     }
-    //console.log(sumAllRiskLevels);
     this.score[deviceID].riskLevel = sumAllRiskLevels
     let statusIndicator = document.getElementById(deviceID + "-status")
-    //console.log(statusIndicator)
+    //Je nach höhe des Werts, wird die Farbe des Statusindikators angepasst
     if (sumAllRiskLevels <= 10) {
         statusIndicator.removeAttribute("negative")
         statusIndicator.removeAttribute("intermediary")
@@ -411,8 +414,11 @@ function checkRiskForDevice(deviceID) {
         statusIndicator.setAttribute("pulse", "")
         statusIndicator.setAttribute("negative", "")
     }
+    //Neu Berechnen des Risikos für das Gesammte Netzwerk
     checkOverallRisk()
 }
+
+//Berechnen eines Risikolevels für das gesammte Netzwerk anhand der zuvor berechneten Werte in der score variable
 function checkOverallRisk() {
     let sumAllRiskLevels = -50.0
     let riskLevelChanged = false;
@@ -432,7 +438,7 @@ function checkOverallRisk() {
     }
     
     sumAllRiskLevels /= deviceCount
-    // console.log(riskLevelChanged)
+    //Prüfen des Werts und Anzeigen des entsprechenden Banners. Sind keine Informationen vorhanden, wird ein entsprechender Hinweis angezeigt
     if (sessionStorage.getItem('devices')==='{}' || riskLevelChanged === false) {
         good.style.display = "none";
         stop.style.display = "none";
@@ -457,6 +463,7 @@ function checkOverallRisk() {
 
 }
 
+/*Funktion zum Anzeigen des Ladescreens */
 function toggleLoad() {
     var i = document.getElementById('loadsc');
     i.classList.toggle("hidden");
